@@ -1,0 +1,11 @@
+{
+  "pages": [
+    { "id": "pipeline", "label": "Pipeline", "icon": "columns" },
+    { "id": "review", "label": "Review", "icon": "sparkle" },
+    { "id": "calls", "label": "Calls", "icon": "phone" },
+    { "id": "people", "label": "People", "icon": "users" }
+  ],
+  "home": {
+    "scripts": ["app/model.js", "home-boxes.js"]
+  }
+}

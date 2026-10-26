@@ -1,0 +1,123 @@
+{
+  "tools": {
+    "task-list": {
+      "repository": "georgecairns-ui/task-list-os",
+      "commit": "6b519bde0c27b48d1c287ec702b4fb672d49d267"
+    },
+    "pipeline": {
+      "repository": "georgecairns-ui/pipeline-os",
+      "commit": "ad849d7f02166521a9b3bcff4d1f394ecc4e1987"
+    },
+    "skill-map": {
+      "repository": "georgecairns-ui/skill-and-folder-map-os",
+      "commit": "a7d928d9221c5ee635ed9fd5c1fca092061561b1"
+    },
+    "proposals": {
+      "repository": "georgecairns-ui/proposal-writing-os",
+      "commit": "9eea3da539a322fd8dff50b3156e5adf79dc99b6"
+    },
+    "content": {
+      "repository": "georgecairns-ui/content-machine-os",
+      "commit": "d427b3cfe3d2c071d65f1283ebe33de9342da9f4"
+    },
+    "money": {
+      "repository": "georgecairns-ui/money-view-os",
+      "commit": "1527e61fea753425f90cf50155fbdadbd04cf023"
+    },
+    "ads": {
+      "repository": "georgecairns-ui/ads-os",
+      "commit": "4ae417f8eb581e6184e755dd8d96a9c0b7318c26"
+    }
+  },
+  "attach": [
+    {
+      "tool": "pipeline",
+      "filesAdded": 33,
+      "alreadyThere": 95,
+      "permissionsAdded": [
+        "Edit(./apps/pipeline/data/**)",
+        "Write(./apps/pipeline/data/**)"
+      ],
+      "permissionsLeftOut": []
+    },
+    {
+      "tool": "skill-map",
+      "filesAdded": 43,
+      "alreadyThere": 89,
+      "permissionsAdded": [
+        "Edit(./apps/skill-map/data/**)",
+        "Write(./apps/skill-map/data/**)",
+        "Bash(node apps/skill-map/scan/scan.js)",
+        "Bash(node apps/skill-map/scan/scan.js --dry-run)",
+        "Bash(node apps/skill-map/scan/scan.js --no-usage)",
+        "Bash(python3 apps/skill-map/scan/scan.py)",
+        "Bash(python3 apps/skill-map/scan/scan.py --dry-run)",
+        "Bash(python3 apps/skill-map/scan/scan.py --no-usage)",
+        "Bash(python apps/skill-map/scan/scan.py)",
+        "Bash(node apps/skill-map/scan/scan-files.js)",
+        "Bash(node apps/skill-map/scan/scan-files.js --dry-run)",
+        "Bash(python3 apps/skill-map/scan/scan-files.py)",
+        "Bash(python3 apps/skill-map/scan/scan-files.py --dry-run)",
+        "Bash(python apps/skill-map/scan/scan-files.py)",
+        "Bash(node apps/skill-map/tidy/tidy.js)",
+        "Bash(node apps/skill-map/tidy/tidy.js --dry-run)",
+        "Bash(python3 apps/skill-map/tidy/tidy.py)",
+        "Bash(python3 apps/skill-map/tidy/tidy.py --dry-run)",
+        "Bash(python apps/skill-map/tidy/tidy.py)"
+      ],
+      "permissionsLeftOut": [
+        "Bash(ls:*)"
+      ]
+    },
+    {
+      "tool": "proposals",
+      "filesAdded": 36,
+      "alreadyThere": 95,
+      "permissionsAdded": [
+        "Edit(./apps/proposals/data/**)",
+        "Write(./apps/proposals/data/**)",
+        "Edit(./apps/proposals/brand/**)",
+        "Write(./apps/proposals/brand/**)",
+        "WebFetch"
+      ],
+      "permissionsLeftOut": []
+    },
+    {
+      "tool": "content",
+      "filesAdded": 39,
+      "alreadyThere": 90,
+      "permissionsAdded": [
+        "Edit(./apps/content/data/**)",
+        "Write(./apps/content/data/**)",
+        "Edit(./.claude/skills/*-what-works/**)",
+        "Write(./.claude/skills/*-what-works/**)"
+      ],
+      "permissionsLeftOut": []
+    },
+    {
+      "tool": "money",
+      "filesAdded": 41,
+      "alreadyThere": 61,
+      "permissionsAdded": [
+        "Edit(./apps/money/data/**)",
+        "Write(./apps/money/data/**)",
+        "Bash(bash setup/scripts/start-money-view.sh)",
+        "Bash(powershell -ExecutionPolicy Bypass -File setup\\scripts\\start-money-view.ps1)"
+      ],
+      "permissionsLeftOut": []
+    },
+    {
+      "tool": "ads",
+      "filesAdded": 50,
+      "alreadyThere": 90,
+      "permissionsAdded": [
+        "Edit(./apps/ads/data/**)",
+        "Write(./apps/ads/data/**)",
+        "Bash(bash setup/scripts/install-claude-ads.sh)",
+        "Bash(powershell -ExecutionPolicy Bypass -File setup\\scripts\\install-claude-ads.ps1)",
+        "Bash(node apps/ads/app/report.js:*)"
+      ],
+      "permissionsLeftOut": []
+    }
+  ]
+}

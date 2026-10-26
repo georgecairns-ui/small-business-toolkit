@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Content Machine OS</title>
+  <meta name="description" content="Plans your posts from what your customers search for and what works for your competitors, drafted in your voice and scored for each platform. You approve every post and post it yourself.">
+  <link rel="icon" type="image/png" href="../shared/images/claude-icon.png">
+  <!-- Shared look (theme.css holds every colour and font) -->
+  <link rel="stylesheet" href="../shared/theme.css">
+  <link rel="stylesheet" href="../shared/base.css">
+  <link rel="stylesheet" href="../shared/sidebar.css">
+  <!-- Light or dark: applied before anything draws, so the page never flashes the wrong colours -->
+  <script src="../shared/js/theme.js"></script>
+  <!-- This app's layout, then the pages' own styles -->
+  <link rel="stylesheet" href="app/app.css">
+  <link rel="stylesheet" href="app/views.css">
+</head>
+<body data-tool="content">
+  <a class="skip-link" href="#view">Skip to main content</a>
+
+  <!-- Shown before the app is running: loading, or what to do next -->
+  <div id="gate" class="gate"></div>
+
+  <!-- The app itself -->
+  <div id="shell" class="shell" hidden>
+    <aside class="sidebar" id="sidebar" aria-label="Main">
+      <div class="sidebar__brand">
+        <img src="../shared/images/claude-icon.png" alt="" width="30" height="30">
+        <div class="sidebar__brand-text">
+          <div class="sidebar__product" id="businessName">Your workspace</div>
+        </div>
+      </div>
+
+      <!-- The shared sidebar (../shared/js/sidebar.js) adds Home, the other tools in this folder and
+           the locked tools. This tool's one page stays here, so they work even if those can't load. -->
+      <a class="side-home" href="../home/"><span data-icon="home"></span>Home</a>
+
+      <div class="side-label">Your tools</div>
+      <section class="tool-group" data-tool-group="content">
+        <button type="button" class="tool-group__head" aria-expanded="true" aria-controls="nav">
+          <span class="tool-group__icon"><span data-icon="megaphone"></span></span>
+          <span class="tool-group__name">Content Machine OS</span>
+          <span class="tool-group__count" aria-hidden="true"></span>
+          <span class="tool-group__chevron"><span data-icon="chevronDown"></span></span>
+        </button>
+        <div class="tool-group__body">
+          <nav class="nav" id="nav" aria-label="Content Machine OS">
+            <a class="nav__item is-active" href="#calendar" aria-current="page"><span data-icon="calendar"></span>Content calendar<span class="nav__count nav__count--accent" data-count="todo"></span></a>
+          </nav>
+        </div>
+      </section>
+
+      <!-- Shared sidebar: the other tools in this folder, then the locked ones -->
+      <div data-toolkit-menu="others"></div>
+      <div data-toolkit-menu="more" hidden></div>
+
+      <div class="sidebar__foot">
+        <div class="sidebar__row">
+          <span class="sidebar__spacer"></span>
+          <button type="button" class="icon-btn" data-action="shortcuts" aria-label="Keyboard shortcuts"><span data-icon="keyboard"></span></button>
+          <button type="button" class="icon-btn" data-action="settings" aria-label="Settings" title="Settings"><span data-icon="settings"></span></button>
+        </div>
+        <div class="sidebar__by">
+          <img src="../shared/images/claude-icon.png" alt="" width="22" height="22">
+          <span>by Get AI Powers</span>
+        </div>
+      </div>
+    </aside>
+    <div class="sidebar-scrim" data-action="close-sidebar"></div>
+
+    <div class="main">
+      <header class="topbar">
+        <button type="button" class="icon-btn topbar__menu" data-action="open-sidebar" aria-label="Open menu"><span data-icon="menu"></span></button>
+        <div class="topbar__title">
+          <h1 id="viewTitle">Content calendar</h1>
+          <span class="topbar__sub" id="viewSub"></span>
+        </div>
+        <span class="claude-status" id="claudeStatus" hidden></span>
+        <span class="save-status" id="saveStatus" hidden></span>
+        <button type="button" class="icon-btn topbar__theme" data-theme-toggle aria-label="Switch to dark mode" title="Light or dark"><span data-icon="moon"></span></button>
+        <button type="button" class="btn topbar__voice" data-brain-dump title="Brain dump: talk, and Claude sorts it out (V)"><span data-icon="mic"></span><span class="topbar__voice-label">Brain dump</span></button>
+      </header>
+      <div id="banner"></div>
+      <!-- The rail: the views to flick between, Health check, and (on Calendar) the week and month controls -->
+      <div class="rail" id="rail"></div>
+      <main id="view" class="view" tabindex="-1"></main>
+    </div>
+
+    <!-- The post editor: slides in from the right -->
+    <div class="drawer-scrim" id="drawerScrim" hidden></div>
+    <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Edit post" hidden></aside>
+  </div>
+
+  <!-- Pop-up: your business settings (opened by the gear on the rail) -->
+  <dialog class="modal modal--settings" id="settingsDialog" aria-labelledby="settingsTitle"></dialog>
+
+  <!-- Pop-up: keyboard shortcuts -->
+  <dialog class="modal" id="shortcutsDialog" aria-labelledby="shortcutsTitle">
+    <div class="modal__head"><h2 id="shortcutsTitle">Keyboard shortcuts</h2><button type="button" class="icon-btn" data-close aria-label="Close"><span data-icon="x"></span></button></div>
+    <div class="modal__body shortcuts">
+      <div><span class="kbd">1</span> to <span class="kbd">6</span> Calendar, To do, Ideas, Research, Platforms, Health check</div>
+      <div><span class="kbd">V</span> Brain dump (record a voice note)</div>
+      <div><span class="kbd">Esc</span> Close the post editor or a pop-up</div>
+    </div>
+  </dialog>
+
+  <!-- Shared helpers, then the rules, then the pages, then the app that ties them together -->
+  <script src="../shared/js/ui.js"></script>
+  <script src="../shared/js/store.js"></script>
+  <script src="../shared/js/sidebar.js"></script>
+  <script src="../shared/js/braindump.js"></script>
+  <script src="app/model.js"></script>
+  <script src="app/components.js"></script>
+  <script src="app/media.js"></script>
+  <script src="app/hovercard.js"></script>
+  <script src="app/calendar.js"></script>
+  <script src="app/drawer.js"></script>
+  <script src="app/settings.js"></script>
+  <script src="app/view-todo.js"></script>
+  <script src="app/view-ideas.js"></script>
+  <script src="app/view-research.js"></script>
+  <script src="app/view-platforms.js"></script>
+  <script src="app/view-health.js"></script>
+  <script src="app/app.js"></script>
+</body>
+</html>

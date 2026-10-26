@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home</title>
+  <meta name="description" content="Your day at a glance, from every tool in this folder.">
+  <link rel="icon" type="image/png" href="../shared/images/claude-icon.png">
+  <!-- Shared look (theme.css holds every colour and font) -->
+  <link rel="stylesheet" href="../shared/theme.css">
+  <link rel="stylesheet" href="../shared/base.css">
+  <link rel="stylesheet" href="../shared/sidebar.css">
+  <script src="../shared/js/theme.js"></script>
+  <link rel="stylesheet" href="home.css">
+</head>
+<body data-tool="home">
+  <a class="skip-link" href="#home">Skip to main content</a>
+
+  <div class="shell">
+    <aside class="sidebar" id="sidebar" aria-label="Main">
+      <div class="sidebar__brand">
+        <img src="../shared/images/claude-icon.png" alt="" width="30" height="30">
+        <div class="sidebar__brand-text">
+          <div class="sidebar__product" id="businessName">Your workspace</div>
+        </div>
+      </div>
+
+      <a class="side-home is-active" href="../home/" aria-current="page"><span data-icon="home"></span>Home</a>
+
+      <!-- Every tool in this folder, each a dropdown of its pages (drawn by ../shared/js/sidebar.js) -->
+      <div class="side-label">Your tools</div>
+      <div data-toolkit-menu="others"></div>
+      <div data-toolkit-menu="more" hidden></div>
+
+      <div class="sidebar__foot">
+        <div class="sidebar__by">
+          <img src="../shared/images/claude-icon.png" alt="" width="22" height="22">
+          <span>by Get AI Powers</span>
+        </div>
+      </div>
+    </aside>
+    <div class="sidebar-scrim" data-home-action="close-sidebar"></div>
+
+    <div class="main">
+      <header class="topbar">
+        <button type="button" class="icon-btn topbar__menu" data-home-action="open-sidebar" aria-label="Open menu"><span data-icon="menu"></span></button>
+        <div class="topbar__title"><h1>Home</h1></div>
+        <span class="claude-status" id="claudeStatus" hidden></span>
+        <button type="button" class="icon-btn" data-theme-toggle aria-label="Switch to dark mode" title="Light or dark"><span data-icon="moon"></span></button>
+        <button type="button" class="btn topbar__voice" data-brain-dump title="Brain dump: talk, and Claude sorts it out (V)"><span data-icon="mic"></span><span class="topbar__voice-label">Brain dump</span></button>
+        <button type="button" class="btn" data-home-action="customise" id="customiseBtn" aria-label="Customise Home"><span data-icon="layout"></span><span class="topbar__customise-label">Customise</span></button>
+      </header>
+      <div id="banner"></div>
+      <main id="home" class="view" tabindex="-1">
+        <div class="home">
+          <div class="home__hello">
+            <h2 class="home__greeting" id="greeting">Hello</h2>
+            <p class="home__date" id="today"></p>
+          </div>
+          <div class="home__editbar" id="editBar" hidden>
+            <p>Switch boxes on or off, drag them into the order you like, and pick a size for each.</p>
+            <span class="spacer"></span>
+            <button type="button" class="btn btn--ghost" data-home-action="reset">Reset</button>
+            <button type="button" class="btn btn--primary" data-home-action="done">Done</button>
+          </div>
+          <div class="home__grid" id="grid" aria-live="polite"></div>
+          <section class="home__hidden" id="hiddenBoxes" hidden>
+            <h3>Hidden boxes</h3>
+            <div class="home__hidden-list" id="hiddenList"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../shared/js/ui.js"></script>
+  <script src="../shared/js/store.js"></script>
+  <script src="../shared/js/sidebar.js"></script>
+  <script src="../shared/js/braindump.js"></script>
+  <script src="home.js"></script>
+</body>
+</html>

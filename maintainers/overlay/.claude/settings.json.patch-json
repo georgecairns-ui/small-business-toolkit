@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow+": [
+      "Edit(./apps/toolkit/data/**)",
+      "Write(./apps/toolkit/data/**)"
+    ]
+  }
+}

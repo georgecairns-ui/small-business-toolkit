@@ -1,0 +1,10 @@
+{
+  "pages": [
+    { "id": "proposals", "label": "Proposals", "icon": "fileText" },
+    { "id": "clients", "label": "Clients", "icon": "folder" },
+    { "id": "packages", "label": "Packages", "icon": "list" }
+  ],
+  "home": {
+    "scripts": ["app/model.js", "home-boxes.js"]
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "about": [
+    "This is your task list. The app (Open Task List.html) and Claude both read and write this file.",
+    "Claude: read apps/task-list/CLAUDE.md before changing anything here.",
+    "Sections: settings, tasks, plan (today), week (goals), events (calendar copy), people, dump (brain dump), replies (emails to answer, with drafts), meetings (calls), triage (last check), activity.",
+    "Tasks marked \"example\": true are samples. Replace them with the person's real tasks during setup."
+  ],
+  "formatVersion": 2,
+  "settings": {
+    "yourName": "",
+    "businessName": "",
+    "minutesSavedPerTask": 6,
+    "minutesSavedPerPlan": 20,
+    "dayStarts": "08:00",
+    "dayEnds": "18:00",
+    "emailProvider": "gmail",
+    "calendarProvider": "google"
+  },
+  "tasks": [],
+  "plan": {
+    "date": null,
+    "preparedAt": null,
+    "note": "",
+    "items": []
+  },
+  "week": {
+    "start": null,
+    "goals": [],
+    "note": ""
+  },
+  "events": [],
+  "eventsSyncedAt": null,
+  "people": [],
+  "dump": [],
+  "replies": [],
+  "meetings": [],
+  "triage": {
+    "lastRunAt": null,
+    "nextRunAt": null,
+    "emailsScanned": 0,
+    "needReply": 0,
+    "newTasks": 0,
+    "noAction": 0,
+    "callsProcessed": 0
+  },
+  "activity": []
+}

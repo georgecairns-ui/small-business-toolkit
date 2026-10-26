@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Skill and Folder Map OS</title>
+  <meta name="description" content="Every skill Claude has, drawn as one map: which you use, how they connect, and which parts of your business have none yet.">
+  <link rel="icon" type="image/png" href="../shared/images/claude-icon.png">
+  <!-- Shared look (theme.css holds every colour and font) -->
+  <link rel="stylesheet" href="../shared/theme.css">
+  <link rel="stylesheet" href="../shared/base.css">
+  <link rel="stylesheet" href="../shared/sidebar.css">
+  <!-- Light or dark: applied before anything draws, so the page never flashes the wrong colours -->
+  <script src="../shared/js/theme.js"></script>
+  <!-- This app's layout -->
+  <link rel="stylesheet" href="app/app.css">
+</head>
+<body data-tool="skill-map">
+  <a class="skip-link" href="#view">Skip to main content</a>
+
+  <!-- Shown before the map is running: welcome, loading, or a problem -->
+  <div id="gate" class="gate"></div>
+
+  <!-- The app itself -->
+  <div id="shell" class="shell" hidden>
+    <aside class="sidebar" id="sidebar" aria-label="Main">
+      <div class="sidebar__brand">
+        <img src="../shared/images/claude-icon.png" alt="" width="30" height="30">
+        <div class="sidebar__brand-text">
+          <div class="sidebar__product" id="businessName">Your workspace</div>
+        </div>
+      </div>
+
+      <!-- The shared sidebar (../shared/js/sidebar.js) adds Home, the other tools in this folder and
+           the locked tools. This tool's own pages stay here, so they work even if those can't load. -->
+      <a class="side-home" href="../home/"><span data-icon="home"></span>Home</a>
+
+      <div class="side-label">Your tools</div>
+      <section class="tool-group" data-tool-group="skill-map">
+        <button type="button" class="tool-group__head" aria-expanded="true" aria-controls="nav">
+          <span class="tool-group__icon"><span data-icon="map"></span></span>
+          <span class="tool-group__name">Skill and Folder Map OS</span>
+          <span class="tool-group__count" aria-hidden="true"></span>
+          <span class="tool-group__chevron"><span data-icon="chevronDown"></span></span>
+        </button>
+        <div class="tool-group__body">
+          <nav class="nav" id="nav" aria-label="Skill and Folder Map OS">
+            <a class="nav__item" href="#map" data-view="map"><span data-icon="map"></span>Map</a>
+            <a class="nav__item" href="#skills" data-view="skills"><span data-icon="list"></span><span class="nav__label" data-label="skills">All skills</span><span class="nav__count" data-count="skills"></span></a>
+            <a class="nav__item" href="#overview" data-view="overview"><span data-icon="barChart"></span>Overview</a>
+            <a class="nav__item" href="#gaps" data-view="gaps"><span data-icon="target"></span><span class="nav__label" data-label="gaps">Gaps</span><span class="nav__count" data-count="gaps"></span></a>
+            <a class="nav__item" href="#review" data-view="review"><span data-icon="sparkle"></span>Review<span class="nav__count nav__count--accent" data-count="review"></span></a>
+          </nav>
+        </div>
+      </section>
+
+      <!-- Shared sidebar: the other tools in this folder, then the locked ones -->
+      <div data-toolkit-menu="others"></div>
+      <div data-toolkit-menu="more" hidden></div>
+
+      <div class="sidebar__foot">
+        <div class="saved-mini" id="savedMini"></div>
+        <div class="sidebar__row">
+          <span class="sidebar__spacer"></span>
+          <button type="button" class="icon-btn" data-action="shortcuts" aria-label="Keyboard shortcuts"><span data-icon="keyboard"></span></button>
+          <button type="button" class="icon-btn" data-action="settings" aria-label="Preferences" title="Preferences"><span data-icon="settings"></span></button>
+        </div>
+        <div class="sidebar__by">
+          <img src="../shared/images/claude-icon.png" alt="" width="22" height="22">
+          <span>by Get AI Powers</span>
+        </div>
+      </div>
+    </aside>
+    <div class="sidebar-scrim" data-action="close-sidebar"></div>
+
+    <div class="main">
+      <header class="topbar">
+        <button type="button" class="icon-btn topbar__menu" data-action="open-sidebar" aria-label="Open menu"><span data-icon="menu"></span></button>
+        <div class="topbar__title">
+          <h1 id="viewTitle">Map</h1>
+          <span class="topbar__sub" id="viewSub"></span>
+        </div>
+        <div class="segmented lens" role="group" aria-label="Map of">
+          <button type="button" data-action="lens" data-lens="skills" aria-pressed="true" title="Your skills (T)"><span data-icon="sparkle"></span><span class="lens__label">Skills</span></button>
+          <button type="button" data-action="lens" data-lens="files" aria-pressed="false" title="Your folders and files (T)"><span data-icon="folder"></span><span class="lens__label">Files</span></button>
+        </div>
+        <div class="topbar__search">
+          <span data-icon="search" class="topbar__search-icon"></span>
+          <input type="search" id="searchInput" class="input" placeholder="Find a skill" autocomplete="off" aria-label="Find a skill">
+          <span class="kbd topbar__search-kbd">/</span>
+          <div class="search-results popover" id="searchResults" hidden role="listbox"></div>
+        </div>
+        <span class="claude-status" id="claudeStatus" hidden></span>
+        <span class="save-status" id="saveStatus" hidden></span>
+        <button type="button" class="icon-btn topbar__theme" data-theme-toggle aria-label="Switch to dark mode" title="Light or dark"><span data-icon="moon"></span></button>
+        <button type="button" class="btn topbar__add" data-action="add-manual" title="Add a skill you use on claude.ai"><span data-icon="plus"></span><span class="topbar__add-label">Add a skill</span></button>
+        <button type="button" class="btn btn--primary topbar__new" id="scanBtn" data-action="scan" aria-label="Scan again" title="Scan again (S)"><span data-icon="refresh"></span><span class="topbar__new-label">Scan again</span></button>
+      </header>
+      <div id="banner"></div>
+      <main id="view" class="view" tabindex="-1"></main>
+    </div>
+
+    <!-- The panel: one skill or group, slides in from the right -->
+    <aside class="drawer" id="drawer" aria-label="Details" hidden></aside>
+  </div>
+
+  <!-- Pop-up: forms and messages -->
+  <dialog class="modal" id="genericDialog"><div id="genericBody"></div></dialog>
+
+  <!-- Pop-up: keyboard shortcuts -->
+  <dialog class="modal" id="shortcutsDialog" aria-labelledby="shortcutsTitle">
+    <div class="modal__head"><h2 id="shortcutsTitle">Keyboard shortcuts</h2><button type="button" class="icon-btn" data-close aria-label="Close"><span data-icon="x"></span></button></div>
+    <div class="modal__body shortcuts">
+      <div><span class="kbd">/</span> Find a skill</div>
+      <div><span class="kbd">1</span> to <span class="kbd">5</span> Map, All skills, Overview, Gaps, Review</div>
+      <div><span class="kbd">T</span> Switch between your skills and your folders</div>
+      <div><span class="kbd">S</span> Scan again</div>
+      <div><span class="kbd">U</span> Up one folder (folder map)</div>
+      <div><span class="kbd">F</span> Fit the whole map on screen</div>
+      <div><span class="kbd">+</span> <span class="kbd">-</span> Zoom the map (click it first)</div>
+      <div><span class="kbd">Esc</span> Close a panel or pop-up</div>
+    </div>
+  </dialog>
+
+  <!-- Shared helpers, then the model, then the pages, then the app that ties them together -->
+  <script src="../shared/js/ui.js"></script>
+  <script src="../shared/js/store.js"></script>
+  <script src="../shared/js/sidebar.js"></script>
+  <script src="app/model.js"></script>
+  <script src="app/files-model.js"></script>
+  <script src="app/tidy-model.js"></script>
+  <script src="app/components.js"></script>
+  <script src="app/map.js"></script>
+  <script src="app/view-map.js"></script>
+  <script src="app/view-skills.js"></script>
+  <script src="app/view-overview.js"></script>
+  <script src="app/view-gaps.js"></script>
+  <script src="app/view-review.js"></script>
+  <script src="app/view-files.js"></script>
+  <script src="app/view-preferences.js"></script>
+  <script src="app/drawer.js"></script>
+  <script src="app/drawer-files.js"></script>
+  <script src="app/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "pages": [
+    { "id": "calendar", "label": "Content calendar", "icon": "calendar" }
+  ],
+  "home": {
+    "scripts": ["app/model.js", "home-boxes.js"]
+  }
+}

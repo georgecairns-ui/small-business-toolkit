@@ -1,0 +1,169 @@
+/*
+  THEME
+  -----
+  Every colour, font, size, space, corner and shadow in the app comes from this file.
+  To re-brand the whole app (for a client, or to your own colours), change the values below
+  and nothing else. There are 2 sets of colours: light (first) and dark (further down).
+  The switch in the top bar flips between them; with no choice made, the app follows the computer.
+
+  Current look: calm, clean software (white, soft grey, near-black text) with small touches of
+  Claude terracotta for Get AI Powers. Font: Figtree, bundled in shared/fonts so it works offline.
+
+  Want the Get AI Powers slab-serif headings instead? The brand fonts are bundled in shared/fonts.
+  Uncomment the @font-face block at the bottom and set --font-display.
+*/
+
+@font-face { font-family: "Figtree"; src: url("fonts/Figtree-Variable.woff2") format("woff2"); font-weight: 300 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Figtree"; src: url("fonts/Figtree-Italic-Variable.woff2") format("woff2"); font-weight: 300 900; font-style: italic; font-display: swap; }
+
+:root {
+  color-scheme: light;
+
+  /* ---------- Colours: surfaces ---------- */
+  --color-bg:           #F5F3EE;  /* main working area */
+  --color-sidebar:      #F1EEE6;  /* sidebar and quiet panels */
+  --color-surface:      #FFFDFB;  /* cards, drawers, pop-ups */
+  --color-sunk:         #EFEBE0;  /* hover, inset areas, skeletons */
+  --color-sunk-strong:  #E6E1D6;  /* selected rows, pressed states */
+  --color-line:         #E4DFD5;  /* hairline borders and dividers */
+  --color-line-strong:  #C4BEB4;  /* input borders, borders on hover */
+
+  /* ---------- Colours: text ---------- */
+  --color-ink:          #191919;  /* main text (never pure black) */
+  --color-ink-soft:     #38352F;  /* secondary text */
+  --color-muted:        #6B665D;  /* helper text, labels, timestamps */
+  --color-faint:        #A8A196;  /* placeholders, disabled */
+
+  /* ---------- Colours: main buttons (near-black in light, near-white in dark) ---------- */
+  --color-primary:       #191919;
+  --color-primary-hover: #38352F;
+  --color-on-primary:    #FFFDFB;
+
+  /* ---------- Colours: accent (clay from the Get AI Powers brand, used sparingly) ---------- */
+  --color-accent:       #D97757;  /* icons, the selected page, the logo, small highlights */
+  --color-accent-hover: #C4643F;
+  --color-accent-text:  #9C5238;  /* accent used for small text (passes contrast on white) */
+  --color-accent-soft:  #F8E9E2;  /* count badges, "New" tags, highlights */
+  --color-accent-line:  #EFC8B8;
+  --color-on-accent:    #191919;
+
+  /* ---------- Colours: meaning ---------- */
+  --color-success:      #1F7A45;
+  --color-success-soft: #DCF3E3;
+  --color-warning:      #8A5200;
+  --color-warning-soft: #FFF0D2;
+  --color-danger:       #B2261D;
+  --color-danger-soft:  #FFE6E2;
+  --color-info:         #1E5A9F;
+  --color-info-soft:    #E1EEFC;
+  --color-dark:         #191919;  /* toasts and tooltips */
+  --color-on-dark:      #F5F3EE;
+  --color-scrim:        rgba(25, 25, 25, 0.32);  /* the dim layer behind pop-ups */
+
+  /* Category colours (Do today, Quick wins, Delegate, Waiting on, Can wait) */
+  --cat-today:    #D97757;
+  --cat-quick:    #C08A1E;
+  --cat-delegate: #3F8A55;
+  --cat-waiting:  #4A73B5;
+  --cat-later:    #8C9099;
+
+  /* Calendar event colours */
+  --event-bg:     #E9F0FB;
+  --event-line:   #4A73B5;
+  --event-text:   #1F3F6E;
+  --block-bg:     #F8E9E2;   /* a task dragged into the calendar */
+  --block-line:   #D97757;
+
+  /* ---------- Type ---------- */
+  --font-ui: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: var(--font-ui);
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --text-2xs: 0.6875rem; /* 11px */
+  --text-xs:  0.75rem;   /* 12px */
+  --text-sm:  0.8125rem; /* 13px */
+  --text-base: 0.875rem; /* 14px, the main UI size */
+  --text-md:  1rem;      /* 16px */
+  --text-lg:  1.125rem;
+  --text-xl:  1.375rem;
+  --text-2xl: 1.75rem;
+  --leading: 1.45;
+
+  /* ---------- Space ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 48px;
+
+  /* ---------- Layout ---------- */
+  --sidebar-width: 248px;
+  --topbar-height: 60px;
+  --drawer-width: 420px;
+  --content-max: 1120px;
+
+  /* ---------- Corners and shadows ---------- */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 10px;   /* cards */
+  --radius-lg: 12px;   /* columns, sections */
+  --radius-xl: 14px;   /* pop-ups */
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 2px rgba(20, 24, 33, 0.05);
+  --shadow-md: 0 2px 6px rgba(20, 24, 33, 0.05), 0 8px 24px rgba(20, 24, 33, 0.08);
+  --shadow-lg: 0 12px 40px rgba(20, 24, 33, 0.14);
+  --focus-ring: 0 0 0 3px rgba(204, 120, 92, 0.32);
+
+  /* ---------- Motion ---------- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 340ms;
+}
+
+/* ---------- Dark colours: used when the switch says dark, or the computer prefers dark ---------- */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #191919; --color-sidebar: #1E1D1B; --color-surface: #2A2825; --color-sunk: #24231F; --color-sunk-strong: #302E2A;
+  --color-line: #38352F; --color-line-strong: #4A4640;
+  --color-ink: #F5F3EE; --color-ink-soft: #D8D3C9; --color-muted: #A8A196; --color-faint: #77726A;
+  --color-primary: #F5F3EE; --color-primary-hover: #FFFDFB; --color-on-primary: #191919;
+  --color-accent: #E08A6A; --color-accent-hover: #E9A98F; --color-accent-text: #E9A98F; --color-accent-soft: #3A251C; --color-accent-line: #5C3626; --color-on-accent: #191919;
+  --color-success: #6FD39A; --color-success-soft: #173A26; --color-warning: #F4C872; --color-warning-soft: #3C2E12;
+  --color-danger: #FFB3A8; --color-danger-soft: #46201C; --color-info: #9FC7F3; --color-info-soft: #19304A;
+  --color-dark: #2A2825; --color-on-dark: #F5F3EE; --color-scrim: rgba(0, 0, 0, 0.55);
+  --cat-today: #E08A6A; --cat-quick: #F4C872; --cat-delegate: #6FD39A; --cat-waiting: #9FC7F3; --cat-later: #A0A5AE;
+  --event-bg: #19304A; --event-line: #6F9BD9; --event-text: #CFE2FA; --block-bg: #3A251C; --block-line: #E08A6A;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4); --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35); --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
+  --focus-ring: 0 0 0 3px rgba(222, 142, 114, 0.4);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-bg: #191919; --color-sidebar: #1E1D1B; --color-surface: #2A2825; --color-sunk: #24231F; --color-sunk-strong: #302E2A;
+    --color-line: #38352F; --color-line-strong: #4A4640;
+    --color-ink: #F5F3EE; --color-ink-soft: #D8D3C9; --color-muted: #A8A196; --color-faint: #77726A;
+    --color-primary: #F5F3EE; --color-primary-hover: #FFFDFB; --color-on-primary: #191919;
+    --color-accent: #E08A6A; --color-accent-hover: #E9A98F; --color-accent-text: #E9A98F; --color-accent-soft: #3A251C; --color-accent-line: #5C3626; --color-on-accent: #191919;
+    --color-success: #6FD39A; --color-success-soft: #173A26; --color-warning: #F4C872; --color-warning-soft: #3C2E12;
+    --color-danger: #FFB3A8; --color-danger-soft: #46201C; --color-info: #9FC7F3; --color-info-soft: #19304A;
+    --color-dark: #2A2825; --color-on-dark: #F5F3EE; --color-scrim: rgba(0, 0, 0, 0.55);
+    --cat-today: #E08A6A; --cat-quick: #F4C872; --cat-delegate: #6FD39A; --cat-waiting: #9FC7F3; --cat-later: #A0A5AE;
+    --event-bg: #19304A; --event-line: #6F9BD9; --event-text: #CFE2FA; --block-bg: #3A251C; --block-line: #E08A6A;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4); --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35); --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
+    --focus-ring: 0 0 0 3px rgba(222, 142, 114, 0.4);
+  }
+}
+
+/*
+  Optional: the Get AI Powers brand look (slab serif headings).
+  Remove the comment markers around this block, then set:
+    --font-display: "Zilla Slab", Georgia, serif;
+
+@font-face { font-family: "Zilla Slab"; src: url("fonts/ZillaSlab-SemiBold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Zilla Slab"; src: url("fonts/ZillaSlab-Bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+*/

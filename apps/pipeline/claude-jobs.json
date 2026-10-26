@@ -1,0 +1,17 @@
+{
+  "about": "Jobs the app can ask Claude to do straight away, through the helper (apps/server). The app sends only the job's name; these words are what Claude follows. See maintainers/SHARED-V4-CHANGES.md.",
+  "jobs": {
+    "update-deals": {
+      "label": "updating deals from new call notes",
+      "prompt": "Call notes have just been added to a deal in Pipeline OS. Follow .claude/skills/update-a-deal for every deal in apps/pipeline/data/pipeline.json that has notes waiting (notesInbox items with status waiting). Read context/sales.md first. Be quick and change nothing else."
+    },
+    "send-emails": {
+      "label": "sending the emails the person approved",
+      "prompt": "The person has just pressed Send on an email in Pipeline OS. Follow .claude/skills/send-approved-emails: send only the emails in apps/pipeline/data/pipeline.json whose sendStatus is queued, exactly as written, then record what happened. Send nothing else and change nothing else."
+    },
+    "research-deals": {
+      "label": "researching people before a call",
+      "prompt": "The person has asked for research in Pipeline OS. Follow .claude/skills/research-a-prospect for every deal in apps/pipeline/data/pipeline.json whose researchRequestedAt is newer than its research (or that has no research). Read context/sales.md first. Change nothing else."
+    }
+  }
+}

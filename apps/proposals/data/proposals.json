@@ -1,0 +1,60 @@
+{
+  "about": [
+    "Your proposals. Claude and the Proposal Writing OS app both read and write this file.",
+    "You never need to edit it by hand: ask Claude, or use the app at http://localhost:4747.",
+    "Claude: the format is in apps/proposals/CLAUDE.md."
+  ],
+  "formatVersion": 1,
+  "settings": {
+    "yourName": "",
+    "businessName": "",
+    "currency": "GBP",
+    "vatRegistered": false,
+    "vatRate": 20,
+    "paymentTerms": "",
+    "validDays": 30,
+    "chaseAfterDays": 7,
+    "autoWrite": true,
+    "clientsFolder": "files/02-clients",
+    "emailProvider": "gmail",
+    "proposalsSetUp": false,
+    "signOff": {
+      "name": "",
+      "role": "",
+      "email": "",
+      "phone": ""
+    },
+    "brand": {
+      "logo": "",
+      "logoOnColour": "",
+      "website": "",
+      "cover": "colour",
+      "setUp": false
+    },
+    "template": {
+      "name": "",
+      "importedAt": null
+    },
+    "ownSkill": "",
+    "sections": [
+      { "key": "about", "label": "About you", "on": true },
+      { "key": "challenge", "label": "What's getting in the way", "on": true },
+      { "key": "solution", "label": "How we'll fix it", "on": true },
+      { "key": "delivery", "label": "How we'll deliver it", "on": true },
+      { "key": "investment", "label": "Your options", "on": true },
+      { "key": "next", "label": "Next steps", "on": true },
+      { "key": "terms", "label": "Terms", "on": false }
+    ]
+  },
+  "packages": [],
+  "extras": [],
+  "clients": [],
+  "proposals": [],
+  "requests": [],
+  "checkIn": {
+    "lastRunAt": null,
+    "foldersChecked": 0,
+    "proposalsWritten": 0
+  },
+  "activity": []
+}

@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pipeline OS</title>
+  <meta name="description" content="Every deal on one board. Claude writes up your sales calls, checks every deal and drafts the email back. You approve it.">
+  <link rel="icon" type="image/png" href="../shared/images/claude-icon.png">
+  <!-- Shared look (theme.css holds every colour and font) -->
+  <link rel="stylesheet" href="../shared/theme.css">
+  <link rel="stylesheet" href="../shared/base.css">
+  <link rel="stylesheet" href="../shared/sidebar.css">
+  <!-- Light or dark: applied before anything draws, so the page never flashes the wrong colours -->
+  <script src="../shared/js/theme.js"></script>
+  <!-- This app's layout -->
+  <link rel="stylesheet" href="app/app.css">
+</head>
+<body data-tool="pipeline">
+  <a class="skip-link" href="#view">Skip to main content</a>
+
+  <!-- Shown before the pipeline is running: welcome, loading, or a problem -->
+  <div id="gate" class="gate"></div>
+
+  <!-- The app itself -->
+  <div id="shell" class="shell" hidden>
+    <aside class="sidebar" id="sidebar" aria-label="Main">
+      <div class="sidebar__brand">
+        <img src="../shared/images/claude-icon.png" alt="" width="30" height="30">
+        <div class="sidebar__brand-text">
+          <div class="sidebar__product" id="businessName">Your workspace</div>
+        </div>
+      </div>
+
+      <!-- The shared sidebar (../shared/js/sidebar.js) adds Home, the other tools in this folder and
+           the locked tools. This tool's own pages stay here, so they work even if those can't load. -->
+      <a class="side-home" href="../home/"><span data-icon="home"></span>Home</a>
+
+      <div class="side-label">Your tools</div>
+      <section class="tool-group" data-tool-group="pipeline">
+        <button type="button" class="tool-group__head" aria-expanded="true" aria-controls="nav">
+          <span class="tool-group__icon"><span data-icon="trendingUp"></span></span>
+          <span class="tool-group__name">Pipeline OS</span>
+          <span class="tool-group__count" aria-hidden="true"></span>
+          <span class="tool-group__chevron"><span data-icon="chevronDown"></span></span>
+        </button>
+        <div class="tool-group__body">
+          <nav class="nav" id="nav" aria-label="Pipeline OS">
+            <a class="nav__item" href="#pipeline" data-view="pipeline"><span data-icon="columns"></span>Pipeline<span class="nav__count" data-count="pipeline"></span></a>
+            <a class="nav__item" href="#review" data-view="review"><span data-icon="sparkle"></span>Review<span class="nav__count nav__count--accent" data-count="review"></span></a>
+            <a class="nav__item" href="#calls" data-view="calls"><span data-icon="phone"></span>Calls<span class="nav__count nav__count--accent" data-count="calls"></span></a>
+            <a class="nav__item" href="#people" data-view="people"><span data-icon="users"></span>People<span class="nav__count" data-count="people"></span></a>
+          </nav>
+        </div>
+      </section>
+
+      <!-- Shared sidebar: the other tools in this folder, then the locked ones -->
+      <div data-toolkit-menu="others"></div>
+      <div data-toolkit-menu="more" hidden></div>
+
+      <div class="sidebar__foot">
+        <div class="saved-mini" id="savedMini"></div>
+        <div class="sidebar__row">
+          <span class="sidebar__spacer"></span>
+          <button type="button" class="icon-btn" data-action="shortcuts" aria-label="Keyboard shortcuts"><span data-icon="keyboard"></span></button>
+          <button type="button" class="icon-btn" data-action="settings" aria-label="Preferences" title="Preferences"><span data-icon="settings"></span></button>
+        </div>
+        <div class="sidebar__by">
+          <img src="../shared/images/claude-icon.png" alt="" width="22" height="22">
+          <span>by Get AI Powers</span>
+        </div>
+      </div>
+    </aside>
+    <div class="sidebar-scrim" data-action="close-sidebar"></div>
+
+    <div class="main">
+      <header class="topbar">
+        <button type="button" class="icon-btn topbar__menu" data-action="open-sidebar" aria-label="Open menu"><span data-icon="menu"></span></button>
+        <div class="topbar__title">
+          <h1 id="viewTitle">Pipeline</h1>
+          <span class="topbar__sub" id="viewSub"></span>
+        </div>
+        <div class="topbar__search">
+          <span data-icon="search" class="topbar__search-icon"></span>
+          <input type="search" id="searchInput" class="input" placeholder="Search deals and people" autocomplete="off" aria-label="Search deals and people">
+          <span class="kbd topbar__search-kbd">/</span>
+          <div class="search-results popover" id="searchResults" hidden role="listbox"></div>
+        </div>
+        <span class="claude-status" id="claudeStatus" hidden></span>
+        <span class="save-status" id="saveStatus" hidden></span>
+        <button type="button" class="icon-btn topbar__theme" data-theme-toggle aria-label="Switch to dark mode" title="Light or dark"><span data-icon="moon"></span></button>
+        <button type="button" class="btn topbar__voice" data-brain-dump title="Brain dump: talk, and Claude sorts it out (V)"><span data-icon="mic"></span><span class="topbar__voice-label">Brain dump</span></button>
+        <button type="button" class="btn btn--primary topbar__new" data-action="add-deal" aria-label="New deal"><span data-icon="plus"></span><span class="topbar__new-label">New deal</span></button>
+      </header>
+      <div id="banner"></div>
+      <main id="view" class="view" tabindex="-1"></main>
+    </div>
+
+    <!-- The record panel: one deal, person or call, slides in from the right -->
+    <aside class="drawer" id="drawer" aria-label="Details" hidden></aside>
+  </div>
+
+  <!-- Pop-up: keyboard shortcuts -->
+  <dialog class="modal" id="shortcutsDialog" aria-labelledby="shortcutsTitle">
+    <div class="modal__head"><h2 id="shortcutsTitle">Keyboard shortcuts</h2><button type="button" class="icon-btn" data-close aria-label="Close"><span data-icon="x"></span></button></div>
+    <div class="modal__body shortcuts">
+      <div><span class="kbd">N</span> New deal</div>
+      <div><span class="kbd">V</span> Brain dump (record a voice note)</div>
+      <div><span class="kbd">/</span> Search</div>
+      <div><span class="kbd">1</span> to <span class="kbd">4</span> Pipeline, Review, Calls, People</div>
+      <div><span class="kbd">Esc</span> Close a panel or pop-up</div>
+    </div>
+  </dialog>
+
+  <!-- Shared helpers, then the model, then the pages, then the app that ties them together -->
+  <script src="../shared/js/ui.js"></script>
+  <script src="../shared/js/store.js"></script>
+  <script src="../shared/js/sidebar.js"></script>
+  <script src="../shared/js/braindump.js"></script>
+  <script src="app/model.js"></script>
+  <script src="app/components.js"></script>
+  <script src="app/links.js"></script>
+  <script src="app/confetti.js"></script>
+  <script src="app/view-pipeline.js"></script>
+  <script src="app/view-review.js"></script>
+  <script src="app/view-calls.js"></script>
+  <script src="app/view-people.js"></script>
+  <script src="app/view-preferences.js"></script>
+  <script src="app/drawer.js"></script>
+  <script src="app/app.js"></script>
+</body>
+</html>

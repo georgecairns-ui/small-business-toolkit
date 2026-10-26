@@ -1,0 +1,21 @@
+{
+  "about": "Jobs the app can ask Claude to do straight away, through the helper (apps/server). The app sends only the job's name; these words are what Claude follows. See maintainers/SHARED-V4-CHANGES.md.",
+  "jobs": {
+    "refresh-money": {
+      "label": "refreshing your money view",
+      "prompt": "The person has pressed Refresh numbers in Money View OS. Follow .claude/skills/update-my-money-view: read context/money.md and apps/money/data/money.json first, read only their connected accounts software (invoices, balances and its bank feed), then update accounts, transactions, invoices read from their accounts software, payments you can match and linking a draft note to its arrived invoice, suggested regular payments, flags and the import log in apps/money/data/money.json. Never type a total, a forecast or a tax figure, and never store a bank login, sort code, account number or card number. Move no money. Send nothing. Change nothing else."
+    },
+    "put-invoices-in-accounts": {
+      "label": "putting your invoices in as drafts",
+      "prompt": "The person has pressed Put it in their accounts software as a draft in Money View OS. Follow .claude/skills/put-invoices-in-my-accounts for every invoice in apps/money/data/money.json that has request.kind draft: create it as a DRAFT only, through a connection that can create drafts, never approved, never sent, never emailed, then set ref, set status to in-accounts and clear the request. If the connection cannot create drafts, set the invoice back to draft, clear the request and write a flag saying so in plain words. Move no money. Send nothing. Change nothing else."
+    },
+    "chase-invoices": {
+      "label": "drafting your reminders",
+      "prompt": "The person has pressed Chase in Money View OS. Follow .claude/skills/who-owes-me-money for the invoices they named, or every overdue invoice if none is named, in apps/money/data/money.json: draft a polite reminder for each with .claude/skills/polite-chaser and the person's voice from context/voice.md, and save it in that invoice's chaser field (text and at). Draft only. Never send or email anything. Move no money. Send nothing. Change nothing else."
+    },
+    "can-i-afford-this": {
+      "label": "working out your what if",
+      "prompt": "The person has asked Claude a question in the What if view of Money View OS. Follow .claude/skills/can-i-afford-this for the scenario in apps/money/data/money.json that has a request: turn the question into changes only, switch it on, write a one-paragraph note from the figures the app's own rules give (apps/money/app/model.js, scenarioCompare), say it is an estimate and to check big decisions with their accountant, then clear the request. Never type a forecast or a balance of your own and never touch a real invoice, bill or setting. Move no money. Send nothing. Change nothing else."
+    }
+  }
+}

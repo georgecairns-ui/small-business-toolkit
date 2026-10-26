@@ -1,0 +1,30 @@
+{
+  "pages": [
+    {
+      "id": "tasks",
+      "label": "Tasks",
+      "icon": "checkSquare"
+    },
+    {
+      "id": "replies",
+      "label": "Inbox",
+      "icon": "inbox"
+    },
+    {
+      "id": "review",
+      "label": "Review",
+      "icon": "sparkle"
+    },
+    {
+      "id": "calls",
+      "label": "Calls",
+      "icon": "phone"
+    }
+  ],
+  "home": {
+    "scripts": [
+      "app/model.js",
+      "home-boxes.js"
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "about": [
+    "Your pipeline. Claude and the Pipeline OS app both read and write this file.",
+    "You never need to edit it by hand: ask Claude, or use the app at http://localhost:4747.",
+    "Claude: the format is in apps/pipeline/CLAUDE.md."
+  ],
+  "formatVersion": 1,
+  "settings": {
+    "yourName": "",
+    "businessName": "",
+    "currency": "GBP",
+    "chaseAfterDays": 7,
+    "autoMove": true,
+    "salesSetUp": false,
+    "emailProvider": "gmail",
+    "calendarProvider": "google",
+    "stages": [
+      {
+        "key": "new",
+        "label": "New enquiry"
+      },
+      {
+        "key": "call-completed",
+        "label": "Call completed"
+      },
+      {
+        "key": "talking",
+        "label": "Talking"
+      },
+      {
+        "key": "proposal",
+        "label": "Proposal sent"
+      },
+      {
+        "key": "negotiating",
+        "label": "Negotiating"
+      },
+      {
+        "key": "won",
+        "label": "Won"
+      },
+      {
+        "key": "lost",
+        "label": "Lost"
+      }
+    ],
+    "claudeSends": false,
+    "fitCriteria": []
+  },
+  "deals": [],
+  "people": [],
+  "calls": [],
+  "suggestions": [],
+  "checkIn": {
+    "lastRunAt": null,
+    "nextRunAt": null,
+    "emailsRead": 0,
+    "callsRead": 0,
+    "dealsUpdated": 0
+  },
+  "activity": []
+}

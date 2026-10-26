@@ -1,0 +1,11 @@
+{
+  "tools+": [
+    {
+      "id": "toolkit",
+      "name": "Toolkit",
+      "icon": "layout",
+      "app": "apps/toolkit/",
+      "dataFiles": ["apps/toolkit/data/toolkit.json"]
+    }
+  ]
+}

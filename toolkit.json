@@ -1,0 +1,18 @@
+{
+  "id": "small-business-toolkit",
+  "name": "Small Business Toolkit OS",
+  "version": "1.0.0",
+  "sharedVersion": "7",
+  "attachingVersion": "3",
+  "about": "All 7 tools from the Get AI Powers small business toolkit, attached to Task List OS, plus the Toolkit section (apps/toolkit/). Built by maintainers/build.py from the 7 tools' repositories; maintainers/built-from.json says which version of each.",
+  "tools": ["task-list", "pipeline", "skill-map", "proposals", "content", "money", "ads", "toolkit"],
+  "app": "apps/toolkit/",
+  "dataFiles": ["apps/toolkit/data/toolkit.json"],
+  "skills": ["toolkit-check-in", "whats-next", "build-on-my-toolkit", "setup"],
+  "setupSteps": [
+    "setup/toolkit-01-quick-questions.md",
+    "setup/toolkit-02-connect-the-rest.md",
+    "setup/toolkit-03-make-it-automatic.md",
+    "setup/toolkit-04-check-and-hand-over.md"
+  ]
+}

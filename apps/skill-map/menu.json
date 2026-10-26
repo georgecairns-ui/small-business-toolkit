@@ -1,0 +1,36 @@
+{
+  "pages": [
+    {
+      "id": "map",
+      "label": "Map",
+      "icon": "map"
+    },
+    {
+      "id": "skills",
+      "label": "All skills and files",
+      "icon": "list"
+    },
+    {
+      "id": "overview",
+      "label": "Overview",
+      "icon": "barChart"
+    },
+    {
+      "id": "gaps",
+      "label": "Gaps and clean-up",
+      "icon": "target"
+    },
+    {
+      "id": "review",
+      "label": "Review",
+      "icon": "sparkle"
+    }
+  ],
+  "home": {
+    "scripts": [
+      "app/model.js",
+      "app/files-model.js",
+      "home-boxes.js"
+    ]
+  }
+}

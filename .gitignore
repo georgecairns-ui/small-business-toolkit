@@ -1,0 +1,22 @@
+# Built zips
+dist/
+
+# Safety copies the app makes before every save
+*.backup.json
+
+# Computer clutter
+.DS_Store
+._*
+Thumbs.db
+desktop.ini
+
+# Local Claude Code files that belong to one computer, not the kit
+.claude/launch.json
+.claude/settings.local.json
+.claude/.cc-writes/
+
+# Home layout: one person's choice of boxes, made while testing
+apps/home/data/
+
+# Photos and videos added to posts: they stay on this computer, never in the kit
+apps/*/data/media/

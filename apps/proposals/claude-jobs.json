@@ -1,0 +1,17 @@
+{
+  "about": "Jobs the app can ask Claude to do straight away, through the helper (apps/server). The app sends only the job's name; these words are what Claude follows. See maintainers/SHARED-V4-CHANGES.md.",
+  "jobs": {
+    "write-proposals": {
+      "label": "writing a proposal",
+      "prompt": "The person has just asked for a proposal in Proposal Writing OS. Follow .claude/skills/write-a-proposal for every request in apps/proposals/data/proposals.json with kind write and status waiting. Read the business's own proposal skill (settings.ownSkill) and context/proposals.md first. Change nothing else."
+    },
+    "change-proposals": {
+      "label": "changing a proposal",
+      "prompt": "The person has just asked for a change to a proposal in Proposal Writing OS. Follow .claude/skills/change-a-proposal for every request in apps/proposals/data/proposals.json with kind change and status waiting. Change nothing else."
+    },
+    "check-folders": {
+      "label": "checking the client folders",
+      "prompt": "The person has just pressed Check for new folders in Proposal Writing OS. Follow .claude/skills/check-client-folders for every request in apps/proposals/data/proposals.json with kind scan and status waiting. If settings.autoWrite is true, then follow .claude/skills/write-a-proposal for each new folder it marks ready. Change nothing else."
+    }
+  }
+}

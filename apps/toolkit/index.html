@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Toolkit</title>
+  <meta name="description" content="Your toolkit: what's connected, which tools are set up, and jobs to hand Claude to build and change things for you.">
+  <link rel="icon" type="image/png" href="../shared/images/claude-icon.png">
+  <!-- Shared look (theme.css holds every colour and font) -->
+  <link rel="stylesheet" href="../shared/theme.css">
+  <link rel="stylesheet" href="../shared/base.css">
+  <link rel="stylesheet" href="../shared/sidebar.css">
+  <!-- Light or dark: applied before anything draws, so the page never flashes the wrong colours -->
+  <script src="../shared/js/theme.js"></script>
+  <!-- This app's layout and its pages' styles -->
+  <link rel="stylesheet" href="app/app.css">
+</head>
+<body data-tool="toolkit">
+  <a class="skip-link" href="#view">Skip to main content</a>
+
+  <!-- Shown before the app is running: loading, or what to do next -->
+  <div id="gate" class="gate"></div>
+
+  <!-- The app itself -->
+  <div id="shell" class="shell" hidden>
+    <aside class="sidebar" id="sidebar" aria-label="Main">
+      <div class="sidebar__brand">
+        <img src="../shared/images/claude-icon.png" alt="" width="30" height="30">
+        <div class="sidebar__brand-text">
+          <div class="sidebar__product" id="businessName">Your workspace</div>
+        </div>
+      </div>
+
+      <!-- The shared sidebar (../shared/js/sidebar.js) adds Home, the other tools in this folder and
+           the locked tools. This tool's own pages stay here, so they work even if those can't load. -->
+      <a class="side-home" href="../home/"><span data-icon="home"></span>Home</a>
+
+      <div class="side-label">Your tools</div>
+      <section class="tool-group" data-tool-group="toolkit">
+        <button type="button" class="tool-group__head" aria-expanded="true" aria-controls="nav">
+          <span class="tool-group__icon"><span data-icon="layout"></span></span>
+          <span class="tool-group__name">Toolkit</span>
+          <span class="tool-group__count" aria-hidden="true"></span>
+          <span class="tool-group__chevron"><span data-icon="chevronDown"></span></span>
+        </button>
+        <div class="tool-group__body">
+          <nav class="nav" id="nav" aria-label="Toolkit">
+            <a class="nav__item is-active" href="#connections" aria-current="page"><span data-icon="external"></span>Connections<span class="nav__count nav__count--accent" data-count="attention"></span></a>
+            <a class="nav__item" href="#setup"><span data-icon="checkSquare"></span>Set up</a>
+            <a class="nav__item" href="#build"><span data-icon="sparkle"></span>Build and customise<span class="nav__count nav__count--accent" data-count="ideas"></span></a>
+          </nav>
+        </div>
+      </section>
+
+      <!-- Shared sidebar: the other tools in this folder, then the locked ones -->
+      <div data-toolkit-menu="others"></div>
+      <div data-toolkit-menu="more" hidden></div>
+
+      <div class="sidebar__foot">
+        <div class="sidebar__row">
+          <span class="sidebar__spacer"></span>
+          <button type="button" class="icon-btn" data-action="shortcuts" aria-label="Keyboard shortcuts"><span data-icon="keyboard"></span></button>
+        </div>
+        <div class="sidebar__by">
+          <img src="../shared/images/claude-icon.png" alt="" width="22" height="22">
+          <span>by Get AI Powers</span>
+        </div>
+      </div>
+    </aside>
+    <div class="sidebar-scrim" data-action="close-sidebar"></div>
+
+    <div class="main">
+      <header class="topbar">
+        <button type="button" class="icon-btn topbar__menu" data-action="open-sidebar" aria-label="Open menu"><span data-icon="menu"></span></button>
+        <div class="topbar__title">
+          <h1 id="viewTitle">Connections</h1>
+          <span class="topbar__sub" id="viewSub"></span>
+        </div>
+        <span class="claude-status" id="claudeStatus" hidden></span>
+        <span class="save-status" id="saveStatus" hidden></span>
+        <button type="button" class="icon-btn topbar__theme" data-theme-toggle aria-label="Switch to dark mode" title="Light or dark"><span data-icon="moon"></span></button>
+        <button type="button" class="btn topbar__voice" data-brain-dump title="Brain dump: talk, and Claude sorts it out (V)"><span data-icon="mic"></span><span class="topbar__voice-label">Brain dump</span></button>
+      </header>
+      <div id="banner"></div>
+      <!-- The rail: the 3 pages to flick between -->
+      <div class="rail" id="rail"></div>
+      <main id="view" class="view" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <!-- Pop-up: a Build and customise job (filled by app/view-build.js) -->
+  <dialog class="modal modal--build" id="buildDialog" aria-labelledby="buildTitle"></dialog>
+
+  <!-- Pop-up: keyboard shortcuts -->
+  <dialog class="modal" id="shortcutsDialog" aria-labelledby="shortcutsTitle">
+    <div class="modal__head"><h2 id="shortcutsTitle">Keyboard shortcuts</h2><button type="button" class="icon-btn" data-close aria-label="Close"><span data-icon="x"></span></button></div>
+    <div class="modal__body shortcuts">
+      <div><span class="kbd">1</span> to <span class="kbd">3</span> Connections, Set up, Build and customise</div>
+      <div><span class="kbd">V</span> Brain dump (record a voice note)</div>
+      <div><span class="kbd">Esc</span> Close a pop-up</div>
+    </div>
+  </dialog>
+
+  <!-- Shared helpers, then the list and the rules, then the pages, then the app that ties them together -->
+  <script src="../shared/js/ui.js"></script>
+  <script src="../shared/js/store.js"></script>
+  <script src="../shared/js/sidebar.js"></script>
+  <script src="../shared/js/braindump.js"></script>
+  <script src="app/apps-list.js"></script>
+  <script src="app/model.js"></script>
+  <script src="app/components.js"></script>
+  <script src="app/view-connections.js"></script>
+  <script src="app/view-setup.js"></script>
+  <script src="app/view-build.js"></script>
+  <script src="app/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "about": "Jobs the app can ask Claude to do straight away, through the helper (apps/server). The app sends only the job's name; these words are what Claude follows. See maintainers/SHARED-V4-CHANGES.md.",
+  "jobs": {
+    "research-my-market": {
+      "label": "researching what your customers search for",
+      "prompt": "The person has pressed Refresh research in Content Machine OS. Follow .claude/skills/research-my-market: read context/content.md and apps/content/data/content.json first, research the public web only (never log in anywhere, never follow or message anyone), fill the research section of apps/content/data/content.json, then follow .claude/skills/build-my-content-skill to update their what-works skill. Change nothing else."
+    },
+    "plan-my-content": {
+      "label": "planning your next posts",
+      "prompt": "The person has pressed Plan next weeks in Content Machine OS. Follow .claude/skills/plan-my-content: read context/content.md, context/voice.md and apps/content/data/content.json, then fill the next weeks of the calendar in apps/content/data/content.json without changing any post that already exists. Post nothing, message no one. Change nothing else."
+    },
+    "write-posts": {
+      "label": "writing your waiting posts",
+      "prompt": "The person has asked Claude to write or change a post in Content Machine OS. Follow .claude/skills/write-posts for every post in apps/content/data/content.json that has a request (kind write, rewrite or case-study), reading context/voice.md and their what-works skill first. Write the words, fill each platform's score factors and reason, add anything you need from them to needs, set the status from the post's approval, then clear the request. Post nothing. Change nothing else."
+    }
+  }
+}

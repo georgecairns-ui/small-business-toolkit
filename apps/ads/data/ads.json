@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "settings": {
+    "businessName": "",
+    "ownerName": "",
+    "currency": "GBP",
+    "weekStarts": 1,
+    "result": { "name": "", "plural": "", "kind": "", "worth": null, "closeRate": null },
+    "targetCostPerResult": null,
+    "platformTargets": {},
+    "monthlyBudget": null,
+    "dailyCap": null,
+    "weeklyCap": null,
+    "seasons": []
+  },
+  "platforms": {},
+  "campaigns": [],
+  "figures": [],
+  "builds": [],
+  "summaries": [],
+  "suggestions": [],
+  "wins": [],
+  "imports": [],
+  "activity": []
+}

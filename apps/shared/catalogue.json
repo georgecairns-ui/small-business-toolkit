@@ -1,0 +1,67 @@
+{
+  "catalogueVersion": 1,
+  "tools": [
+    {
+      "id": "task-list",
+      "name": "Task List OS",
+      "description": "The task list that does itself. Claude sorts your inbox, calls and brain dump into tasks with drafts and times, and every other tool's actions land here for you to approve.",
+      "icon": "checkSquare",
+      "app": "apps/task-list/",
+      "repository": "task-list-os"
+    },
+    {
+      "id": "pipeline",
+      "name": "Pipeline OS",
+      "description": "The pipeline that chases itself, with every deal on one board by stage. Claude spots the chases that are due and drafts each follow-up in your voice, ready for you to send.",
+      "icon": "trendingUp",
+      "app": "apps/pipeline/",
+      "repository": "pipeline-os"
+    },
+    {
+      "id": "skill-map",
+      "name": "Skill and Folder Map OS",
+      "description": "See every skill Claude has and every folder and file you keep, drawn as two glowing maps. It shows what you use, what is doubled up, which parts of your business have no skill yet, and what to tidy first.",
+      "icon": "map",
+      "app": "apps/skill-map/",
+      "repository": "skill-and-folder-map-os"
+    },
+    {
+      "id": "proposals",
+      "name": "Proposal Writing OS",
+      "description": "Put everything about a client in one folder and get a proposal in your brand. Claude writes it with your packages and prices, and you check it before it goes anywhere.",
+      "icon": "fileText",
+      "app": "apps/proposals/",
+      "repository": "proposal-writing-os"
+    },
+    {
+      "id": "content",
+      "name": "Content Machine OS",
+      "description": "Plans your posts from what your customers search for and what works for your competitors, drafted in your voice and scored for each platform. You approve every post and post it yourself.",
+      "icon": "megaphone",
+      "app": "apps/content/",
+      "repository": "content-machine-os"
+    },
+    {
+      "id": "money",
+      "name": "Money View OS",
+      "description": "Your money month by month: what's invoiced, paid and due, and a forecast of the next 12 weeks. Raise invoices into your accounts app, and see what to put aside for tax. It never moves money.",
+      "icon": "wallet",
+      "app": "apps/money/",
+      "repository": "money-view-os"
+    },
+    {
+      "id": "ads",
+      "name": "Ads OS",
+      "description": "Your Google and Meta ads on one plain-English screen. Claude builds and analyses your campaigns and makes the changes you approve, and nothing spends until you say yes.",
+      "icon": "barChart",
+      "app": "apps/ads/",
+      "repository": "ads-os"
+    }
+  ],
+  "booking": {
+    "url": "https://calendly.com/d/d2bq-8jx-r39/claudit-audit",
+    "button": "Book a free call",
+    "line": "Get AI Powers sets this up with you on a free call.",
+    "showMoreTools": true
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "about": "Jobs the app can ask Claude to do straight away, through the helper (apps/server). The app sends only the job's name; these words are what Claude follows. See maintainers/SHARED-V4-CHANGES.md.",
+  "jobs": {
+    "update-my-ads": {
+      "label": "refreshing your ad figures",
+      "prompt": "The person has pressed Refresh figures in Ads OS. Follow .claude/skills/update-my-ads: read context/ads.md, context/business.md and apps/ads/data/ads.json first, then read each connected ad account with read-only tools (or the newest report in files/04-marketing/ads/exports), including each campaign's ads (their words, status and, where the connection offers it, the picture) and each ad's daily figures, and write campaigns, adFigures, figures and imports into apps/ads/data/ads.json. Write raw figures only, one row per campaign per day (and per ad per day in adFigures), and never type a total. Only read the ad accounts: change nothing in them. Change only what the person approved in the app, and nothing else."
+    },
+    "build-a-campaign": {
+      "label": "drafting a new campaign",
+      "prompt": "The person has pressed New campaign in Ads OS. Follow .claude/skills/build-a-campaign: in apps/ads/data/ads.json, a build with a request of kind write and no ad words yet is a new brief, and its request note says what the campaign is for. Read context/ads.md, context/business.md and context/voice.md, fill in that build as a complete draft (audience, 2 or 3 ads, a budget inside their limits, dates, season, a prediction with its assumptions, why and checks). If the build has a brief or a fromCampaignId, follow them, then clear its request. It stays a draft until they approve it. Never touch an ad account. Change only what the person approved in the app, and nothing else."
+    },
+    "write-campaign": {
+      "label": "changing your campaign",
+      "prompt": "The person has asked Claude to change a campaign in Ads OS. Follow .claude/skills/build-a-campaign for every build in apps/ads/data/ads.json that has a request of kind write or rewrite and ad words already: read context/ads.md and context/voice.md, make the change they asked for in the request note (or follow the build's brief and fromCampaignId, reusing the audience and best ads as asked), keep the budget inside their limits, then clear the request. It stays a draft until they approve it. Never touch an ad account. Change only what the person approved in the app, and nothing else."
+    },
+    "build-in-account": {
+      "label": "building your approved campaigns, paused",
+      "prompt": "The person has pressed the build button on an approved campaign in Ads OS. Follow .claude/skills/build-in-account for every build in apps/ads/data/ads.json with a request of kind build and the status approved. Check the budget and the season first and refuse if either fails. On Meta, create it in the account with every object paused and read it back to confirm. On Google Ads, write the import file and the build sheet into files/04-marketing/ads. Then update the build, add to activity and clear the request. Build everything paused. Switching it on is a separate step the person asks for in the app, and you do not do it here. Do not change anything that already exists in the account. Change only what the person approved in the app, and nothing else."
+    },
+    "how-did-the-ads-do": {
+      "label": "writing this week's summary",
+      "prompt": "The person has pressed Write this week's summary in Ads OS. Follow .claude/skills/how-did-the-ads-do: run node apps/ads/app/report.js week, then write 4 to 6 plain sentences about what happened, what worked, what didn't and what to watch, quoting only numbers the report printed. Add or replace this week's summary in apps/ads/data/ads.json. Do not change anything in an ad account. Change only what the person approved in the app, and nothing else."
+    },
+    "what-should-i-change": {
+      "label": "looking for changes worth making",
+      "prompt": "The person has pressed What should I change? in Ads OS. Follow .claude/skills/what-should-i-change: read context/ads.md, run node apps/ads/app/report.js week, and add up to 5 suggestions to apps/ads/data/ads.json, each with a plain why and none that repeats an open one. Suggestions are for the owner to make; do not carry any out. Do not change anything in an ad account. Change only what the person approved in the app, and nothing else."
+    },
+    "send-to-task-list": {
+      "label": "adding it to your task list",
+      "prompt": "Ads OS has just approved a suggestion or built a campaign, and Task List OS is attached. Follow the Task List section of apps/ads/ATTACH-CLAUDE.md: in apps/ads/data/ads.json, write a suggested task for each approved suggestion with no taskId, and for each build with the status in-account or ready-to-import and no taskId (its switch-on task). Write each task in the way apps/task-list/CLAUDE.md describes, record the task's id in that suggestion's or build's taskId so nothing is sent twice, and add to activity. Do not change anything in an ad account. Change only what the person approved in the app, and nothing else."
+    },
+    "analyse-campaign": {
+      "label": "analysing your campaign",
+      "prompt": "The person has pressed Analyse campaign in Ads OS. Follow .claude/skills/analyse-campaign for every campaign in apps/ads/data/ads.json with a request of kind analyse: run node apps/ads/app/report.js campaign <id> and quote only the numbers it prints. Write an analysis (a plain summary, what is working, what is wasting money and what you could not see) into analyses, and add up to 3 suggestions for that campaign. If the campaign has no prediction, add one with its assumptions. Then clear the request. Do not change anything in an ad account. Change only what the person approved in the app, and nothing else."
+    },
+    "make-account-change": {
+      "label": "making the change you approved",
+      "prompt": "The person has confirmed a change to their Meta ad account in Ads OS. Follow .claude/skills/make-account-change for every action in apps/ads/data/ads.json with the status requested. For each one, set it to doing, run node apps/ads/app/report.js action <id> and refuse if it says BLOCKED. Otherwise make exactly that one change with the Meta connection, read it back to confirm, and set it to done with what you read back, or to failed with a plain note. Never delete anything, never touch Google Ads, and never make a second change for one action. When a switch-on of a build is done, also set that build to live and record when (switchedOnAt). Change only what the person approved in the app, and nothing else."
+    }
+  }
+}

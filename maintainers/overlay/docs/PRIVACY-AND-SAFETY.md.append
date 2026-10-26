@@ -1,0 +1,12 @@
+## Each tool's own answers
+
+Every tool in your toolkit has its own page of plain answers, about what it reads and what it may and may not do:
+
+- Pipeline OS: [docs/pipeline/PRIVACY-AND-SAFETY.md](pipeline/PRIVACY-AND-SAFETY.md)
+- Skill and Folder Map OS: [docs/skill-map/PRIVACY-AND-SAFETY.md](skill-map/PRIVACY-AND-SAFETY.md)
+- Proposal Writing OS: [docs/proposals/PRIVACY-AND-SAFETY.md](proposals/PRIVACY-AND-SAFETY.md)
+- Content Machine OS: [docs/content/PRIVACY-AND-SAFETY.md](content/PRIVACY-AND-SAFETY.md)
+- Money View OS: [docs/money/PRIVACY-AND-SAFETY.md](money/PRIVACY-AND-SAFETY.md)
+- Ads OS: [docs/ads/PRIVACY-AND-SAFETY.md](ads/PRIVACY-AND-SAFETY.md)
+
+Where a tool's page is stricter than this one, the stricter answer is the one Claude follows for that tool.

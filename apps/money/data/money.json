@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "settings": {
+    "businessName": "",
+    "ownerName": "",
+    "currency": "GBP",
+    "businessType": "",
+    "yearStart": "04-06",
+    "weekStarts": 1,
+    "nervousBalance": 0,
+    "vat": { "registered": false, "scheme": "standard", "rate": 20, "flatRate": 0, "quarterEnds": [3, 6, 9, 12], "cashAccounting": false },
+    "tax": { "setAsidePercent": 0, "potAccountId": null, "note": "" },
+    "invoice": { "prefix": "INV-", "nextNumber": 1, "termsDays": 30 },
+    "bank": { "name": "", "link": "" }
+  },
+  "sources": {
+    "accounts": { "app": "", "mode": "none", "checkedAt": null },
+    "bank": { "mode": "none", "checkedAt": null }
+  },
+  "accounts": [],
+  "invoices": [],
+  "expected": [],
+  "outgoings": [],
+  "transactions": [],
+  "potMoves": [],
+  "scenarios": [],
+  "flags": [],
+  "imports": [],
+  "activity": []
+}

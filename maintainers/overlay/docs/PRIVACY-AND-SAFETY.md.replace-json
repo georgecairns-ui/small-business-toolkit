@@ -1,0 +1,14 @@
+[
+  [
+    "Task List OS has no account, no server and no database.",
+    "Small Business Toolkit OS has no account, no server and no database."
+  ],
+  [
+    "Read it, to spot things that need doing, and prepare draft replies for you to check. That's it. Claude never sends, replies, forwards, deletes, archives or tidies your email. You press send, every time.",
+    "Read it, to spot things that need doing, and prepare draft replies for you to check. Claude never replies, forwards, deletes, archives or tidies your email by itself. The one exception is in Pipeline OS: if you agree to it during setup, Claude sends an email you've checked and pressed **Send** on, exactly as you saw it, from your own email. You can turn that off in Pipeline OS's Preferences."
+  ],
+  [
+    "The same goes for your calendar, accounts and other apps: Claude reads and drafts. It doesn't pay, book, post, accept or change anything for you.",
+    "The same goes for your calendar, accounts and other apps: Claude reads and drafts. It doesn't pay, book, post, accept or change anything for you, apart from the few things a tool does when you press its button and confirm: Money View OS puts an invoice into your accounts as a draft, and Ads OS builds a Meta campaign switched off or makes the one change you approved. Nothing ever moves money."
+  ]
+]

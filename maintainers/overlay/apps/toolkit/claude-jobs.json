@@ -1,0 +1,9 @@
+{
+  "about": "Jobs the app can ask Claude to do straight away, through the helper (apps/server). The app sends only the job's name; these words are what Claude follows.",
+  "jobs": {
+    "find-ideas": {
+      "label": "looking for what to do next",
+      "prompt": "The person has pressed Find ideas in the Toolkit. Follow .claude/skills/whats-next: read apps/toolkit/data/toolkit.json, context/ and every installed tool's data file, then add up to 5 new ideas to the ideas list in apps/toolkit/data/toolkit.json (never repeat a dismissed one). Connect nothing, send nothing, change nothing else."
+    }
+  }
+}

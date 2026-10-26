@@ -1,0 +1,10 @@
+{
+  "pages": [
+    { "id": "connections", "label": "Connections", "icon": "external" },
+    { "id": "setup", "label": "Set up", "icon": "checkSquare" },
+    { "id": "build", "label": "Build and customise", "icon": "sparkle" }
+  ],
+  "home": {
+    "scripts": ["app/apps-list.js", "app/model.js", "home-boxes.js"]
+  }
+}

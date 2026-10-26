@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "settings": {
+    "businessName": "",
+    "ownerName": "",
+    "about": { "sells": "", "problems": [], "different": "", "who": "", "where": "" },
+    "themes": [],
+    "postsPerWeek": 3,
+    "defaultApproval": "ask",
+    "defaultTime": "09:00",
+    "weekStarts": 1,
+    "planWeeks": 2
+  },
+  "platforms": {},
+  "research": { "updatedAt": null, "skill": "", "searches": [], "trends": [], "competitors": [], "whatWorks": {} },
+  "ideas": [],
+  "posts": [],
+  "activity": []
+}

@@ -1,0 +1,73 @@
+{
+  "tools": [
+    {
+      "id": "task-list",
+      "name": "Task List OS",
+      "app": "apps/task-list/",
+      "dataFiles": [
+        "apps/task-list/data/tasks.json"
+      ]
+    },
+    {
+      "id": "pipeline",
+      "name": "Pipeline OS",
+      "app": "apps/pipeline/",
+      "dataFiles": [
+        "apps/pipeline/data/pipeline.json"
+      ]
+    },
+    {
+      "id": "skill-map",
+      "name": "Skill and Folder Map OS",
+      "app": "apps/skill-map/",
+      "dataFiles": [
+        "apps/skill-map/data/skillmap.json",
+        "apps/skill-map/data/filemap.json",
+        "apps/skill-map/data/tidy.json"
+      ]
+    },
+    {
+      "id": "proposals",
+      "name": "Proposal Writing OS",
+      "app": "apps/proposals/",
+      "dataFiles": [
+        "apps/proposals/data/proposals.json"
+      ]
+    },
+    {
+      "id": "content",
+      "name": "Content Machine OS",
+      "app": "apps/content/",
+      "media": true,
+      "dataFiles": [
+        "apps/content/data/content.json"
+      ]
+    },
+    {
+      "id": "money",
+      "name": "Money View OS",
+      "app": "apps/money/",
+      "dataFiles": [
+        "apps/money/data/money.json"
+      ]
+    },
+    {
+      "id": "ads",
+      "name": "Ads OS",
+      "app": "apps/ads/",
+      "media": true,
+      "dataFiles": [
+        "apps/ads/data/ads.json"
+      ]
+    },
+    {
+      "id": "toolkit",
+      "name": "Toolkit",
+      "icon": "layout",
+      "app": "apps/toolkit/",
+      "dataFiles": [
+        "apps/toolkit/data/toolkit.json"
+      ]
+    }
+  ]
+}

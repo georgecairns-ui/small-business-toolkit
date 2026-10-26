@@ -1,0 +1,47 @@
+{
+  "about": "The business areas Skill and Folder Map OS starts with. The scan copies these into data/skillmap.json the first time. Change the wording there (or in the app's Preferences), not here. Each 'ideas' line is something a skill could do in that area, shown on the Gaps page when the area has none.",
+  "areas": [
+    {
+      "key": "sales",
+      "label": "Sales",
+      "blurb": "Finding customers, talking to them and closing the deal.",
+      "ideas": ["Prepare you for every sales call", "Chase quotes that have gone quiet", "Write up each call and set the next step"]
+    },
+    {
+      "key": "marketing",
+      "label": "Marketing",
+      "blurb": "Getting noticed: posts, emails, the website and ads.",
+      "ideas": ["Plan and draft a week of posts in your voice", "Turn a finished job into a case study", "Write the monthly newsletter"]
+    },
+    {
+      "key": "delivery",
+      "label": "Client delivery",
+      "blurb": "Doing the work you sold, to the standard you promised.",
+      "ideas": ["Run the same kick-off for every new client", "Write the update each client gets", "Check the work against your own checklist"]
+    },
+    {
+      "key": "money",
+      "label": "Money and admin",
+      "blurb": "Invoices, chasing payment, expenses and the paperwork.",
+      "ideas": ["Draft polite reminders for late invoices", "Sort receipts and expenses each week", "Summarise what is owed to you"]
+    },
+    {
+      "key": "people",
+      "label": "People and team",
+      "blurb": "Hiring, onboarding, rotas, holidays and team updates.",
+      "ideas": ["Draft job adverts and screening questions", "Onboard a new starter step by step", "Write the weekly team update"]
+    },
+    {
+      "key": "service",
+      "label": "Customer service",
+      "blurb": "Answering questions, fixing problems and keeping customers happy.",
+      "ideas": ["Draft replies to the questions you get most", "Spot a customer who is about to leave", "Log and follow up every complaint"]
+    },
+    {
+      "key": "running",
+      "label": "Running the business",
+      "blurb": "Planning, meetings, decisions and keeping the wheels turning.",
+      "ideas": ["Plan your week from your calendar and tasks", "Write up every meeting with actions", "Prepare for a monthly review"]
+    }
+  ]
+}

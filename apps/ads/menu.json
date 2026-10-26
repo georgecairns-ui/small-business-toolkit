@@ -1,0 +1,8 @@
+{
+  "pages": [
+    { "id": "overview", "label": "Ads", "icon": "barChart" }
+  ],
+  "home": {
+    "scripts": ["app/model.js", "app/charts.js", "home-boxes.js"]
+  }
+}

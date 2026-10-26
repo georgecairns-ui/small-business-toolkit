@@ -1,0 +1,187 @@
+/*
+  VIEWS: styles for Invoices (and the invoice editor), In and out, and What if
+  ----------------------------------------------------------------------------
+  Flat outlined cards, theme variables only, so light and dark both work. Each page is its own size
+  container so it adapts to the space it is given, from a 320 pixel phone to a very wide screen, and
+  never scrolls sideways. Overview and Months have their own styles beside their code.
+*/
+.inv-page, .io-page, .wi-page {
+  container-type: inline-size; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5);
+  width: 100%; max-width: 1100px; margin-inline: auto; padding: var(--space-5); align-content: start;
+}
+.inv-page > *, .io-page > *, .wi-page > * { min-width: 0; }
+
+/* ---------- Invoices: filters and search ---------- */
+.inv-tools { display: grid; gap: var(--space-3); }
+.inv-chips { row-gap: var(--space-2); }
+.inv-chip { padding-inline: 12px; height: 30px; }
+.inv-chip__n { font-size: var(--text-xs); font-weight: 650; color: var(--color-muted); }
+.inv-chip.is-active .inv-chip__n { color: inherit; opacity: 0.8; }
+.inv-search { position: relative; display: block; max-width: 24rem; }
+.inv-search svg { position: absolute; left: 10px; top: 50%; width: 15px; height: 15px; transform: translateY(-50%); color: var(--color-muted); pointer-events: none; }
+.inv-search .input { padding-left: 32px; }
+.inv-source { margin: 0; font-size: var(--text-sm); }
+
+/* ---------- Invoices: the list ---------- */
+.inv-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+.inv-head { display: none; }
+.inv-row {
+  display: grid; width: 100%; gap: var(--space-1) var(--space-3); align-items: center; text-align: left; font: inherit; color: inherit; cursor: pointer;
+  padding: var(--space-3) var(--space-4); background: var(--color-surface); border: 1px solid var(--color-line); border-radius: var(--radius-lg);
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "cust state" "num money" "issued due" "paid where";
+  transition: border-color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+}
+.inv-row:hover { border-color: var(--color-line-strong); background: var(--color-sunk); }
+.inv-row:focus-visible { outline: none; box-shadow: var(--focus-ring); border-color: var(--color-accent); }
+.inv-row--overdue { border-left: 3px solid var(--color-danger); }
+.inv-row--void .inv-row__cust, .inv-row--void .inv-row__num { text-decoration: line-through; color: var(--color-muted); }
+.inv-row > * { min-width: 0; }
+.inv-row__num { grid-area: num; font-size: var(--text-sm); color: var(--color-muted); }
+.inv-row__cust { grid-area: cust; font-weight: 650; overflow-wrap: anywhere; }
+.inv-row__state { grid-area: state; justify-self: end; }
+.inv-row__where { grid-area: where; font-size: var(--text-sm); justify-self: end; text-align: right; overflow-wrap: anywhere; }
+.inv-row__issued { grid-area: issued; }
+.inv-row__due { grid-area: due; justify-self: end; text-align: right; }
+.inv-row__total { grid-area: money; justify-self: end; font-weight: 650; }
+.inv-row__paid { grid-area: paid; }
+.inv-row__date, .inv-row__money { font-size: var(--text-sm); }
+.inv-row [data-label]::before { content: attr(data-label) " "; color: var(--color-muted); font-size: var(--text-xs); font-weight: 500; }
+.inv-row__total::before { content: ""; }
+.inv-late { color: var(--color-danger); font-weight: 600; }
+
+.inv-pill { background: var(--color-sunk); color: var(--color-muted); }
+.inv-pill--waiting { background: var(--color-info-soft); color: var(--color-info); }
+.inv-pill--in-accounts { background: var(--color-accent-soft); color: var(--color-accent-text); }
+.inv-pill--sent { background: var(--color-info-soft); color: var(--color-info); }
+.inv-pill--part-paid { background: var(--color-warning-soft); color: var(--color-warning); }
+.inv-pill--paid { background: var(--color-success-soft); color: var(--color-success); }
+.inv-pill--overdue { background: var(--color-danger-soft); color: var(--color-danger); }
+.inv-pill--void { background: transparent; border: 1px solid var(--color-line); }
+
+@container (min-width: 560px) {
+  .inv-row {
+    grid-template-columns: 6rem minmax(0, 1fr) 7rem auto;
+    grid-template-areas: "num cust money state" "issued due paid where";
+  }
+  .inv-row__state { justify-self: end; }
+}
+@container (min-width: 900px) {
+  .inv-head, .inv-row {
+    display: grid; align-items: center; gap: var(--space-3);
+    grid-template-columns: 6rem minmax(0, 1.5fr) 5rem minmax(7rem, 8.5rem) 6.5rem 6rem minmax(8.5rem, auto) minmax(6rem, 0.8fr);
+  }
+  .inv-head { padding: 0 var(--space-4); font-size: var(--text-xs); font-weight: 650; color: var(--color-muted); }
+  .inv-right { text-align: right; }
+  .inv-row { grid-template-areas: "num cust issued due money paid state where"; }
+  .inv-row [data-label]::before { content: none; }
+  .inv-row__due { justify-self: start; text-align: left; }
+  .inv-row__money { justify-self: end; text-align: right; }
+  .inv-row__state { justify-self: start; }
+  .inv-row__where { justify-self: start; text-align: left; }
+}
+
+/* ---------- The invoice editor (inside the drawer) ---------- */
+.inv-drawer .drawer__body > * { min-width: 0; }
+.inv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: var(--space-3); }
+.inv-grid--2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr)); }
+.inv-overdue { margin: 0; color: var(--color-danger); font-weight: 650; }
+.inv-lines { container-type: inline-size; display: grid; gap: var(--space-2); }
+.inv-lines__head, .inv-line { display: grid; gap: var(--space-2); align-items: center; grid-template-columns: minmax(0, 1fr) 4rem 6rem 6.25rem 5.5rem 28px; }
+.inv-lines__head { font-size: var(--text-xs); font-weight: 650; color: var(--color-muted); }
+.inv-lines__right, .inv-line__total { text-align: right; }
+.inv-line__total { font-weight: 600; font-size: var(--text-sm); overflow-wrap: anywhere; }
+.inv-line .input, .inv-line .select { min-width: 0; width: 100%; }
+.inv-line .select { padding-right: 24px; }
+.inv-line__gap { width: 28px; }
+@container (max-width: 480px) {
+  .inv-lines__head { display: none; }
+  .inv-line {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 28px; padding: var(--space-3); border: 1px solid var(--color-line); border-radius: var(--radius-md); background: var(--color-sunk);
+    grid-template-areas: "text text text" "qty price price" "vat total remove";
+  }
+  .inv-line__text { grid-area: text; }
+  .inv-line__qty { grid-area: qty; }
+  .inv-line__price { grid-area: price; }
+  .inv-line__vat { grid-area: vat; }
+  .inv-line__total { grid-area: total; }
+  .inv-line > .icon-btn, .inv-line > .inv-line__gap { grid-area: remove; }
+}
+.inv-totals { display: grid; gap: var(--space-1); justify-self: end; width: min(100%, 18rem); padding-top: var(--space-2); border-top: 1px solid var(--color-line); }
+.inv-totals__row { display: flex; justify-content: space-between; gap: var(--space-4); font-size: var(--text-sm); color: var(--color-ink-soft); }
+.inv-totals__row--big { font-size: var(--text-md); font-weight: 700; color: var(--color-ink); }
+.inv-pay { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-1); font-size: var(--text-sm); }
+.inv-pay li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2); padding: var(--space-2) 0; border-top: 1px solid var(--color-line); }
+.inv-pay li:first-child { border-top: 0; }
+.inv-actions .btn { max-width: 100%; }
+.inv-actions .btn svg { width: 14px; height: 14px; }
+.inv-payform { display: grid; gap: var(--space-3); padding: var(--space-3); background: var(--color-sunk); border: 1px solid var(--color-line); border-radius: var(--radius-md); }
+
+/* ---------- In and out ---------- */
+.io-section { display: grid; gap: var(--space-4); padding: var(--space-4); background: var(--color-surface); border: 1px solid var(--color-line); border-radius: var(--radius-lg); }
+.io-section__head, .wi-section__head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: var(--space-3); }
+.io-section__title, .wi-title { font-size: var(--text-lg); font-weight: 650; }
+.io-section__intro, .io-group__note, .wi-note { margin: 2px 0 0; font-size: var(--text-sm); }
+.io-group { display: grid; gap: var(--space-2); }
+.io-group__title { font-size: var(--text-md); font-weight: 650; }
+.io-group__sum { font-size: var(--text-sm); font-weight: 600; margin-left: var(--space-2); }
+.io-group--suggested { padding: var(--space-3); background: var(--color-accent-soft); border: 1px solid var(--color-accent-line); border-radius: var(--radius-md); }
+.io-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+.io-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); padding: var(--space-3); background: var(--color-surface); border: 1px solid var(--color-line); border-radius: var(--radius-md); }
+.io-row__main { flex: 1 1 14rem; display: grid; gap: 1px; min-width: 0; }
+.io-row__title { font-weight: 600; overflow-wrap: anywhere; }
+.io-row__sub { font-size: var(--text-sm); overflow-wrap: anywhere; }
+.io-row__side { display: flex; align-items: center; gap: var(--space-2); }
+.io-row__amount { font-weight: 650; }
+.io-row__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.io-row__actions .btn svg { width: 13px; height: 13px; }
+.io-total { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-3); }
+.io-total__label { font-weight: 600; }
+.io-total__num { font-size: var(--text-xl); font-weight: 700; }
+.io-total__note { font-size: var(--text-sm); }
+.io-form, .wi-form { display: grid; gap: var(--space-3); padding: var(--space-4); }
+.io-form__title, .wi-form__title { font-size: var(--text-md); font-weight: 650; }
+.io-form__grid, .wi-form__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: var(--space-3); }
+.io-form__foot, .wi-form__foot { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.wi-form__wide { grid-column: 1 / -1; }
+
+/* ---------- What if ---------- */
+.wi-ask, .wi-chartpanel { padding: var(--space-4); }
+.wi-ask__form { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.wi-ask__form .input { flex: 1 1 16rem; min-width: 0; }
+.wi-chart { min-height: 240px; min-width: 0; }
+.wi-tablewrap { min-width: 0; }
+.wi-table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+.wi-table th, .wi-table td { padding: var(--space-2) var(--space-3); text-align: left; border-top: 1px solid var(--color-line); vertical-align: baseline; }
+.wi-table thead th { border-top: 0; font-size: var(--text-xs); font-weight: 650; color: var(--color-muted); }
+.wi-table tbody th { font-weight: 650; overflow-wrap: anywhere; }
+.wi-table .wi-right { text-align: right; }
+.wi-table__base th { color: var(--color-ink-soft); }
+.wi-table .is-warn { color: var(--color-warning); font-weight: 650; }
+.wi-table .is-bad { color: var(--color-danger); font-weight: 650; }
+.wi-section { display: grid; gap: var(--space-3); }
+.wi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); gap: var(--space-3); }
+.wi-card { display: grid; align-content: start; gap: var(--space-3); padding: var(--space-4); min-width: 0; }
+.wi-card.is-on { border-color: var(--color-accent-line); box-shadow: inset 3px 0 0 var(--color-accent); }
+.wi-card__head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-3); }
+.wi-card__name { font-size: var(--text-base); font-weight: 650; overflow-wrap: anywhere; min-width: 0; }
+.wi-card__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.wi-changes { margin: 0; padding-left: 1.1em; display: grid; gap: var(--space-1); font-size: var(--text-sm); overflow-wrap: anywhere; }
+.wi-claude { display: grid; gap: var(--space-1); padding: var(--space-3); background: var(--color-accent-soft); border: 1px solid var(--color-accent-line); border-radius: var(--radius-md); }
+.wi-claude p { margin: 0; font-size: var(--text-sm); overflow-wrap: anywhere; }
+.wi-claude__label { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-xs); font-weight: 700; color: var(--color-accent-text); }
+.wi-claude__label svg { width: 13px; height: 13px; }
+.wi-claude .wi-claude__small { font-size: var(--text-xs); }
+.wi-banner { min-width: 0; }
+
+/* Narrow: the comparison table becomes one small card per row, so nothing scrolls sideways */
+@container (max-width: 520px) {
+  .wi-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .wi-table, .wi-table tbody, .wi-table tr, .wi-table th, .wi-table td { display: block; width: 100%; }
+  .wi-table tr { padding: var(--space-2) 0; border-top: 1px solid var(--color-line); }
+  .wi-table th, .wi-table td { border-top: 0; padding: 2px 0; text-align: left; }
+  .wi-table td { display: flex; justify-content: space-between; gap: var(--space-3); }
+  .wi-table td::before { content: attr(data-label); color: var(--color-muted); font-weight: 500; }
+  .inv-page, .io-page, .wi-page { padding: var(--space-3); gap: var(--space-4); }
+  .io-row__side { margin-left: auto; }
+}

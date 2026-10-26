@@ -1,0 +1,15 @@
+{
+  "pages": [
+    {
+      "id": "money",
+      "label": "Money view",
+      "icon": "wallet"
+    }
+  ],
+  "home": {
+    "scripts": [
+      "app/model.js",
+      "home-boxes.js"
+    ]
+  }
+}

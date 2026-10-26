@@ -1,0 +1,26 @@
+[
+  [
+    "# Task List OS: standing instructions for Claude",
+    "# Small Business Toolkit OS: standing instructions for Claude\n\nThis folder holds all 7 tools from the Get AI Powers small business toolkit, attached to each other: Task List OS (the host, described first below), then each other tool's own instructions under \"Attached tools\" at the end, and the Toolkit section of the app (described just before them)."
+  ],
+  [
+    "> Developing Task List OS itself (changing the app, the setup steps or the skills for everyone, rather than using it)? Read `maintainers/MAINTAINING.md` instead of following this file.",
+    "> Developing Small Business Toolkit OS itself (changing it for everyone, rather than using it)? Read `maintainers/MAINTAINING.md` instead of following this file. It's built from the 7 tools' own repositories, so most changes belong in those."
+  ],
+  [
+    "| \"Check in\", \"check my inbox\", \"anything new?\" (and every scheduled run) | `.claude/skills/check-in` |",
+    "| \"Check in\", \"check everything\", \"anything new?\" (and every scheduled run) | `.claude/skills/toolkit-check-in`, which runs `.claude/skills/check-in` and every other set-up tool's check-in |\n| \"What should I do next?\", \"what else can you do for me?\" | `.claude/skills/whats-next` |\n| \"Build me a page for...\", \"add a skill for...\", \"can you change how...\" | `.claude/skills/build-on-my-toolkit` |"
+  ],
+  [
+    "## Other tools in the toolkit\n\nTask List OS is one of 7 free tools from Get AI Powers. The app's menu shows the others under \"More tools\" with a padlock. `apps/shared/catalogue.json` lists every tool, what it does and the booking link.\n\n- If they ask about a locked tool, or say they want one: explain what it does in plain words (its description in the catalogue is a good start), say Get AI Powers sets it up with them on a free call, and give them the booking link (`booking.url` in the catalogue). Say it once. Never push it.\n- If they say they're on that call, or that Get AI Powers has told them to go ahead: follow `ATTACHING.md` in this folder to attach the tool.\n- Never attach a tool on your own initiative. Change the booking link or switch off \"More tools\" only when they ask (see `docs/CUSTOMISING.md`).",
+    "## The Toolkit section\n\nAll 7 tools are already in this folder, so the menu has no locked tools. The last section of the sidebar, **Toolkit** (`apps/toolkit/`), is how the person grows the toolkit without knowing what to ask for. Its data, and when you update each part, are in `apps/toolkit/CLAUDE.md`. In short:\n\n- **Connections:** every app the toolkit can use, its status and a Connect button. Whenever you connect, check or lose an app, update `connections` in `apps/toolkit/data/toolkit.json`.\n- **Set up:** each tool's setup status, with Set up now for any left for later. Update `tools` whenever you finish or part-finish a tool's setup. To set up one tool, run its part of `START-HERE.md`.\n- **Build and customise:** buttons that open Claude with a job typed in (a new page, a skill, a change, a routine) and your ideas for what to do next (`ideas`, from `.claude/skills/whats-next`). Record anything you build for them in `builds`.\n\n**Brain dump items about the Toolkit** (something to connect, build or change): add each one to `ideas` as an idea with a ready prompt, by `.claude/skills/whats-next`'s format, and say so in the item's summary. Never connect or build anything from a brain dump on its own.\n\nEvery button there opens a new conversation in this folder with a prompt already typed in. Treat it as the person asking you, in their own words: follow it, and ask if anything in it is unclear.\n\nThe tools' own instructions follow. Where one tool's rule is stricter than the host's, the stricter one applies to that tool's work."
+  ],
+  [
+    "| `apps/installed.json` | The tools in this folder. The menu and the helper both read it |",
+    "| `apps/installed.json` | The tools in this folder (all 7, plus the Toolkit). The menu and the helper both read it |\n| `apps/toolkit/` | The Toolkit section: connections, setup status, ideas and what you've built for them, in `apps/toolkit/data/toolkit.json` |"
+  ],
+  [
+    "| \"Open my task list\", \"it's not loading\" | `.claude/skills/open-task-list` |",
+    "| \"Open my task list\", \"open my toolkit\", \"it's not loading\" | `.claude/skills/open-task-list` (it starts the one app every tool shares) |"
+  ]
+]

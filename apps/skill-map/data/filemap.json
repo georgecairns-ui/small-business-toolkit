@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "settings": {
+    "roots": [],
+    "setUp": false,
+    "ignore": []
+  },
+  "scan": null,
+  "folders": [],
+  "files": [],
+  "findings": {},
+  "recommendations": []
+}

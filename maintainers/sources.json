@@ -1,0 +1,9 @@
+{
+  "task-list": { "repository": "georgecairns-ui/task-list-os", "local": "~/Repos/getaipowers/task-list-os" },
+  "pipeline": { "repository": "georgecairns-ui/pipeline-os", "local": "~/Repos/getaipowers/pipeline-os" },
+  "skill-map": { "repository": "georgecairns-ui/skill-and-folder-map-os", "local": "~/Repos/getaipowers/skill-map-os" },
+  "proposals": { "repository": "georgecairns-ui/proposal-writing-os", "local": "~/Repos/getaipowers/proposal-os" },
+  "content": { "repository": "georgecairns-ui/content-machine-os", "local": "~/Repos/getaipowers/content-machine-os" },
+  "money": { "repository": "georgecairns-ui/money-view-os", "local": "~/Repos/getaipowers/money-view-os" },
+  "ads": { "repository": "georgecairns-ui/ads-os", "local": "~/Repos/getaipowers/ads-os" }
+}

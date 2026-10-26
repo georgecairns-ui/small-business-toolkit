@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Task List OS</title>
+  <meta name="description" content="Your day, your week and your calendar. Claude sorts it, you approve it.">
+  <link rel="icon" type="image/png" href="../shared/images/claude-icon.png">
+  <!-- Shared look (theme.css holds every colour and font) -->
+  <link rel="stylesheet" href="../shared/theme.css">
+  <link rel="stylesheet" href="../shared/base.css">
+  <link rel="stylesheet" href="../shared/sidebar.css">
+  <!-- Light or dark: applied before anything draws, so the page never flashes the wrong colours -->
+  <script src="../shared/js/theme.js"></script>
+  <!-- This app's layout -->
+  <link rel="stylesheet" href="app/app.css">
+</head>
+<body data-tool="task-list">
+  <a class="skip-link" href="#view">Skip to main content</a>
+
+  <!-- Shown before a folder is connected: welcome, loading, or a problem -->
+  <div id="gate" class="gate"></div>
+
+  <!-- The app itself -->
+  <div id="shell" class="shell" hidden>
+    <aside class="sidebar" id="sidebar" aria-label="Main">
+      <div class="sidebar__brand">
+        <img src="../shared/images/claude-icon.png" alt="" width="30" height="30">
+        <div class="sidebar__brand-text">
+          <div class="sidebar__product" id="businessName">Your workspace</div>
+        </div>
+      </div>
+
+      <!-- The shared sidebar (../shared/js/sidebar.js) adds Home, the other tools in this folder and
+           the locked tools. This tool's own pages stay here, so they work even if those can't load. -->
+      <a class="side-home" href="../home/"><span data-icon="home"></span>Home</a>
+
+      <div class="side-label">Your tools</div>
+      <section class="tool-group" data-tool-group="task-list">
+        <button type="button" class="tool-group__head" aria-expanded="true" aria-controls="nav">
+          <span class="tool-group__icon"><span data-icon="checkSquare"></span></span>
+          <span class="tool-group__name">Task List OS</span>
+          <span class="tool-group__count" aria-hidden="true"></span>
+          <span class="tool-group__chevron"><span data-icon="chevronDown"></span></span>
+        </button>
+        <div class="tool-group__body">
+          <nav class="nav" id="nav" aria-label="Task List OS">
+            <a class="nav__item" href="#tasks" data-view="tasks"><span data-icon="checkSquare"></span>Tasks<span class="nav__count" data-count="tasks"></span></a>
+            <a class="nav__item" href="#replies" data-view="replies"><span data-icon="inbox"></span>Inbox<span class="nav__count nav__count--accent" data-count="replies"></span></a>
+            <a class="nav__item" href="#review" data-view="review"><span data-icon="sparkle"></span>Review<span class="nav__count nav__count--accent" data-count="review"></span></a>
+            <a class="nav__item" href="#calls" data-view="calls"><span data-icon="phone"></span>Calls<span class="nav__count" data-count="calls"></span></a>
+          </nav>
+        </div>
+      </section>
+
+      <!-- Shared sidebar: the other tools in this folder, then the locked ones -->
+      <div data-toolkit-menu="others"></div>
+      <div data-toolkit-menu="more" hidden></div>
+
+      <div class="sidebar__foot">
+        <div class="saved-mini" id="savedMini"></div>
+        <div class="sidebar__row">
+          <span class="sidebar__spacer"></span>
+          <button type="button" class="icon-btn" data-action="shortcuts" aria-label="Keyboard shortcuts"><span data-icon="keyboard"></span></button>
+          <button type="button" class="icon-btn" data-action="settings" aria-label="Preferences" title="Preferences"><span data-icon="settings"></span></button>
+        </div>
+        <div class="sidebar__by">
+          <img src="../shared/images/claude-icon.png" alt="" width="22" height="22">
+          <span>by Get AI Powers</span>
+        </div>
+      </div>
+    </aside>
+    <div class="sidebar-scrim" data-action="close-sidebar"></div>
+
+    <div class="main">
+      <header class="topbar">
+        <button type="button" class="icon-btn topbar__menu" data-action="open-sidebar" aria-label="Open menu"><span data-icon="menu"></span></button>
+        <div class="topbar__title">
+          <h1 id="viewTitle">Today</h1>
+          <span class="topbar__sub" id="viewSub"></span>
+        </div>
+        <div class="topbar__search">
+          <span data-icon="search" class="topbar__search-icon"></span>
+          <input type="search" id="searchInput" class="input" placeholder="Search tasks and people" autocomplete="off" aria-label="Search tasks and people">
+          <span class="kbd topbar__search-kbd">/</span>
+          <div class="search-results popover" id="searchResults" hidden role="listbox"></div>
+        </div>
+        <span class="claude-status" id="claudeStatus" hidden></span>
+        <span class="save-status" id="saveStatus" hidden></span>
+        <button type="button" class="icon-btn topbar__theme" data-theme-toggle aria-label="Switch to dark mode" title="Light or dark"><span data-icon="moon"></span></button>
+        <button type="button" class="btn topbar__voice" data-brain-dump title="Brain dump: talk, and Claude sorts it out (V)"><span data-icon="mic"></span><span class="topbar__voice-label">Brain dump</span></button>
+        <button type="button" class="btn btn--primary topbar__new" data-action="quick-add" aria-label="New task"><span data-icon="plus"></span><span class="topbar__new-label">New</span></button>
+      </header>
+      <div id="banner"></div>
+      <main id="view" class="view" tabindex="-1"></main>
+    </div>
+
+    <!-- The record panel: one task or one person, slides in from the right -->
+    <aside class="drawer" id="drawer" aria-label="Details" hidden></aside>
+  </div>
+
+  <!-- Pop-up: quick add -->
+  <dialog class="modal" id="quickAdd" aria-labelledby="quickAddTitle">
+    <form id="quickAddForm" autocomplete="off">
+      <div class="modal__head"><h2 id="quickAddTitle">New task</h2><button type="button" class="icon-btn" data-close aria-label="Close"><span data-icon="x"></span></button></div>
+      <div class="modal__body">
+        <input class="input input--title" name="title" required maxlength="200" placeholder="What needs doing?" aria-label="What needs doing">
+        <div class="field-row">
+          <label class="field"><span class="field__label">List</span><select class="select" name="category"></select></label>
+          <label class="field"><span class="field__label">Who's it for</span><input class="input" name="whoFor" list="quickPeople" maxlength="80" placeholder="A person or company (optional)" autocomplete="off"><datalist id="quickPeople"></datalist></label>
+        </div>
+        <div class="field-row">
+          <label class="field"><span class="field__label">Plan for</span><input class="input" type="date" name="scheduledDate"></label>
+          <label class="field"><span class="field__label">Due</span><input class="input" type="date" name="due"></label>
+        </div>
+        <label class="switch"><input type="checkbox" name="today" checked><span class="switch__track" aria-hidden="true"></span>Put it on today's list</label>
+      </div>
+      <div class="modal__foot"><span class="muted spacer">Press Enter to add</span><button type="button" class="btn" data-close>Cancel</button><button type="submit" class="btn btn--primary">Add task</button></div>
+    </form>
+  </dialog>
+
+
+  <!-- Pop-up: keyboard shortcuts -->
+  <dialog class="modal" id="shortcutsDialog" aria-labelledby="shortcutsTitle">
+    <div class="modal__head"><h2 id="shortcutsTitle">Keyboard shortcuts</h2><button type="button" class="icon-btn" data-close aria-label="Close"><span data-icon="x"></span></button></div>
+    <div class="modal__body shortcuts">
+      <div><span class="kbd">V</span> Brain dump (record a voice note)</div>
+      <div><span class="kbd">N</span> New task</div>
+      <div><span class="kbd">/</span> Search</div>
+      <div><span class="kbd">1</span> to <span class="kbd">4</span> Tasks, Inbox, Review, Calls</div>
+      <div><span class="kbd">A</span> Approve the first suggestion on the page</div>
+      <div><span class="kbd">D</span> Open the first reply draft on the page</div>
+      <div><span class="kbd">Esc</span> Close a panel or pop-up</div>
+      <div><span class="kbd">&#8984;</span> or <span class="kbd">Ctrl</span> + <span class="kbd">Enter</span> Add your brain dump</div>
+    </div>
+  </dialog>
+
+  <!-- Shared helpers, then the model, then the pages, then the app that ties them together -->
+  <script src="../shared/js/ui.js"></script>
+  <script src="../shared/js/store.js"></script>
+  <script src="../shared/js/sidebar.js"></script>
+  <script src="../shared/js/braindump.js"></script>
+  <script src="app/model.js"></script>
+  <script src="app/components.js"></script>
+  <script src="app/links.js"></script>
+  <script src="app/view-today.js"></script>
+  <script src="app/view-review.js"></script>
+  <script src="app/view-replies.js"></script>
+  <script src="app/view-calls.js"></script>
+  <script src="app/view-calendar.js"></script>
+  <script src="app/view-tasks.js"></script>
+  <script src="app/view-preferences.js"></script>
+  <script src="app/drawer.js"></script>
+  <script src="app/app.js"></script>
+</body>
+</html>
