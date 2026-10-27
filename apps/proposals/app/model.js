@@ -19,7 +19,9 @@
   Every number the person relies on (each option's price, VAT, totals, what's out, won this
   month) is worked out here from the packages, never typed in by Claude. Once a proposal is
   approved or sent, each option keeps its own copy of the package's name, price and length
-  (option.snapshot), so changing or removing a package later never changes a proposal that is out.
+  (option.snapshot), and each extra its own copy of the extra's name, price and billing
+  (extra.snapshot), so changing or removing a package or an extra later never changes a proposal
+  that is out.
 */
 (function () {
   "use strict";
@@ -162,8 +164,9 @@
 
   // Once a proposal is approved or sent, each option keeps its own copy of what the package was
   // (name, price, billing, months and the wording shown), so the price on a proposal that is out
-  // never moves when the package is changed or removed. Proposals made before this existed are
-  // copied from the package as it is now, the first time they load, so their numbers stay the same.
+  // never moves when the package is changed or removed. Each extra keeps its own copy the same way
+  // (name, price, billing and summary). Proposals made before this existed are copied from the
+  // package or extra as it is now, the first time they load, so their numbers stay the same.
   const LOCKED = ["approved", "sent", "won", "lost"];
   function snapshotOption(d, o, force) {
     if (!force && o.snapshot && o.snapshot.packageId === o.packageId) return;
@@ -173,9 +176,16 @@
       months: pkg.billing === "monthly" ? Math.max(0, Math.round(num(pkg.months))) : 0,
       summary: str(pkg.summary), timeline: str(pkg.timeline), includes: arr(pkg.includes).map(str) };
   }
+  function snapshotExtra(d, e, force) {
+    if (!force && e.snapshot && e.snapshot.extraId === e.extraId) return;
+    const x = extraById(d, e.extraId);
+    if (!x) return;
+    e.snapshot = { extraId: x.id, name: x.name, price: num(x.price), billing: x.billing || "one-off", summary: str(x.summary) };
+  }
   function snapshotOptions(d, p, force) {
     if (LOCKED.indexOf(p.status) === -1) return;
     p.sections.investment.options.forEach(function (o) { snapshotOption(d, o, force); });
+    p.sections.investment.extras.forEach(function (e) { snapshotExtra(d, e, force); });
   }
   // What an option sells: the snapshot when there is one, otherwise the package as it is now
   function optionPackage(d, o) {
@@ -185,6 +195,12 @@
         summary: str(s.summary), timeline: str(s.timeline), includes: arr(s.includes).map(str) };
     }
     return packageById(d, o.packageId);
+  }
+  // What an extra sells: the snapshot when there is one, otherwise the extra as it is now
+  function proposalExtra(d, e) {
+    const s = e.snapshot;
+    if (s && s.extraId === e.extraId) return { id: s.extraId, name: str(s.name), price: num(s.price), billing: s.billing || "one-off", summary: str(s.summary) };
+    return extraById(d, e.extraId);
   }
 
   // One option in a proposal: the package's price (as it was when the proposal went out, if it has),
@@ -199,8 +215,9 @@
     const vat = d.settings.vatRegistered ? Math.round(total * num(d.settings.vatRate)) / 100 : 0;
     return { pkg: pkg, unit: unit, billing: pkg.billing, months: months, total: total, vat: vat, gross: total + vat, custom: unit !== pkg.price };
   }
+  // One extra in a proposal: the extra's price (as it was when the proposal went out, if it has), times qty
   function extraPrice(d, e) {
-    const x = extraById(d, e.extraId);
+    const x = proposalExtra(d, e);
     if (!x) return null;
     const qty = Math.max(1, Math.round(num(e.qty) || 1));
     const total = x.price * qty;
@@ -453,7 +470,7 @@
     DEFAULT_SECTIONS: DEFAULT_SECTIONS, STATUS: STATUS, STATUS_ORDER: STATUS_ORDER, BILLING: BILLING, SOURCE_KINDS: SOURCE_KINDS,
     validate: validate, normalise: normalise, sectionsOn: sectionsOn, sectionLabel: sectionLabel,
     money: money, billingLabel: billingLabel, billingSuffix: billingSuffix,
-    packageById: packageById, optionPackage: optionPackage, proposalRate: proposalRate, extraById: extraById, optionPrice: optionPrice, extraPrice: extraPrice, recommended: recommended, proposalValue: proposalValue,
+    packageById: packageById, optionPackage: optionPackage, proposalRate: proposalRate, extraById: extraById, proposalExtra: proposalExtra, optionPrice: optionPrice, extraPrice: extraPrice, recommended: recommended, proposalValue: proposalValue,
     proposalById: proposalById, clientById: clientById, clientFor: clientFor, clientName: clientName, proposalsFor: proposalsFor,
     waitingRequests: waitingRequests, requestFor: requestFor, changeWaiting: changeWaiting,
     notSetUp: notSetUp, needsPackages: needsPackages, clientState: clientState, ageDays: ageDays, validUntil: validUntil, needsChase: needsChase,

@@ -14,7 +14,7 @@
     },
     "proposals": {
       "repository": "georgecairns-ui/proposal-writing-os",
-      "commit": "55700bfbe480b70ebea4f118ef703057721b4464"
+      "commit": "ecc779ce744db3284cbc8d387b0ab68ec42b2081"
     },
     "content": {
       "repository": "georgecairns-ui/content-machine-os",
