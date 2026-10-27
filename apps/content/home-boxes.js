@@ -2,8 +2,8 @@
   CONTENT MACHINE OS ON HOME: the boxes this tool adds to the Home dashboard
   -------------------------------------------------------------------------
   Loaded by apps/home/home.js after app/model.js (listed under "home" in the tool's menu file). It reads the same data
-  file as the app itself, through the same shared store. Every box starts switched off, so attaching
-  never changes someone's Home: the person switches boxes on from Home's list.
+  file as the app itself, through the same shared store. The boxes start switched on when Content Machine OS is on its own, and off when Task List OS is in the
+  folder, so attaching never changes someone's Home: the person switches boxes on from Home's list.
 */
 (function () {
   "use strict";
@@ -13,6 +13,12 @@
   const PAGE = "../content/#";
   const STYLE_ID = "cm-home-style";
   let data = null;
+
+  // Boxes start switched on only when Content Machine OS is on its own. When Task List OS is in the folder
+  // (its Home scripts load first and set window.TL), they start off, so attaching never changes
+  // someone's Home. Home reads this once, when it first builds the layout.
+  function startOn() { return !window.TL; }
+  function box(def) { Object.defineProperty(def, "defaultOn", { get: startOn, enumerable: true }); return def; }
 
   function empty(text) { return '<p class="hbox__empty">' + esc(text) + "</p>"; }
   function today() { return ui.isoDate(new Date()); }
@@ -99,10 +105,10 @@
   // ---------- What Home asks of this tool ----------
   window.TaskListOS.home.register("content", {
     boxes: [
-      { id: "posting", title: "Posting today", icon: "megaphone", size: 1, defaultOn: false, page: PAGE + "todo", render: posting },
-      { id: "waiting", title: "Waiting on you", icon: "checkSquare", size: 1, defaultOn: false, page: PAGE + "todo", render: waiting },
-      { id: "week", title: "This week’s posts", icon: "calendar", size: 2, defaultOn: false, page: PAGE + "calendar", render: week },
-      { id: "health", title: "Health check", icon: "barChart", size: 1, defaultOn: false, page: PAGE + "health", render: healthBox }
+      box({ id: "posting", title: "Posting today", icon: "megaphone", size: 1, page: PAGE + "todo", render: posting }),
+      box({ id: "waiting", title: "Waiting on you", icon: "checkSquare", size: 1, page: PAGE + "todo", render: waiting }),
+      box({ id: "week", title: "This week’s posts", icon: "calendar", size: 2, page: PAGE + "calendar", render: week }),
+      box({ id: "health", title: "Health check", icon: "barChart", size: 1, page: PAGE + "health", render: healthBox })
     ],
     greetingName: function () { return data && data.settings.ownerName; },
     businessName: function () { return data && data.settings.businessName; },

@@ -1,8 +1,9 @@
 # Built zips
 dist/
 
-# Safety copies the app makes before every save
+# Safety copies the app makes before every save, and the half-written file a save is in the middle of
 *.backup.json
+*.saving
 
 # Computer clutter
 .DS_Store
@@ -17,6 +18,10 @@ desktop.ini
 
 # Home layout: one person's choice of boxes, made while testing
 apps/home/data/
+
+# The saved download of each tool as a customer installed it: theirs, not the kit's
+setup/as-installed/*
+!setup/as-installed/README.md
 
 # Photos and videos added to posts: they stay on this computer, never in the kit
 apps/*/data/media/

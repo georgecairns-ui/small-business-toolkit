@@ -400,6 +400,15 @@
     });
   }
 
+  function openDeleteProposal(id) {
+    const p = M.proposalById(data, id);
+    if (!p) return;
+    openGeneric('<form data-form="delete-proposal" data-proposal="' + esc(id) + '" autocomplete="off">' + modalHead("Delete this proposal?") + '<div class="modal__body">' +
+      "<p>" + esc(M.clientName(data, p) + ": " + (p.title || p.cover.title || "Proposal")) + " will be taken off your list.</p>" +
+      '<p class="field__hint">You will have a few seconds to undo it straight after.</p></div>' +
+      '<div class="modal__foot"><button type="button" class="btn" data-close>Keep it</button><button type="submit" class="btn btn--primary">Delete it</button></div></form>');
+  }
+
   function openMarkLost(id) {
     openGeneric('<form data-form="mark-lost" data-proposal="' + esc(id) + '" autocomplete="off">' + modalHead("Mark as lost") + '<div class="modal__body">' +
       '<label class="field"><span class="field__label">Why didn’t it go ahead? (optional)</span><input class="input" name="reason" maxlength="160" placeholder="Went with someone cheaper, timing, went quiet"></label>' +
@@ -489,14 +498,7 @@
         break;
       }
       case "recommend": change(function (d) { mut.setRecommended(d, proposalId, Number(btn.getAttribute("data-index"))); }).then(function () { ui.toast("Recommended option changed"); }); break;
-      case "delete-proposal": {
-        let removed = null;
-        go("proposals");
-        change(function (d) { removed = mut.deleteProposal(d, proposalId); }).then(function () {
-          ui.toast("Proposal deleted", { icon: "trash", actionLabel: "Undo", onAction: function () { change(function (d) { mut.restoreProposal(d, removed); }); } });
-        });
-        break;
-      }
+      case "delete-proposal": openDeleteProposal(proposalId); break;
 
       // packages and preferences
       case "pkg-add": V.packages.addRow($("#pkgList")); break;
@@ -590,6 +592,17 @@
       f.instruction.blur();
       change(function (d) { req = mut.requestChange(d, id, text); }).then(function () { renderView(); return req ? askClaude("change", req.id) : false; }).then(function (started) {
         ui.toast(started ? "Claude is changing it now. This page updates by itself" : "Saved. Press Open in Claude to make the change now", { icon: "sparkle", duration: 7000 });
+      });
+      return;
+    }
+    if (kind === "delete-proposal") {
+      const id = form.getAttribute("data-proposal");
+      let removed = null;
+      generic.close();
+      go("proposals");
+      change(function (d) { removed = mut.deleteProposal(d, id); }).then(function () {
+        if (!removed) return;
+        ui.toast("Proposal deleted", { icon: "trash", actionLabel: "Undo", onAction: function () { change(function (d) { mut.restoreProposal(d, removed); }); } });
       });
       return;
     }

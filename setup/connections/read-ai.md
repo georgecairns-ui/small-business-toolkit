@@ -8,7 +8,7 @@ One line: turns meeting recordings into Calls entries and drafted follow-ups, wi
 
 1. Say "Let's connect your meeting reports" to the person. Say "connect" and "a connection", never MCP, API, JSON or repo.
 2. In the Claude app or on claude.ai, go to Customize, Connectors, search "Read AI", click Connect to Claude, sign in, and Allow Access.
-3. In Claude Code: it appears automatically once Claude Code is signed in with a claude.ai subscription. Check with `/mcp`.
+3. In Claude Code: it appears once Claude Code is signed in with a claude.ai subscription. Check your own list of connections; if it isn't there yet, ask them to close Claude Code and open it again (in the Terminal, `/mcp` also lists them).
 
 Read AI says this connector works across Claude Desktop, Claude web and Claude Code once connected; it is in open beta.
 

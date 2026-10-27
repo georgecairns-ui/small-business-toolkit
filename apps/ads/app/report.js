@@ -7,7 +7,8 @@
     node apps/ads/app/report.js checks <buildId>    the budget and season checks for one build, ending OK or BLOCKED
     node apps/ads/app/report.js campaign <id>       one campaign: totals, 12 weeks, its light, its ads and its prediction score
     node apps/ads/app/report.js action <id>         the limits check for one account change the owner approved, ending OK or BLOCKED
-  It reads apps/ads/data/ads.json and uses model.js, so every number here is the number the app shows.
+                                                    (BLOCKED too when apps/ads/data/approvals.json has no matching confirmation)
+  It reads apps/ads/data/ads.json (and approvals.json for the action check) and uses model.js, so every number here is the number the app shows.
   Nothing is written anywhere. No packages.
 */
 "use strict";
@@ -17,6 +18,7 @@ const path = require("path");
 const M = require("./model.js");
 
 const DATA_FILE = path.join(__dirname, "..", "data", "ads.json");
+const APPROVALS_FILE = path.join(__dirname, "..", "data", "approvals.json");
 
 function todayLocal() {
   const d = new Date();
@@ -27,6 +29,14 @@ function load(file) {
   const raw = JSON.parse(fs.readFileSync(file || DATA_FILE, "utf8"));
   M.validate(raw);
   return M.normalise(raw);
+}
+
+// The owner's confirmations. A missing file is an empty list, so nothing is approved.
+function loadApprovals(file) {
+  let raw;
+  try { raw = JSON.parse(fs.readFileSync(file || APPROVALS_FILE, "utf8")); } catch (e) { return []; }
+  M.validateApprovals(raw);
+  return M.normaliseApprovals(raw).approvals;
 }
 
 function change(frac) { return frac === null ? "no earlier figure to compare" : M.pct(frac, { sign: true }) + " on the same days last week"; }
@@ -145,7 +155,9 @@ function campaignReport(data, campaignId, todayIso) {
 }
 
 // One account change the owner approved, with its limits check, ending OK or BLOCKED
-function actionReport(data, actionId, todayIso) {
+// approvals: the list from approvals.json. When it is given, the change must also match one of the owner's confirmations,
+// or the result is BLOCKED. Without it only the limits are checked.
+function actionReport(data, actionId, todayIso, approvals) {
   const a = (data.actions || []).find(function (x) { return x.id === actionId; });
   if (!a) throw new Error("There is no account change with the id " + actionId + ".");
   const c = M.actionChecks(data, a, todayIso), lines = ["Change: " + M.actionSentence(data, a, todayIso), "Status: " + (M.ACTION_STATUS_LABELS[a.status] || a.status)];
@@ -158,9 +170,21 @@ function actionReport(data, actionId, todayIso) {
     lines.push("  In all: " + M.money(b.total) + " a day, about " + M.money(b.monthly) + " a month");
   }
   if (c.season) lines.push("  Season: " + c.season.label + " (" + c.season.text + ")");
-  if (c.warnings.length) { lines.push("Warnings"); c.warnings.forEach(function (w) { lines.push("  " + w); }); }
+  let ok = c.ok;
+  const warnings = c.warnings.slice();
+  if (approvals) {
+    const found = M.approvalFor(approvals, a);
+    if (found) lines.push("Owner's confirmation: found (confirmed " + found.confirmedAt + ")");
+    else {
+      lines.push("Owner's confirmation: none that matches this change");
+      warnings.push("There is no confirmation from the owner in the approvals file that matches this change exactly, so it was not approved in the app.");
+      ok = false;
+    }
+    if (a.status !== "requested" && a.status !== "doing") { warnings.push("This change is not waiting to be made (status: " + a.status + ")."); ok = false; }
+  }
+  if (warnings.length) { lines.push("Warnings"); warnings.forEach(function (w) { lines.push("  " + w); }); }
   else lines.push("Warnings: none");
-  lines.push("Result: " + (c.ok ? "OK" : "BLOCKED"));
+  lines.push("Result: " + (ok ? "OK" : "BLOCKED"));
   return lines.join("\n");
 }
 
@@ -213,7 +237,7 @@ function main(argv) {
   if (command === "action") {
     if (!argv[1]) { console.error("Say which change: node apps/ads/app/report.js action <id>"); process.exit(2); }
     if (!(data.actions || []).some(function (x) { return x.id === argv[1]; })) { console.error("There is no account change with the id " + argv[1] + "."); process.exit(2); }
-    console.log(actionReport(data, argv[1], today));
+    console.log(actionReport(data, argv[1], today, loadApprovals()));
     return;
   }
   const date = argv[1] || today;
@@ -223,4 +247,4 @@ function main(argv) {
 }
 
 if (require.main === module) main(process.argv.slice(2));
-module.exports = { weekReport: weekReport, todoReport: todoReport, checksReport: checksReport, campaignReport: campaignReport, actionReport: actionReport, load: load };
+module.exports = { weekReport: weekReport, todoReport: todoReport, checksReport: checksReport, campaignReport: campaignReport, actionReport: actionReport, load: load, loadApprovals: loadApprovals };

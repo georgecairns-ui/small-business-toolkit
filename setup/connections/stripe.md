@@ -9,11 +9,11 @@ One line: fills Review with payments to follow up on and failed charges.
 1. Say "Let's connect your payments" to the person. Say "connect" and "a connection", never MCP, API, JSON or repo.
 2. In the Claude app or on claude.ai, go to the + button, Connectors, enable "Stripe".
 3. Sign in to Stripe in the window that opens, and set permissions per environment (for example live or test) in that sign-in screen.
-4. In Claude Code: it appears automatically once Claude Code is signed in with a claude.ai subscription. Check with `/mcp`. Backup if needed: `claude mcp add --transport http stripe https://mcp.stripe.com/` then `/mcp` for sign-in, or Stripe's own route, `npm install -g @stripe/cli@latest` then `stripe agent setup`.
+4. In Claude Code: it appears once Claude Code is signed in with a claude.ai subscription. Check your own list of connections; if it isn't there yet, ask them to close Claude Code and open it again (in the Terminal, `/mcp` also lists them). Backup if needed: `claude mcp add --transport http stripe https://mcp.stripe.com/` then `/mcp` for sign-in, or Stripe's own route, `npm install -g @stripe/cli@latest` then `stripe agent setup`.
 
 ## Route 2: API key
 
-From 31 October 2026, Stripe's connector only accepts an Agent API key (full secret keys and restricted keys without the Agent tag are rejected). Where to create an Agent API key and how to set it to read-only is not verified: check https://docs.stripe.com/keys. Once the person has the key, ask them to open the Terminal app (Mac) or PowerShell (Windows) in their Small Business Toolkit folder and run `bash setup/scripts/save-key.sh STRIPE_API_KEY` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 STRIPE_API_KEY` (Windows), paste the key, then restart Claude Code. Never ask for the key in chat.
+From 31 October 2026, Stripe's connector only accepts an Agent API key (full secret keys and restricted keys without the Agent tag are rejected). Where to create an Agent API key and how to set it to read-only is not verified: check https://docs.stripe.com/keys. Once the person has the key, ask them to open the Terminal app (Mac) or PowerShell (Windows) in this folder and run `bash setup/scripts/save-key.sh STRIPE_API_KEY` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 STRIPE_API_KEY` (Windows), paste the key, then restart Claude Code. Never ask for the key in chat.
 
 Then: `claude mcp add --transport http stripe https://mcp.stripe.com/ --header "Authorization: Bearer ${STRIPE_API_KEY}"`.
 

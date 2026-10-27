@@ -46,8 +46,8 @@
         '<a class="btn btn--sm" href="#packages">Add packages</a></div>';
       html += '<div class="pstats">' +
         stat(String(n.toCheck), n.toCheck === 1 ? "ready to check" : "ready to check") +
-        stat(M.money(d, n.sentValue), "out with clients, " + n.sentCount + " sent") +
-        stat(M.money(d, n.wonMonthValue), "won this month" + (n.winRate == null ? "" : ", " + n.winRate + "% win rate")) +
+        stat(M.money(d, n.sentValue), "out with clients, " + n.sentCount + " sent" + (n.sentRates ? ", day and hourly rates not counted" : "")) +
+        stat(M.money(d, n.wonMonthValue), "won this month" + (n.wonMonthRates ? ", day and hourly rates not counted" : "") + (n.winRate == null ? "" : ", " + n.winRate + "% win rate")) +
         "</div>";
       html += '<div class="pipe-bar"><div class="segmented" role="group" aria-label="Show">' + FILTERS.map(function (f) {
         return '<button type="button" data-action="filter" data-value="' + f.key + '" aria-pressed="' + (f.key === filter.key) + '">' + esc(f.label) + "</button>";

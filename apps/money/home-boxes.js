@@ -2,8 +2,8 @@
   MONEY VIEW OS ON HOME: the boxes this tool adds to the Home dashboard
   ---------------------------------------------------------------------
   Loaded by apps/home/home.js after app/model.js (listed under "home" in the tool's menu file). It reads the same data
-  file as the app itself, through the same shared store. Every box starts switched off, so attaching
-  never changes someone's Home: the person switches boxes on from Home's list.
+  file as the app itself, through the same shared store. The boxes start switched on when Money View OS is on its own, and off when Task List OS is in the
+  folder, so attaching never changes someone's Home: the person switches boxes on from Home's list.
 
   Every figure comes from MV.model, the same rules as the app, and every box says where its figure
   came from or that it is an estimate. Nothing on Home moves money or sends anything.
@@ -16,6 +16,12 @@
   const PAGE = "../money/#";
   const STYLE_ID = "mv-home-style";
   let data = null;
+
+  // Boxes start switched on only when Money View OS is on its own. When Task List OS is in the folder
+  // (its Home scripts load first and set window.TL), they start off, so attaching never changes
+  // someone's Home. Home reads this once, when it first builds the layout.
+  function startOn() { return !window.TL; }
+  function box(def) { Object.defineProperty(def, "defaultOn", { get: startOn, enumerable: true }); return def; }
 
   function empty(text) { return '<p class="hbox__empty">' + esc(text) + "</p>"; }
   function today() { return ui.isoDate(new Date()); }
@@ -115,11 +121,11 @@
   // ---------- What Home asks of this tool ----------
   window.TaskListOS.home.register("money", {
     boxes: [
-      { id: "cash", title: "Cash today", icon: "wallet", size: 1, defaultOn: false, page: PAGE + "overview", render: cashBox },
-      { id: "lowest", title: "Lowest point", icon: "trendingUp", size: 1, defaultOn: false, page: PAGE + "overview", render: lowestBox },
-      { id: "owed", title: "Owed to you", icon: "fileText", size: 1, defaultOn: false, page: PAGE + "invoices", render: owedBox },
-      { id: "tax", title: "Tax pot", icon: "inbox", size: 1, defaultOn: false, page: PAGE + "overview", render: taxBox },
-      { id: "next", title: "Next 14 days", icon: "calendar", size: 2, defaultOn: false, page: PAGE + "overview", render: nextBox }
+      box({ id: "cash", title: "Cash today", icon: "wallet", size: 1, page: PAGE + "overview", render: cashBox }),
+      box({ id: "lowest", title: "Lowest point", icon: "trendingUp", size: 1, page: PAGE + "overview", render: lowestBox }),
+      box({ id: "owed", title: "Owed to you", icon: "fileText", size: 1, page: PAGE + "invoices", render: owedBox }),
+      box({ id: "tax", title: "Tax pot", icon: "inbox", size: 1, page: PAGE + "overview", render: taxBox }),
+      box({ id: "next", title: "Next 14 days", icon: "calendar", size: 2, page: PAGE + "overview", render: nextBox })
     ],
     greetingName: function () { return data && data.settings.ownerName; },
     businessName: function () { return data && data.settings.businessName; },

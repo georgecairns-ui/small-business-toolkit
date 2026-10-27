@@ -23,7 +23,7 @@
     },
     "tidy-up": {
       "label": "tidying up",
-      "prompt": "The person has pressed a Fix button in Skill and Folder Map OS and has already seen and agreed to what it will do. Follow .claude/skills/tidy-up: work out the moves for any item that asks you to, run the tidy-up script once (node apps/skill-map/tidy/tidy.js, or python3 apps/skill-map/tidy/tidy.py if Node isn't installed), then run the matching scan once so the map is up to date. Never delete anything, never move anything yourself, change nothing else."
+      "prompt": "The person has pressed a Fix button in Skill and Folder Map OS and has already seen and agreed to what it will do. Follow .claude/skills/tidy-up: work out the moves for any item that asks you to, run the tidy-up script once (node apps/skill-map/tidy/tidy.js, or python3 apps/skill-map/tidy/tidy.py if Node isn't installed), then run the matching scan once so the map is up to date. If the script is not allowed to run, stop and say the tidy-up is waiting for the person to approve it. Never delete anything, never move anything yourself, change nothing else."
     }
   }
 }

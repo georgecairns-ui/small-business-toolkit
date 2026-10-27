@@ -1,6 +1,6 @@
 ---
 name: open-my-toolkit
-description: Gets the person's Small Business Toolkit running on their computer and gives them the link (http://localhost:4747). Starts the helper if it isn't running, and can make it start with the computer. Use when they type /open-my-toolkit, say "open my toolkit", "open the app", "open my task list" (or open any of the 7 tools by name), "where's my toolkit?", "it isn't loading", or at the end of setup.
+description: Gets the person's Small Business Toolkit running on their computer and gives them the link (http://localhost:4747). Starts the helper if it isn't running, and can make it start with the computer. Use when they type /open-my-toolkit, say "open my toolkit", "open the small business toolkit", "open the app", "open my task list" (or open any of the 7 tools by name), "where's my toolkit?", "it isn't loading", or at the end of setup.
 ---
 
 # Open my toolkit

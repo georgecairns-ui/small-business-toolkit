@@ -13,7 +13,12 @@
   scrollbar-width: thin;
 }
 .sidebar__brand { display: flex; align-items: center; gap: 10px; padding: 2px 8px var(--space-4); }
-.sidebar__brand img { flex: none; border-radius: 7px; }
+.sidebar__brand img { flex: none; border-radius: 7px; object-fit: contain; }
+/* A wide logo (a wordmark), set by the match-my-brand skill: the logo takes the place of the business name */
+.sidebar__brand--wordmark img { width: auto; max-width: 176px; height: 36px; border-radius: 0; }
+.sidebar__brand--wordmark .sidebar__brand-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+/* A logo that is dark on a clear background: it sits on a light chip in dark mode */
+.sidebar__brand--chip img { background: var(--color-logo-chip); padding: 2px 4px; box-sizing: content-box; }
 .sidebar__brand-text { min-width: 0; }
 .sidebar__product { font-weight: 700; font-size: var(--text-md); letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 

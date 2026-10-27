@@ -21,7 +21,7 @@
     const x = p || { id: "", name: "", summary: "", bestFor: "", price: "", billing: "one-off", months: "", timeline: "", includes: [] };
     return '<li class="pkg" data-pkg="' + esc(x.id) + '">' +
       '<div class="pkg__row"><label class="field pkg__name"><span class="field__label">Package</span><input class="input" name="name" maxlength="80" value="' + esc(x.name) + '" placeholder="Website refresh"></label>' +
-      '<label class="field pkg__price"><span class="field__label">Price</span><input class="input num" type="number" name="price" min="0" step="1" value="' + esc(x.price === "" ? "" : x.price) + '" placeholder="0"></label>' +
+      '<label class="field pkg__price"><span class="field__label">Price</span><input class="input num" type="number" name="price" min="0" step="0.01" value="' + esc(x.price === "" ? "" : x.price) + '" placeholder="0"></label>' +
       '<label class="field pkg__billing"><span class="field__label">Charged</span><select class="select" name="billing">' + billingOptions(x.billing) + "</select></label>" +
       '<label class="field pkg__months"><span class="field__label">For how many months</span><input class="input num" type="number" name="months" min="0" step="1" value="' + esc(x.months || "") + '" placeholder="Ongoing"></label>' +
       '<button type="button" class="icon-btn pkg__remove" data-action="pkg-remove" aria-label="Remove this package">' + icon("trash") + "</button></div>" +
@@ -34,7 +34,7 @@
     const e = x || { id: "", name: "", price: "", billing: "one-off", summary: "" };
     return '<li class="extra" data-extra="' + esc(e.id) + '">' +
       '<input class="input" name="name" maxlength="80" value="' + esc(e.name) + '" placeholder="Extra page" aria-label="Extra">' +
-      '<input class="input num" type="number" name="price" min="0" step="1" value="' + esc(e.price === "" ? "" : e.price) + '" placeholder="0" aria-label="Price">' +
+      '<input class="input num" type="number" name="price" min="0" step="0.01" value="' + esc(e.price === "" ? "" : e.price) + '" placeholder="0" aria-label="Price">' +
       '<select class="select" name="billing" aria-label="Charged">' + billingOptions(e.billing) + "</select>" +
       '<button type="button" class="icon-btn" data-action="extra-remove" aria-label="Remove this extra">' + icon("trash") + "</button></li>";
   }
@@ -77,7 +77,7 @@
         if (!name) { error = "Give every package a name."; return; }
         const id = li.getAttribute("data-pkg") || M.slugId("pk", name, packages.concat(d.packages));
         const old = M.packageById(d, id) || {};
-        packages.push(Object.assign({}, old, { id: id, name: name.slice(0, 80), summary: f("summary").trim(), bestFor: f("bestFor").trim(), price: Math.max(0, Number(f("price")) || 0),
+        packages.push(Object.assign({}, old, { id: id, name: name.slice(0, 80), summary: f("summary").trim(), bestFor: f("bestFor").trim(), price: Math.round(Math.max(0, Number(f("price")) || 0) * 100) / 100,
           billing: f("billing"), months: f("billing") === "monthly" ? Math.max(0, Math.round(Number(f("months")) || 0)) : 0, timeline: f("timeline").trim(),
           includes: f("includes").split("\n").map(function (x) { return x.replace(/^[-*•]\s*/, "").trim(); }).filter(Boolean).slice(0, 20) }));
       });
@@ -87,7 +87,7 @@
         if (!name) return;
         const id = li.getAttribute("data-extra") || M.slugId("x", name, extras.concat(d.extras));
         const old = M.extraById(d, id) || {};
-        extras.push(Object.assign({}, old, { id: id, name: name.slice(0, 80), price: Math.max(0, Number(f("price")) || 0), billing: f("billing") }));
+        extras.push(Object.assign({}, old, { id: id, name: name.slice(0, 80), price: Math.round(Math.max(0, Number(f("price")) || 0) * 100) / 100, billing: f("billing") }));
       });
       const names = packages.map(function (p) { return p.name.toLowerCase(); });
       if (!error && names.some(function (n, i) { return names.indexOf(n) !== i; })) error = "Two packages have the same name.";

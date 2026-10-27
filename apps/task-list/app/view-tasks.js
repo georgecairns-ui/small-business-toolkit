@@ -94,7 +94,7 @@
       const extra = first ? planned.map(function (x) { return C.planCard(d, x.task, x.item, { anim: ctx.anim }); }).join("") + planNudge(ctx) : "";
       const approveAll = first && planned.length > 1 ? '<button type="button" class="btn btn--approve btn--sm scol__approve" data-action="approve-plan">' + icon("check") + "Approve all</button>" : "";
       return '<section class="scol scol--' + s.key + '" data-drop-stage="' + s.key + '" role="listitem" aria-label="' + esc(M.stageLabel(d, s.key)) + '">' +
-        '<header class="scol__head"><span class="scol__name">' + esc(M.stageLabel(d, s.key)) + '</span><span class="scol__count num">' + (all.length + (first ? planned.length : 0)) + "</span>" + approveAll + "</header>" +
+        '<header class="scol__head"><span class="scol__name">' + esc(M.stageLabel(d, s.key)) + '</span><span class="scol__count num">' + M.stageCount(all, s.key, planned) + "</span>" + approveAll + "</header>" +
         '<div class="scol__cards">' + extra + (shown.length ? shown.map(function (t) { return C.taskCard(d, t, { anim: ctx.anim, draggable: true }); }).join("") :
           (extra ? "" : '<p class="scol__empty">' + (s.key === "done" ? "Nothing done yet" : "Drop a task here") + "</p>")) +
         (all.length > shown.length ? '<button type="button" class="scol__more" data-action="tasks-view" data-value="list">' + (all.length - shown.length) + " more in List</button>" : "") +
@@ -113,7 +113,7 @@
         return window.TL.views.review.proposalRow(ctx, x.task, { kind: "plan", category: x.item.category, reason: x.item.reason });
       }).join("") + "</ul>" : "";
       const nudge = first ? planNudge(ctx) : "";
-      const head = '<span class="scol__name">' + esc(M.stageLabel(d, s.key)) + '</span><span class="scol__count num">' + (tasks.length + (first ? planned.length : 0)) + "</span>" +
+      const head = '<span class="scol__name">' + esc(M.stageLabel(d, s.key)) + '</span><span class="scol__count num">' + M.stageCount(tasks, s.key, planned) + "</span>" +
         (first && planned.length > 1 ? '<button type="button" class="btn btn--approve btn--sm scol__approve" data-action="approve-plan">' + icon("check") + "Approve all</button>" : "");
       const body = sugg + (nudge ? '<div class="slist__nudge">' + nudge + "</div>" : "") + (tasks.length ? C.taskList(d, tasks, { anim: ctx.anim, keySuffix: "-list", showCat: true }) : (sugg || nudge ? "" : '<p class="muted list-empty">Nothing here.</p>'));
       if (s.key === "done") return '<details class="panel panel--flush slist"' + (tasks.length && tasks.length < 6 ? " open" : "") + '><summary class="slist__head">' + head + "</summary>" + body + "</details>";

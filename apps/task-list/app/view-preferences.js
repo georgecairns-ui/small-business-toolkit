@@ -18,10 +18,13 @@
   function options(list, current) {
     return list.map(function (o) { return '<option value="' + esc(o[0]) + '"' + (o[0] === current ? " selected" : "") + ">" + esc(o[1]) + "</option>"; }).join("");
   }
-  // The colour picker needs a plain colour; a standard category uses its theme colour until changed
+  // The colour picker needs a plain colour; a standard category uses its theme colour until changed,
+  // read from theme.css so a business's own brand colour shows here too
+  const THEME_VAR = { today: "--cat-today", "quick-win": "--cat-quick", delegate: "--cat-delegate", waiting: "--cat-waiting", later: "--cat-later" };
   function pickerValue(c) {
     if (c.colour) return c.colour;
-    return { today: "#d97757", "quick-win": "#c08a1e", delegate: "#3f8a55", waiting: "#4a73b5", later: "#8c9099" }[c.key] || "#8c9099";
+    const v = THEME_VAR[c.key] ? getComputedStyle(document.documentElement).getPropertyValue(THEME_VAR[c.key]).trim() : "";
+    return /^#[0-9a-f]{6}$/i.test(v) ? v.toLowerCase() : "#8c9099";
   }
   function catRow(c) {
     const fixed = c.key === "waiting";

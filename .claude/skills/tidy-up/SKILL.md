@@ -21,6 +21,7 @@ The person has already seen exactly what will happen and pressed the button, so 
 3. Run the tidy-up script once. It carries out every queued item and writes what happened into `tidy.json`:
    - `node apps/skill-map/tidy/tidy.js`
    - No Node? `python3 apps/skill-map/tidy/tidy.py`
+   - Running the script is not pre-approved, so the person is asked to approve it. That is their last say. If you can't ask (you were started by the app's Fix button and the command is refused), don't try another way: tell them the tidy-up is waiting, and to open Claude in this folder and say "do the tidy-up", then approve the command when it asks.
 4. Then refresh the map of whatever you tidied, so the app shows the new state: `node apps/skill-map/scan/scan-files.js` after a folder tidy-up, `node apps/skill-map/scan/scan.js` after a skills tidy-up (or the python versions). Run each once.
 5. Stop there.
 

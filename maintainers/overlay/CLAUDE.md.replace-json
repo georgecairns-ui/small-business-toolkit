@@ -1,5 +1,9 @@
 [
   [
+    "Includes the skills you built for this business in setup step 6",
+    "Includes the skills you built for this business during setup"
+  ],
+  [
     "# Task List OS: standing instructions for Claude",
     "# Small Business Toolkit: standing instructions for Claude\n\nThis folder is the Small Business Toolkit from Get AI Powers: 7 tools that work together in one app. They are Task List OS, Pipeline OS, Skill and Folder Map OS, Proposal Writing OS, Content Machine OS, Money View OS and Ads OS, plus the Toolkit section that connects them and grows them. Task List OS is 1 of the 7. Its instructions come first below because they cover the everyday basics every tool shares, then each other tool's own instructions under \"Attached tools\" at the end, and the Toolkit section of the app (described just before them)."
   ],
@@ -20,11 +24,11 @@
     "| `apps/installed.json` | The tools in this folder (all 7, plus the Toolkit). The menu and the helper both read it |\n| `apps/toolkit/` | The Toolkit section: connections, setup status, ideas and what you've built for them, in `apps/toolkit/data/toolkit.json` |"
   ],
   [
-    "| \"Open my task list\", \"it's not loading\" | `.claude/skills/open-task-list` |",
+    "| \"Open my task list\", \"open the app\", \"it's not loading\" | `.claude/skills/open-the-app` |",
     "| \"Open my toolkit\", \"open the app\", \"open my task list\", \"it's not loading\" | `.claude/skills/open-my-toolkit` (it starts the one app every tool shares) |"
   ],
   [
-    "| **http://localhost:4747** | The app. It opens on Home (a dashboard of boxes they arrange themselves), then the task list's pages: Tasks (Today, This week or All, as a Board, List or Calendar), Inbox, Review and Calls, plus Preferences (the cog). The Brain dump button at the top records a voice note. A small helper in `apps/server/` runs it on this computer. If it isn't running, use `.claude/skills/open-task-list` |\n| `Open Task List.html` | Double-clicking it goes to the link above when the task list is running |\n| `apps/task-list/` | The task list app. `CLAUDE.md` in there explains its data. Their tasks are in `apps/task-list/data/tasks.json` |",
+    "| **http://localhost:4747** | The app. It opens on Home (a dashboard of boxes they arrange themselves), then the task list's pages: Tasks (Today, This week or All, as a Board, List or Calendar), Inbox, Review and Calls, plus Preferences (the cog). The Brain dump button at the top records a voice note. A small helper in `apps/server/` runs it on this computer. If it isn't running, use `.claude/skills/open-the-app` |\n| `Open Task List.html` | Double-clicking it goes to the link above when the task list is running |\n| `apps/task-list/` | The task list app. `CLAUDE.md` in there explains its data. Their tasks are in `apps/task-list/data/tasks.json` |",
     "| **http://localhost:4747** | The Small Business Toolkit app. It opens on Home (a dashboard of boxes they arrange themselves). The sidebar has a section for each of the 7 tools, then the Toolkit section. The Brain dump button at the top records a voice note. A small helper in `apps/server/` runs it on this computer. If it isn't running, use `.claude/skills/open-my-toolkit` |\n| `Open Small Business Toolkit.html` | Double-clicking it goes to the link above when the toolkit is running |\n| `apps/task-list/` | The Task List OS app, 1 of the 7 tools: Tasks (Today, This week or All, as a Board, List or Calendar), Inbox, Review and Calls, plus Preferences (the cog). `CLAUDE.md` in there explains its data. Their tasks are in `apps/task-list/data/tasks.json` |"
   ],
   [

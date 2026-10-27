@@ -40,7 +40,7 @@
       const closed = s.key === "won" || s.key === "lost";
       // Won and lost show the last 90 days, so the board doesn't fill up with old deals
       const shown = closed ? deals.filter(function (x) { return !x.closedAt || M.daysSince(x.closedAt) <= 90; }) : deals;
-      const value = shown.reduce(function (sum, x) { return sum + (Number(x.value) || 0); }, 0);
+      const value = M.dealsValue(shown);
       return '<section class="pcol pcol--' + esc(s.key) + (closed ? " pcol--closed" : "") + '" data-stage="' + esc(s.key) + '" aria-label="' + esc(s.label) + '">' +
         '<header class="pcol__head"><span class="pcol__name">' + esc(s.label) + '</span><span class="pcol__count">' + shown.length + "</span></header>" +
         '<div class="pcol__value num">' + esc(M.money(d, value)) + (closed ? '<span class="pcol__hint">last 90 days</span>' : "") + "</div>" +

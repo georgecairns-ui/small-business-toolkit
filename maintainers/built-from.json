@@ -2,38 +2,38 @@
   "tools": {
     "task-list": {
       "repository": "georgecairns-ui/task-list-os",
-      "commit": "6b519bde0c27b48d1c287ec702b4fb672d49d267"
+      "commit": "237f5656c32319c74d51dd85b42530a6692613f7"
     },
     "pipeline": {
       "repository": "georgecairns-ui/pipeline-os",
-      "commit": "ad849d7f02166521a9b3bcff4d1f394ecc4e1987"
+      "commit": "186dee5813ba0f93560937330831fb5286c82255"
     },
     "skill-map": {
       "repository": "georgecairns-ui/skill-and-folder-map-os",
-      "commit": "a7d928d9221c5ee635ed9fd5c1fca092061561b1"
+      "commit": "4b0f0ac48b88e1900d6da09ab0fe4c69ee334fb2"
     },
     "proposals": {
       "repository": "georgecairns-ui/proposal-writing-os",
-      "commit": "9eea3da539a322fd8dff50b3156e5adf79dc99b6"
+      "commit": "55700bfbe480b70ebea4f118ef703057721b4464"
     },
     "content": {
       "repository": "georgecairns-ui/content-machine-os",
-      "commit": "d427b3cfe3d2c071d65f1283ebe33de9342da9f4"
+      "commit": "50f67d7b817ec7557180512defd9bad0cb8a2209"
     },
     "money": {
       "repository": "georgecairns-ui/money-view-os",
-      "commit": "1527e61fea753425f90cf50155fbdadbd04cf023"
+      "commit": "728d7d34c51ae513e2445e25113ec565a8b77e4a"
     },
     "ads": {
       "repository": "georgecairns-ui/ads-os",
-      "commit": "4ae417f8eb581e6184e755dd8d96a9c0b7318c26"
+      "commit": "58eaa5bc1361a001954ffd9482710c7040e6e8c1"
     }
   },
   "attach": [
     {
       "tool": "pipeline",
       "filesAdded": 33,
-      "alreadyThere": 95,
+      "alreadyThere": 97,
       "permissionsAdded": [
         "Edit(./apps/pipeline/data/**)",
         "Write(./apps/pipeline/data/**)"
@@ -43,7 +43,7 @@
     {
       "tool": "skill-map",
       "filesAdded": 43,
-      "alreadyThere": 89,
+      "alreadyThere": 91,
       "permissionsAdded": [
         "Edit(./apps/skill-map/data/**)",
         "Write(./apps/skill-map/data/**)",
@@ -58,12 +58,7 @@
         "Bash(node apps/skill-map/scan/scan-files.js --dry-run)",
         "Bash(python3 apps/skill-map/scan/scan-files.py)",
         "Bash(python3 apps/skill-map/scan/scan-files.py --dry-run)",
-        "Bash(python apps/skill-map/scan/scan-files.py)",
-        "Bash(node apps/skill-map/tidy/tidy.js)",
-        "Bash(node apps/skill-map/tidy/tidy.js --dry-run)",
-        "Bash(python3 apps/skill-map/tidy/tidy.py)",
-        "Bash(python3 apps/skill-map/tidy/tidy.py --dry-run)",
-        "Bash(python apps/skill-map/tidy/tidy.py)"
+        "Bash(python apps/skill-map/scan/scan-files.py)"
       ],
       "permissionsLeftOut": [
         "Bash(ls:*)"
@@ -72,7 +67,7 @@
     {
       "tool": "proposals",
       "filesAdded": 36,
-      "alreadyThere": 95,
+      "alreadyThere": 97,
       "permissionsAdded": [
         "Edit(./apps/proposals/data/**)",
         "Write(./apps/proposals/data/**)",
@@ -85,10 +80,10 @@
     {
       "tool": "content",
       "filesAdded": 39,
-      "alreadyThere": 90,
+      "alreadyThere": 92,
       "permissionsAdded": [
-        "Edit(./apps/content/data/**)",
-        "Write(./apps/content/data/**)",
+        "Edit(./apps/content/data/content.json)",
+        "Write(./apps/content/data/content.json)",
         "Edit(./.claude/skills/*-what-works/**)",
         "Write(./.claude/skills/*-what-works/**)"
       ],
@@ -96,23 +91,23 @@
     },
     {
       "tool": "money",
-      "filesAdded": 41,
-      "alreadyThere": 61,
+      "filesAdded": 38,
+      "alreadyThere": 66,
       "permissionsAdded": [
         "Edit(./apps/money/data/**)",
-        "Write(./apps/money/data/**)",
-        "Bash(bash setup/scripts/start-money-view.sh)",
-        "Bash(powershell -ExecutionPolicy Bypass -File setup\\scripts\\start-money-view.ps1)"
+        "Write(./apps/money/data/**)"
       ],
       "permissionsLeftOut": []
     },
     {
       "tool": "ads",
-      "filesAdded": 50,
-      "alreadyThere": 90,
+      "filesAdded": 51,
+      "alreadyThere": 92,
       "permissionsAdded": [
-        "Edit(./apps/ads/data/**)",
-        "Write(./apps/ads/data/**)",
+        "Edit(./apps/ads/data/ads.json)",
+        "Write(./apps/ads/data/ads.json)",
+        "Edit(./apps/ads/data/media/**)",
+        "Write(./apps/ads/data/media/**)",
         "Bash(bash setup/scripts/install-claude-ads.sh)",
         "Bash(powershell -ExecutionPolicy Bypass -File setup\\scripts\\install-claude-ads.ps1)",
         "Bash(node apps/ads/app/report.js:*)"

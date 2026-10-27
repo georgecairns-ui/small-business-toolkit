@@ -133,7 +133,7 @@
           (a.answer ? '<p class="kfield__a">' + esc(a.answer) + "</p>" : "") + (a.evidence ? '<p class="kfield__e">' + esc(a.evidence) + "</p>" : "") + "</li>";
       }).join("") + "</ul>" +
       list("Risks", k.risks, "alert") + list("Buying signals", k.signals, "trendingUp") +
-      '<p class="muted drawer__small">Based on MEDDPICC, a standard way to qualify sales. Checked ' + esc(C.ago(k.checkedAt)) + ". Claude never guesses: anything not said stays “Not known yet”.</p></section>";
+      '<p class="muted drawer__small">Based on a standard way to qualify sales. Checked ' + esc(C.ago(k.checkedAt)) + ". Claude never guesses: anything not said stays “Not known yet”.</p></section>";
   }
 
   function alsoHelp(ctx, x) {

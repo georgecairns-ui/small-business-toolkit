@@ -8,7 +8,7 @@ One line: turns Zoom cloud recordings and AI Companion meeting summaries into Ca
 
 1. Say "Let's connect your Zoom recordings" to the person. Say "connect" and "a connection", never MCP, API, JSON or repo.
 2. In the Claude app or on claude.ai, go to the connectors area (ask the person what they see), find "Zoom for Claude", click Connect, sign in to Zoom, and approve.
-3. In Claude Code: it appears automatically once Claude Code is signed in with a claude.ai subscription. Check with `/mcp`.
+3. In Claude Code: it appears once Claude Code is signed in with a claude.ai subscription. Check your own list of connections; if it isn't there yet, ask them to close Claude Code and open it again (in the Terminal, `/mcp` also lists them).
 4. If the person is not a Zoom admin, they may need an admin to turn on the connector first; offer to draft a short message they can send that admin.
 
 Zoom's own connector page does not publish a URL or a Claude Code command for this connector; use the claude.ai connector route above and it will appear in Claude Code once signed in.

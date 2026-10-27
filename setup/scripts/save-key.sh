@@ -3,7 +3,7 @@
 # SAVE A KEY (Mac and Linux)
 # --------------------------
 # Saves a key for one of your apps (for example your Fireflies API key) safely on this computer,
-# so Claude Code can use it, without the key ever appearing in a chat or in your Small Business Toolkit folder.
+# so Claude Code can use it, without the key ever appearing in a chat or in this folder.
 #
 # How to use it: open the Terminal app and run, for example:
 #   bash "setup/scripts/save-key.sh" FIREFLIES_API_KEY
@@ -13,11 +13,21 @@
 #   On a Mac:   stores the key in your Keychain (the Mac's encrypted password store), and adds one
 #               line to your shell profile that reads it from the Keychain when a terminal opens.
 #               The key itself is never written into a file.
-#   On Linux:   stores the key in ~/.config/task-list-os/<NAME>, readable only by you, and adds one
+#   On Linux:   stores the key in ~/.config/<folder>/<NAME>, readable only by you, and adds one
 #               line to your shell profile that reads it.
 # Afterwards: close the terminal, open a new one, and start Claude Code again from your folder.
 
 set -euo pipefail
+
+# The folder's name, for the closing message: "name" in toolkit.json, else the first tool's in apps/installed.json
+HERE="$(cd "$(dirname "$0")/../.." && pwd)"
+name_in() { [ -f "$1" ] && sed -n 's/^[[:space:]]*"name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$1" | head -1 || true; }
+FOLDER_NAME="$(name_in "$HERE/toolkit.json")"
+[ -n "$FOLDER_NAME" ] || FOLDER_NAME="$(name_in "$HERE/apps/installed.json")"
+[ -n "$FOLDER_NAME" ] || FOLDER_NAME="toolkit"
+
+# Where saved keys live. These names are kept as they are, because keys saved before now are found there.
+SERVICE="task-list-os"
 
 NAME="${1:-}"
 if [[ ! "$NAME" =~ ^[A-Z][A-Z0-9_]*$ ]]; then
@@ -44,11 +54,11 @@ touch "$PROFILE"
 
 if [ "$(uname)" = "Darwin" ] && command -v security >/dev/null 2>&1; then
   # -U updates the key if it was saved before
-  security add-generic-password -U -s "task-list-os" -a "$NAME" -w "$KEY" >/dev/null
-  LINE="export $NAME=\"\$(security find-generic-password -s task-list-os -a $NAME -w 2>/dev/null)\""
+  security add-generic-password -U -s "$SERVICE" -a "$NAME" -w "$KEY" >/dev/null
+  LINE="export $NAME=\"\$(security find-generic-password -s $SERVICE -a $NAME -w 2>/dev/null)\""
   WHERE="your Mac's Keychain"
 else
-  DIR="$HOME/.config/task-list-os"
+  DIR="$HOME/.config/$SERVICE"
   mkdir -p "$DIR"
   chmod 700 "$DIR"
   (umask 077 && printf '%s' "$KEY" > "$DIR/$NAME")
@@ -57,10 +67,10 @@ else
 fi
 unset KEY
 
-MARKER="# Task List OS key: $NAME"
-if ! grep -qF "$MARKER" "$PROFILE"; then
-  printf '\n%s\n%s\n' "$MARKER" "$LINE" >> "$PROFILE"
+# The same line is only ever added once (also for a key saved before, whatever its comment said)
+if ! grep -qxF "$LINE" "$PROFILE"; then
+  printf '\n%s\n%s\n' "# Key: $NAME" "$LINE" >> "$PROFILE"
 fi
 
 echo "Saved $NAME in $WHERE."
-echo "Next: close this window, open a new Terminal, go to your Small Business Toolkit folder and start Claude again with:  claude"
+echo "Next: close this window, open a new Terminal, go to your \"$FOLDER_NAME\" folder and start Claude again with:  claude"

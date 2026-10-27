@@ -12,12 +12,14 @@
   4. Gives every view the same ctx: the data, update(), openDrawer(), runJob(), go(), redraw(), toast(),
      today(), the rail's choices (range, an object from AD.model.rangeFor, and platform) and the things
      that ask Claude for something: analyse(), runCampaign(), confirmChange(), addGoogleTask() and doTodo().
-  5. Asks Claude to do its 9 jobs (set out in its jobs file) and shows the shared "Claude is working" pill.
+  5. Asks Claude to do its 8 background jobs (set out in its jobs file) and shows the shared "Claude is working" pill.
   6. Two pop-ups: the one that confirms a change to an ad account, and the Run campaign questions.
 
   The rule throughout: Claude reads the figures and drafts campaigns. Nothing changes in an ad account until
   the owner presses the button and says yes in the pop-up that states that exact change. This page never
-  changes an account itself: it records what was approved, and Claude does that one change.
+  changes an account itself: it records what was approved (in the entry in ads.json and, separately, in
+  approvals.json, which Claude can't write without asking), then opens Claude Code on screen with the job
+  typed in, so the owner sees Claude Code's own question before each call to the ad account.
 */
 (function () {
   "use strict";
@@ -89,6 +91,21 @@
       render();
     }
   });
+
+  // The owner's yes for each account change, saved in its own file as well. Claude can't write it without asking, and
+  // make-account-change acts only on a change that has an entry here. It works only through the helper.
+  const approvalStore = window.TaskListOS.createStore({
+    moduleId: "ads-approvals",
+    fileName: "approvals.json",
+    dataPaths: ["data", "", "apps/ads/data"],
+    api: "/api/data/ads/approvals.json",
+    validate: M.validateApprovals,
+    onStatus: function () { /* only the ads file's state is shown */ },
+    onData: function () { /* nothing is drawn from it */ }
+  });
+  function approve(mutator) {
+    return approvalStore.update(function (d) { M.normaliseApprovals(d); mutator(d); });
+  }
 
   function friendlyError(err) {
     const kind = err && err.kind;
@@ -172,6 +189,8 @@
       analyse: analyseCampaign,
       runCampaign: openRunCampaign,
       confirmChange: openConfirm,
+      openChange: openClaudeForChange,
+      markChangeFailed: markChangeFailed,
       addGoogleTask: addGoogleTask,
       doTodo: doTodo,
       go: go,
@@ -360,7 +379,7 @@
   }
 
   // ============================================================
-  // 4. Asking Claude (9 jobs)
+  // 4. Asking Claude (8 background jobs; changing the ad account is never one of them)
   // ============================================================
 
   // say: what to tell Claude in the folder if the app can't start it
@@ -372,7 +391,6 @@
     "how-did-the-ads-do": { doing: "Claude is writing this week's summary", done: "Claude has written this week's summary", say: "how did the ads do" },
     "what-should-i-change": { doing: "Claude is looking for changes worth making", done: "Claude has added its suggestions", say: "what should I change" },
     "analyse-campaign": { doing: "Claude is analysing your campaign", done: "Claude has analysed your campaign. Read it in the campaign panel", say: "analyse my campaign" },
-    "make-account-change": { doing: "Claude is making the change you approved", done: "Claude has finished. The result is shown on the campaign", say: "make the account change I approved" },
     "send-to-task-list": { doing: "Claude is adding it to your task list", done: "Claude has added it to your task list for you to review there", say: "add my ads to my task list" }
   };
   const POLL_MS = 2500, GIVE_UP_AFTER_POLLS = 480;   // 20 minutes
@@ -588,15 +606,63 @@
     confirmLive();
     const action = pending.action, checks = action ? checksOf(action) : { ok: false };
     if (!action || !checks.ok) return;
+    if (!approvalStore.isHelper()) {
+      ui.toast("Your yes can’t be saved yet, so nothing was sent. Open Ads OS from its link (in Claude, say “open my ads”) and try again. If it still fails, ask Claude to check your Ads OS files.", { icon: "info", duration: 9000 });
+      return;
+    }
     pending = null;
     $("#confirmDialog").close();
     const words = sentenceOf(action);
-    update(function (d) {
-      d.actions.push(action);
-    }, "You approved this change and asked Claude to make it: " + words, action.campaignId || action.buildId || null).then(function () {
+    // Your yes is saved in the approvals file first, then as the change itself; then Claude is opened on screen
+    approve(function (d) { d.approvals.push(M.newApproval(action)); }).then(function () {
+      return update(function (d) {
+        d.actions.push(action);
+      }, "You approved this change and asked Claude to make it: " + words, action.campaignId || action.buildId || null);
+    }).then(function () {
       if (inApp()) redrawPage();
-      return runJob("make-account-change");
-    }).then(function () { if (inApp()) redrawPage(); }).catch(reportFailure);
+      return openClaudeForChange(action.id);
+    }).catch(reportFailure);
+  }
+
+  // The last step of a change: Claude Code opens on screen with the job typed in, so the owner sees Claude Code's own
+  // question before each call to the ad account. If the link doesn't open, the words can be copied instead.
+  function openClaudeForChange(actionId) {
+    const action = (data.actions || []).find(function (a) { return a.id === actionId; });
+    if (!action) { ui.toast("That change is no longer in your list.", { icon: "info" }); return Promise.resolve(false); }
+    const prompt = M.changePrompt([action]), sentence = sentenceOf(action);
+    return fetch("/api/info", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; }, function () { return {}; }).then(function (info) {
+      const dlg = $("#confirmDialog");
+      const link = info.folder ? "claude://code/new?q=" + encodeURIComponent(prompt) + "&folder=" + encodeURIComponent(info.folder) : "";
+      dlg.innerHTML = '<div class="modal__head"><h2 id="confirmTitle">One more step: open Claude</h2><button type="button" class="icon-btn" data-close aria-label="Close">' + icon("x") + "</button></div>" +
+        '<div class="modal__body"><p class="confirm__who muted">' + esc(sentence) + "</p>" +
+        "<p>Your yes is saved. Press Open Claude and send the words that are already typed in. Claude Code then asks you before each call to your " + esc(managerOf("meta").short) + " account. Say yes only if it matches the change you just confirmed.</p>" +
+        '<p class="prefs-hint">' + (link ? "If Claude doesn’t open, copy the words and paste them into Claude Code in your Small Business Toolkit folder." : "Open Claude Code in your Small Business Toolkit folder and paste the words in.") + "</p></div>" +
+        '<div class="modal__foot"><button type="button" class="btn" data-close>Not now</button><span class="spacer"></span>' +
+        '<button type="button" class="btn" data-copy="' + esc(prompt) + '">' + icon("fileText") + "Copy the words</button>" +
+        (link ? '<a class="btn btn--primary" href="' + esc(link) + '">' + icon("external") + "Open Claude</a>" : "") + "</div>";
+      if (!dlg.open) dlg.showModal();
+      return true;
+    });
+  }
+
+  // A change Claude hasn't confirmed after 30 minutes: the owner can mark it as not done, which also closes their yes
+  function markChangeFailed(actionId) {
+    const action = (data.actions || []).find(function (a) { return a.id === actionId; });
+    if (!action || !M.actionStuck(action, Date.now())) { ui.toast("That change isn’t stuck. Give Claude a little longer.", { icon: "info" }); return Promise.resolve(false); }
+    if (!approvalStore.isHelper()) { ui.toast("Open Ads OS from its link to do that.", { icon: "info" }); return Promise.resolve(false); }
+    return approve(function (d) {
+      d.approvals.forEach(function (a) { if (a.id === actionId && !a.closedAt) a.closedAt = M.nowIso(); });
+    }).then(function () {
+      return update(function (d) {
+        const x = d.actions.find(function (y) { return y.id === actionId; });
+        if (!x || !M.actionStuck(x, Date.now())) throw new Error("That change has moved on, so it was left as it is.");
+        M.failStuckAction(x);
+      }, "Marked a change as not done: Claude did not confirm it, so check Ads Manager", action.campaignId || action.buildId || null);
+    }).then(function () {
+      ui.toast("Marked as not done. Check Ads Manager to see whether it went through.", { icon: "info", duration: 9000 });
+      if (inApp()) redrawPage();
+      return true;
+    }).catch(reportFailure);
   }
 
   // ---------- Google changes: a task for the owner ----------
@@ -833,6 +899,7 @@
   renderGate();
   store.start().then(function () {
     if (!store.isHelper()) return;
+    approvalStore.start();
     // If Claude is already working on one of this tool's jobs (the page was reloaded), show the pill again
     fetch("/api/claude/status", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (st) {
       const name = /^ads:(.+)$/.exec(st.job || "");

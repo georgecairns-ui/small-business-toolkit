@@ -14,10 +14,10 @@ The Small Business Toolkit comes with a clean, calm look in light or dark (the m
 |---|---|
 | Colours, fonts, corner roundness, spacing | `apps/shared/theme.css` (every look-and-feel setting is in this one file, with a light set and a dark set). The `match-my-brand` skill does it for you from your website or brand guidelines |
 | What Home shows | The **Customise** button on Home: show or hide boxes, drag them into order, make them wide. **Reset** puts it back |
-| The Get AI Powers slab-serif headings | `apps/shared/theme.css`: follow the note at the bottom of the file |
+| Serif headings, as on getaipowers.com | `apps/shared/theme.css`: follow the note at the bottom of the file |
 | Your name, business name, time saved per task and per plan | The Settings button (the cog) in the app, or `settings` in your task file |
 | The words on the category labels | `CATEGORIES` near the top of `apps/task-list/app/model.js` |
-| The logo in the sidebar | Ask Claude ("put our logo on it"). It saves your logo in `apps/shared/images/` and points the sidebar at it |
+| The logo in the sidebar | Ask Claude ("put our logo on it"). It saves your logo in `apps/shared/images/` and points the sidebar at it. A wide logo shows at its own shape in place of your business name, and a dark logo gets a light background in dark mode |
 | Your folders | `files/` |
 | How Claude writes for you | `context/voice.md` |
 | Hide the "More tools" list in the menu | Set `showMoreTools` to `false` in `apps/shared/catalogue.json`. The locked tools disappear; the tools you have stay |
@@ -30,7 +30,7 @@ If Get AI Powers builds a version of the toolkit for your business or your clien
 
 ## Notes for Claude
 
-- Change colours only through the variables in `apps/shared/theme.css`, in both the light and the dark set (or follow `.claude/skills/match-my-brand`). Keep text dark enough on the background to read easily: aim for a contrast ratio of at least 4.5 to 1 for normal text. If a brand colour is too light for buttons, use a darker shade of it for buttons and keep the original for decoration.
+- Change colours only through the variables in `apps/shared/theme.css`, in the light set and both copies of the dark set (one for the switch, one for a computer set to dark), or follow `.claude/skills/match-my-brand`. Keep text dark enough on the background to read easily: aim for a contrast ratio of at least 4.5 to 1 for normal text. If a brand colour is too light for buttons, use a darker shade of it for buttons and keep the original for decoration.
 - Fonts must be files inside `apps/shared/fonts/` (the app works without internet). If the person wants a font you can't add as a file, use the closest system font in the font list instead and tell them.
 - After any change, ask them to reload the app and check it looks right.
 - Keep the old values in a comment for one change, so it's easy to go back.

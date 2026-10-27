@@ -54,7 +54,8 @@
     const o = opts || {};
     const value = M.proposalValue(d, p);
     const rec = M.recommended(p);
-    const pkg = rec ? M.packageById(d, rec.packageId) : null;
+    const pkg = rec ? M.optionPackage(d, rec) : null;
+    const rate = M.proposalRate(d, p);
     const flags = [];
     if (M.changeWaiting(d, p.id)) flags.push('<span class="chip chip--info">' + icon("loader", "spin") + "Claude is changing it</span>");
     if (p.unpriced.length) flags.push('<span class="chip chip--warning">' + icon("alert") + p.unpriced.length + " to price</span>");
@@ -64,7 +65,7 @@
     return '<article class="pcard' + (o.anim ? o.anim("p-" + p.id) : "") + '" data-proposal="' + esc(p.id) + '">' +
       '<div class="pcard__top"><span class="pcard__client">' + esc(M.clientName(d, p)) + "</span>" + statusChip(p.status) + "</div>" +
       '<button type="button" class="pcard__title" data-action="open-proposal">' + esc(p.title || p.cover.title || "Proposal") + "</button>" +
-      '<div class="pcard__row"><span class="muted">' + esc(pkg ? "Recommended: " + pkg.name : "No option chosen yet") + '</span><span class="pcard__value num">' + (value ? esc(M.money(d, value)) : "") + "</span></div>" +
+      '<div class="pcard__row"><span class="muted">' + esc(pkg ? "Recommended: " + pkg.name : "No option chosen yet") + '</span><span class="pcard__value num">' + (value ? esc(M.money(d, value)) : rate ? esc(M.money(d, rate.unit) + M.billingSuffix(rate.billing)) : "") + "</span></div>" +
       (flags.length ? '<div class="pcard__flags">' + flags.join("") + "</div>" : "") +
       '<div class="pcard__foot"><span class="muted">' + esc(when) + '</span><button type="button" class="btn btn--sm" data-action="open-proposal">Open' + icon("arrowRight") + "</button></div></article>";
   }

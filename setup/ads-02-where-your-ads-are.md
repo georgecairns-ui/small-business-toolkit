@@ -6,6 +6,8 @@ Say this once, in plain words:
 
 > Claude needs at least one connected account to build campaigns for you. Without one, it can still read your figures from a report you download.
 
+> **Already answered in step 1.** The quick questions in `setup/toolkit-01-quick-questions.md` already asked whether the business runs ads and on which platforms (Meta, Google, or both). Read that answer from `setup/progress.md` (under "Answers from step 1") and from `apps/ads/data/ads.json` first. Confirm it back in a sentence rather than asking again, and go straight to naming the ad accounts and connecting them.
+
 ## 1. Ask, one question at a time
 
 1. **Where are your ads, or where do you want them?** Meta (Facebook and Instagram), Google Ads, both, or none yet. Save each they pick as `platforms.<key>` with `on: true` in `apps/ads/data/ads.json` (`meta`, `google`). If they have no ad account yet on a platform they want, say they'll need one before Claude can build there, and that the first campaign can still be drafted.
@@ -31,7 +33,7 @@ For each connection they made, follow `.claude/skills/build-in-account/reference
 
 Save in `apps/ads/data/ads.json`, for each platform: `how` (`connected`, `export` or `none`), `accountName`, and `connectedAt` (now) for a connection. Don't write `lastRefresh` yet: the first look does.
 
-Say once: "Claude Code also asks you before every call to your ad account, so you approve twice for any change: in the app, then here."
+Say once: "Claude Code also asks you before every call to your ad account, so you approve twice for any change: in the app, then here. After you press Yes in the app, it opens Claude on screen with the job typed in, and Claude asks before each step."
 
 Record each connection in `context/tools.md` as `.claude/skills/connect-a-tool` says: what Claude may do (read; for Meta, create campaigns that are paused, and make one change you approved in the app: switch on, pause or change a daily budget) and what it never does (act on its own, go over your limits, delete, or change anything on Google).
 

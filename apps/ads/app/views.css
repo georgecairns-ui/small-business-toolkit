@@ -235,6 +235,7 @@ body.has-drawer .toasts { bottom: 96px; }
 .actline svg { width: 15px; height: 15px; flex: none; margin-top: 2px; color: var(--color-muted); }
 .actline__text { display: grid; gap: 2px; min-width: 0; overflow-wrap: anywhere; }
 .actline__help { color: var(--color-muted); }
+.actline__btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
 .actline--done { background: var(--color-success-soft); border-color: transparent; }
 .actline--done svg { color: var(--color-success); }
 .actline--failed { background: var(--color-danger-soft); border-color: transparent; }

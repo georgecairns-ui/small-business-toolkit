@@ -57,7 +57,8 @@
       "app": "apps/ads/",
       "media": true,
       "dataFiles": [
-        "apps/ads/data/ads.json"
+        "apps/ads/data/ads.json",
+        "apps/ads/data/approvals.json"
       ]
     },
     {

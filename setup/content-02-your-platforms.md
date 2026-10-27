@@ -4,6 +4,8 @@ Goal: you know which platforms they'll post on, where to find each one, and a re
 
 Claude never posts for them. They'll copy each post and post it themselves, so more platforms means more work for them. Say that once, kindly.
 
+> **Already answered in step 1.** The quick questions in `setup/toolkit-01-quick-questions.md` already asked where the business posts. Read that answer from `setup/progress.md` (under "Answers from step 1") and from `apps/content/data/content.json` first. Confirm it back in a sentence rather than asking again, and only ask about anything left blank or anything below it didn't cover (handles, how many posts a week).
+
 ## 1. Ask, one question at a time
 
 Ask one question, wait for the answer, save it, then ask the next.

@@ -10,7 +10,7 @@ One line: fills the Inbox (draft emails waiting for a reply), the calendar in Th
 2. In the Claude app or on claude.ai, go to the connectors area (Customize, then Connectors, or the + button then Connectors in a chat). Menus change over time, so ask the person what they actually see on their screen.
 3. Find "Gmail", click Connect, sign in with the business Google account, and approve.
 4. Repeat for "Google Calendar".
-5. In Claude Code: both appear automatically once Claude Code is signed in with a claude.ai subscription. Check with `/mcp`.
+5. In Claude Code: both appear once Claude Code is signed in with a claude.ai subscription. Check your own list of connections; if it isn't there yet, ask them to close Claude Code and open it again (in the Terminal, `/mcp` also lists them).
 
 ## If neither works
 

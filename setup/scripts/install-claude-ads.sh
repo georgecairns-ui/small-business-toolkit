@@ -9,7 +9,7 @@
 # What it does:
 #   1. Fetches George's copy of claude-ads at one fixed, tested version (tag v2.0.1) into a
 #      temporary folder outside this folder, with git, or as a zip download if git isn't installed.
-#   2. Checks it is exactly the tested commit. If not, it stops and installs nothing.
+#   2. Checks it is exactly the tested commit (a zip must also match its recorded SHA-256). If not, it stops and installs nothing.
 #   3. Runs claude-ads' own installer, skills and agents only (no Python packages), into this
 #      folder's .claude/skills and .claude/agents. Nothing is installed anywhere else.
 #   4. Copies the MIT licence and third-party notices in beside it, and writes a note saying where it came from.
@@ -18,7 +18,7 @@
 # claude-ads is by AgriciDaniel (https://github.com/AgriciDaniel/claude-ads), MIT licence.
 #
 # For testing only: CLAUDE_ADS_SOURCE=/path/to/a/local/clone uses that clone instead of GitHub, and
-# CLAUDE_ADS_ZIP_URL=<address> uses that address instead of the GitHub zip. Leave both unset normally.
+# CLAUDE_ADS_ZIP_URL=<address> uses that address instead of the GitHub zip, with CLAUDE_ADS_ZIP_SHA256=<hash> for that file. Leave all unset normally.
 
 set -euo pipefail
 
@@ -27,6 +27,9 @@ UPSTREAM_URL="https://github.com/AgriciDaniel/claude-ads"
 TAG="v2.0.1"
 COMMIT="669c7608ecb50dd95c941a71fa3ca0a1c0e40512"
 ZIP_URL="${CLAUDE_ADS_ZIP_URL:-$FORK_URL/archive/refs/tags/$TAG.zip}"
+# SHA-256 of GitHub's zip of tag v2.0.1, worked out on 27 October 2026 from a download of the real tag (twice, same result).
+# A zip's own comment names a commit but proves nothing, so the zip route trusts only this hash.
+ZIP_SHA256="${CLAUDE_ADS_ZIP_SHA256:-40fb78610d8618e7f23db4d62e52f87f1b8cba0c83457c2394b08b5df49f67f6}"
 
 KIT="$(cd "$(dirname "$0")/../.." && pwd)"
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/ads-os-claude-ads.XXXXXX")"
@@ -57,7 +60,12 @@ else
   echo "git isn't installed, so downloading claude-ads $TAG as a zip."
   curl -fsSL --max-time 120 -o "$WORK/claude-ads.zip" "$ZIP_URL" \
     || fail "could not download $ZIP_URL. Check the internet connection and try again"
-  # A zip made by GitHub (or git archive) carries the commit it was made from in its comment
+  # The zip must be byte for byte the one we tested. Its own comment proves nothing, so the hash is what is trusted.
+  if command -v sha256sum >/dev/null 2>&1; then ZIP_HASH="$(sha256sum "$WORK/claude-ads.zip" | cut -d' ' -f1)"
+  elif command -v shasum >/dev/null 2>&1; then ZIP_HASH="$(shasum -a 256 "$WORK/claude-ads.zip" | cut -d' ' -f1)"
+  else fail "neither sha256sum nor shasum is installed, so the download can't be checked. Install git and run this again"; fi
+  [ "$ZIP_HASH" = "$ZIP_SHA256" ] || fail "the download is not the tested file (expected SHA-256 $ZIP_SHA256 but got $ZIP_HASH). Nothing was installed. Install git and run this again"
+  # The commit named in the zip's comment must also match
   FOUND="$(unzip -z "$WORK/claude-ads.zip" 2>/dev/null | tail -n 1 | tr -d '[:space:]')"
   mkdir "$WORK/unzipped"
   unzip -q "$WORK/claude-ads.zip" -d "$WORK/unzipped"

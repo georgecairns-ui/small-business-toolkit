@@ -24,6 +24,9 @@
   const IN_SOURCES = { you: "you", pipeline: "Pipeline OS", proposals: "Proposal OS", claude: "Claude" };
   const OUT_SOURCES = { you: "you", ads: "Ads OS", claude: "Claude" };
   const TAX_WEEKS = 52;
+  // Only these usually carry VAT you can reclaim. Wages, loans and tax never do, and rent is often exempt, so those start unticked.
+  const VAT_KINDS = ["bills", "software", "suppliers", "ads"];
+  function vatDefault(category) { return VAT_KINDS.indexOf(category) !== -1; }
 
   // form: which add or edit form is open ({ type: "in" | "out", id: null for a new one }); draft: what is typed in it
   const state = { form: null, draft: {} };
@@ -43,7 +46,7 @@
         { who: "", what: "", amount: "", date: today, chance: "likely" };
     } else {
       state.draft = item ? { name: item.name, amount: String(item.amount), category: item.category, repeat: item.repeat, date: item.date, endDate: item.endDate || "", vatIncluded: !!item.vatIncluded } :
-        { name: "", amount: "", category: "bills", repeat: "monthly", date: today, endDate: "", vatIncluded: !!ctx.data.settings.vat.registered };
+        { name: "", amount: "", category: "bills", repeat: "monthly", date: today, endDate: "", vatIncluded: !!ctx.data.settings.vat.registered && vatDefault("bills") };
     }
   }
 
@@ -231,6 +234,10 @@
       root.oninput = function (e) {
         const t = e.target;
         if (t.form && t.form.hasAttribute("data-form") && t.name) state.draft[t.name] = t.type === "checkbox" ? t.checked : t.value;
+        // Choosing a kind of payment sets the VAT box to what usually suits it; the owner can still change it
+        if (t.name === "category" && t.form && t.form.getAttribute("data-form") === "out" && t.form.elements.vatIncluded) {
+          t.form.elements.vatIncluded.checked = vatDefault(t.value); state.draft.vatIncluded = vatDefault(t.value);
+        }
       };
       root.onchange = root.oninput;
       root.onsubmit = function (e) { e.preventDefault(); submit(ctx, root, e.target); };

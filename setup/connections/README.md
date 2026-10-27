@@ -1,6 +1,6 @@
 # Connecting apps: which guide to follow
 
-Use `skills/connect-a-tool/SKILL.md` for the general method (order of preference, safety rules, never ask for a key in chat). This folder has the specifics for each app. Follow the file for the app the person names.
+Use `.claude/skills/connect-a-tool/SKILL.md` for the general method (order of preference, safety rules, never ask for a key in chat). This folder has the specifics for each app. Follow the file for the app the person names.
 
 | App | What it gives your toolkit | Recommended route | File |
 |---|---|---|---|

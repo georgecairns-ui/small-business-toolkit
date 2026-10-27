@@ -121,7 +121,7 @@ An extra is the same, smaller: `{ "id": "x-photo-day", "name": "Photography day"
 | `cover` | The title is a promise in the client's terms, not "Proposal for X". The subtitle says plainly what it is. |
 | `intro` | 2 to 4 short paragraphs from the person to the client: thanks, what you heard (their pain, in their words), what this proposal does, and which option you recommend. The app adds "Dear <first name>," and the sign-off. |
 | `sections.*.body` | Paragraphs split by a blank line. Short. Each section's lists are optional but make it scannable: 2 to 4 `pains`, 3 to 5 `solution.points`, 3 to 5 `delivery.phases`, 3 to 5 `next.steps`. |
-| `investment.options` | 1 to 3 packages from `packages`, by `packageId`. Exactly one has `recommended: true`, with a `why` that ties back to their pain and goal. Never put a price here: the app works it out. `customPrice` is set only by the person, in the app; never set or change it. |
+| `investment.options` | 1 to 3 packages from `packages`, by `packageId`. Exactly one has `recommended: true`, with a `why` that ties back to their pain and goal. Never put a price here: the app works it out. `customPrice` is set only by the person, in the app; never set or change it. `snapshot` is a copy of the package's price kept by the app once a proposal is approved or sent; never set or change it. |
 | `investment.extras` | Extras from `extras` that fit this client, by `extraId`, with `qty`. |
 | `coverEmail` | The short email they send with the PDF, in their voice (`.claude/skills/human-email`, `context/voice.md`). They open it from the app and attach the PDF themselves. |
 | `followUp` | Written by `follow-up-a-proposal` once a sent proposal has had no reply for `chaseAfterDays`. |

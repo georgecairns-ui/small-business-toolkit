@@ -66,7 +66,7 @@
         '<div class="pref-checks">' + M.CHECK.map(function (c) {
           return field(c.name, '<input class="input" name="check-' + c.key + '" maxlength="80" value="' + esc(M.checkLabel(d, c.key)) + '" placeholder="' + esc(c.label) + '">');
         }).join("") + "</div>",
-        "The 8 questions Claude checks every deal against, based on MEDDPICC, a standard way to qualify sales. Reword them to suit your business; the meaning stays the same.") +
+        "The 8 questions Claude checks every deal against, based on a standard way to qualify sales. Reword them to suit your business; the meaning stays the same.") +
 
       section("Email and calendar",
         '<div class="field-row">' + field("Drafts open in", '<select class="select" name="emailProvider">' + options(L.EMAIL_PROVIDERS.map(function (p) { return [p.key, p.label]; }), s.emailProvider || "gmail") + "</select>") +

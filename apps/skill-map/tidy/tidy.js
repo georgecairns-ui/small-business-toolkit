@@ -16,8 +16,11 @@
     - It never deletes anything. Every change is a move or a rename, so every change can be undone.
     - It only touches things inside the folders the person chose in Preferences (the folder map), or
       inside their skill folders. Anything else is refused.
-    - A move can only end up in the same chosen folder (folder map) or in the matching "-archive"
-      folder next to the skill folder (skills). It never moves anything somewhere else.
+    - A folder-map move can only end up in the "Tidied by Claude" folder inside the same chosen folder.
+      A rename stays in its own folder, and a sort goes into a sub-folder of the folder it is in.
+      A skill can only end up in the matching "-archive" folder next to its skill folder, and only a
+      skill sitting directly in that folder can move. This toolkit's own skills are never touched.
+      Undo puts things back anywhere inside the same chosen folder.
     - It never overwrites: if the new name is taken it adds " (2)", " (3)" and so on.
     - It never opens a file, and it skips a file whose size has changed since the scan.
     - It never follows a shortcut (symbolic link) out of a chosen folder.
@@ -37,6 +40,8 @@ const DATA = path.join(KIT, "apps", "skill-map", "data");
 const NOW = process.env.SKILLMAP_NOW ? new Date(process.env.SKILLMAP_NOW) : new Date();
 const DRY = process.argv.indexOf("--dry-run") > -1;
 const MAX_MOVES = 5000;
+const TIDIED = "Tidied by Claude";
+const KIT_SKILLS = path.join(KIT, ".claude", "skills");
 
 function readJson(file) {
   try { return JSON.parse(fs.readFileSync(file, "utf8")); } catch (e) { return null; }
@@ -65,8 +70,9 @@ function rootsFor(lens) {
   }
   const sm = readJson(path.join(DATA, "skillmap.json"));
   const extra = sm && sm.settings && Array.isArray(sm.settings.extraFolders) ? sm.settings.extraFolders : [];
-  const list = [path.join(HOME, ".claude", "skills"), path.join(HOME, ".claude", "commands"), path.join(KIT, ".claude", "skills")].concat(extra.map(expand));
-  return list.filter(function (r) { return real(r); }).map(function (r) { return { root: r, archive: r + "-archive" }; });
+  const list = [path.join(HOME, ".claude", "skills"), path.join(HOME, ".claude", "commands")].concat(extra.map(expand));
+  // This toolkit's own skills are never a chosen folder, whatever the settings say
+  return list.filter(function (r) { return real(r) && !touchesKit(r); }).map(function (r) { return { root: r, archive: r + "-archive" }; });
 }
 // Which chosen folder a path belongs to: { r, base } where base is the folder (or its archive) it sits in
 function rootOf(roots, p) {
@@ -76,14 +82,36 @@ function rootOf(roots, p) {
   }
   return null;
 }
+// True when a path is this toolkit's own skills folder, its archive, or anything inside either
+// (checked by name and by where the path really leads)
+function touchesKit(p) {
+  const kitDirs = [KIT_SKILLS, KIT_SKILLS + "-archive"];
+  const rc = real(path.join(KIT, ".claude"));
+  if (rc) kitDirs.push(path.join(rc, "skills"), path.join(rc, "skills-archive"));
+  const here = [p];
+  const rd = real(path.dirname(p));
+  if (rd) here.push(path.join(rd, path.basename(p)));
+  const rp = real(p);
+  if (rp) here.push(rp);
+  return here.some(function (x) { return kitDirs.some(function (k) { return x === k || inside(k, x); }); });
+}
+// Walks up from a folder to the nearest one that exists; if that is the guard folder or inside it,
+// it must really lead inside the guard (a shortcut called "Tidied by Claude" can't lead out)
+function leadsInside(guard, dir) {
+  let a = dir;
+  while (!exists(a) && path.dirname(a) !== a) a = path.dirname(a);
+  if (a !== guard && !inside(guard, a)) return true;   // above the guard: the folders below it get made fresh
+  const rg = real(guard), ra = real(a);
+  return !!rg && !!ra && (ra === rg || inside(rg, ra));
+}
 function parentInside(root, p) {
   const rp = real(path.dirname(p)), rr = real(root);
   return !!rp && !!rr && (rp === rr || inside(rr, rp));
 }
 
-function uniqueTo(to) {
+function uniqueTo(to, isDir) {
   if (!exists(to)) return to;
-  const dir = path.dirname(to), ext = path.extname(to), base = path.basename(to, ext);
+  const dir = path.dirname(to), ext = isDir ? "" : path.extname(to), base = path.basename(to, ext);
   for (let n = 2; n < 1000; n++) {
     const t = path.join(dir, base + " (" + n + ")" + ext);
     if (!exists(t)) return t;
@@ -92,12 +120,14 @@ function uniqueTo(to) {
 }
 
 // Carry out one planned move. Returns { status, to?, why? }
-function doMove(lens, roots, mv, undo) {
+function doMove(lens, kind, roots, mv, undo) {
   const from = expand(mv.from), wanted = expand(mv.to);
+  if (touchesKit(from) || touchesKit(wanted)) return { status: "refused", why: "It came with this toolkit, so it was left alone" };
   const found = rootOf(roots, from);
   if (!found) return { status: "refused", why: "It isn't inside a folder you chose" };
   const r = found.r;
   if (!parentInside(found.base, from)) return { status: "refused", why: "It sits behind a shortcut out of your chosen folder" };
+  if (lens === "skills" && !undo && (found.base !== r.root || path.dirname(from) !== r.root)) return { status: "refused", why: "Only a skill sitting directly in your skills folder can be moved" };
   let st;
   try { st = fs.lstatSync(from); } catch (e) { return { status: "skipped", why: "It isn't there any more" }; }
   if (lens === "files") {
@@ -110,15 +140,28 @@ function doMove(lens, roots, mv, undo) {
       if (typeof mv.bytes === "number" && st.size !== mv.bytes) return { status: "skipped", why: "It has changed since the scan" };
     }
   }
-  const allowed = lens === "files" || undo ? r.root : r.archive;
-  if (!inside(allowed, wanted)) return { status: "refused", why: "That isn't somewhere it is allowed to go" };
+  // Where it may go. Undo: anywhere in the chosen folder. Skills: the archive. Folder moves: the "Tidied by Claude"
+  // folder; a rename: the same folder; a sort: a sub-folder of the folder it is in
+  let allowed;
+  if (undo) allowed = r.root;
+  else if (lens === "skills") allowed = r.archive;
+  else if (kind === "rename") allowed = path.dirname(from);
+  else if (kind === "sort") allowed = path.dirname(from);
+  else allowed = path.join(r.root, TIDIED);
+  const guard = lens === "skills" && !undo ? r.archive : r.root;
+  const fileSide = lens === "files" && !undo;
+  const okPlace = fileSide && kind === "rename" ? path.dirname(wanted) === allowed
+    : fileSide && kind === "sort" ? inside(allowed, path.dirname(wanted))
+    : inside(allowed, wanted);
+  if (!okPlace) return { status: "refused", why: "That isn't somewhere it is allowed to go" };
   if (wanted === from) return { status: "skipped", why: "It already has that name" };
-  const to = uniqueTo(wanted);
+  const to = uniqueTo(wanted, st.isDirectory());
   if (!to) return { status: "skipped", why: "Couldn't find a free name" };
   if (DRY) return { status: "would-move", to: to };
+  if (!leadsInside(guard, path.dirname(to))) return { status: "refused", why: "That isn't somewhere it is allowed to go" };
   try {
     fs.mkdirSync(path.dirname(to), { recursive: true });
-    if (!parentInside(allowed, to)) return { status: "refused", why: "That isn't somewhere it is allowed to go" };
+    if (!parentInside(guard, to)) return { status: "refused", why: "That isn't somewhere it is allowed to go" };
     fs.renameSync(from, to);
   } catch (e) {
     return { status: "failed", why: e.code === "EXDEV" ? "It would have to move to another drive" : "The computer wouldn't let it move (" + (e.code || "error") + ")" };
@@ -142,7 +185,7 @@ function runAction(a, actions) {
     if (moves.length > MAX_MOVES) { a.status = "failed"; a.note = "That is more than " + MAX_MOVES + " things at once. Do it in smaller parts"; return; }
   }
   moves.forEach(function (mv) {
-    const res = doMove(lens, roots, mv, a.kind === "undo");
+    const res = doMove(lens, a.kind, roots, mv, a.kind === "undo");
     const row = { from: mv.from, to: res.to || mv.to, status: res.status };
     if (mv.type) row.type = mv.type;
     if (res.why) row.why = res.why;
