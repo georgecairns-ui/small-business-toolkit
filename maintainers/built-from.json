@@ -1,32 +1,32 @@
 {
   "tools": {
     "task-list": {
-      "folder": "/private/tmp/claude-501/-Users-getaipowers-Library-CloudStorage-GoogleDrive-george-cairns-getaipowers-com-Shared-drives-Get-AI-Powers-Brain-Claude-05-Marketing-small-business-toolkit/22bad1e7-2a36-455e-b857-cfec220ad248/scratchpad/tl",
-      "commit": "LOCAL FOLDER, NOT FOR RELEASE"
+      "repository": "georgecairns-ui/task-list-os",
+      "commit": "237f5656c32319c74d51dd85b42530a6692613f7"
     },
     "pipeline": {
-      "folder": "/private/tmp/claude-501/-Users-getaipowers-Library-CloudStorage-GoogleDrive-george-cairns-getaipowers-com-Shared-drives-Get-AI-Powers-Brain-Claude-05-Marketing-small-business-toolkit/22bad1e7-2a36-455e-b857-cfec220ad248/scratchpad/v11/pipeline-os",
-      "commit": "LOCAL FOLDER, NOT FOR RELEASE"
+      "repository": "georgecairns-ui/pipeline-os",
+      "commit": "186dee5813ba0f93560937330831fb5286c82255"
     },
     "skill-map": {
-      "folder": "/private/tmp/claude-501/-Users-getaipowers-Library-CloudStorage-GoogleDrive-george-cairns-getaipowers-com-Shared-drives-Get-AI-Powers-Brain-Claude-05-Marketing-small-business-toolkit/22bad1e7-2a36-455e-b857-cfec220ad248/scratchpad/v11/skill-map-os",
-      "commit": "LOCAL FOLDER, NOT FOR RELEASE"
+      "repository": "georgecairns-ui/skill-and-folder-map-os",
+      "commit": "4b0f0ac48b88e1900d6da09ab0fe4c69ee334fb2"
     },
     "proposals": {
-      "folder": "/private/tmp/claude-501/-Users-getaipowers-Library-CloudStorage-GoogleDrive-george-cairns-getaipowers-com-Shared-drives-Get-AI-Powers-Brain-Claude-05-Marketing-small-business-toolkit/22bad1e7-2a36-455e-b857-cfec220ad248/scratchpad/v11/proposal-os",
-      "commit": "LOCAL FOLDER, NOT FOR RELEASE"
+      "repository": "georgecairns-ui/proposal-writing-os",
+      "commit": "55700bfbe480b70ebea4f118ef703057721b4464"
     },
     "content": {
-      "folder": "/private/tmp/claude-501/-Users-getaipowers-Library-CloudStorage-GoogleDrive-george-cairns-getaipowers-com-Shared-drives-Get-AI-Powers-Brain-Claude-05-Marketing-small-business-toolkit/22bad1e7-2a36-455e-b857-cfec220ad248/scratchpad/v11/content-machine-os",
-      "commit": "LOCAL FOLDER, NOT FOR RELEASE"
+      "repository": "georgecairns-ui/content-machine-os",
+      "commit": "50f67d7b817ec7557180512defd9bad0cb8a2209"
     },
     "money": {
-      "folder": "/private/tmp/claude-501/-Users-getaipowers-Library-CloudStorage-GoogleDrive-george-cairns-getaipowers-com-Shared-drives-Get-AI-Powers-Brain-Claude-05-Marketing-small-business-toolkit/22bad1e7-2a36-455e-b857-cfec220ad248/scratchpad/v11/money-view-os",
-      "commit": "LOCAL FOLDER, NOT FOR RELEASE"
+      "repository": "georgecairns-ui/money-view-os",
+      "commit": "728d7d34c51ae513e2445e25113ec565a8b77e4a"
     },
     "ads": {
-      "folder": "/private/tmp/claude-501/-Users-getaipowers-Library-CloudStorage-GoogleDrive-george-cairns-getaipowers-com-Shared-drives-Get-AI-Powers-Brain-Claude-05-Marketing-small-business-toolkit/22bad1e7-2a36-455e-b857-cfec220ad248/scratchpad/v11/ads-os",
-      "commit": "LOCAL FOLDER, NOT FOR RELEASE"
+      "repository": "georgecairns-ui/ads-os",
+      "commit": "58eaa5bc1361a001954ffd9482710c7040e6e8c1"
     }
   },
   "attach": [
