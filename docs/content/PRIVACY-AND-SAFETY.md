@@ -52,7 +52,7 @@ No. It doesn't send emails, messages or posts. Your plan is saved in files on yo
 
 ## What is the helper?
 
-Your app runs from a small program in your Small Business Toolkit OS folder, so it opens like a web page at http://localhost:4747. It only listens on your own computer: nothing on the internet or your network can reach it. It only shows the app and only ever saves your plan file (keeping a backup before every save) and the photos and videos you add to posts, which it never replaces or deletes. When you press Plan, Refresh research or Ask Claude in the app, it can start Claude Code on your computer to do that one job, and only when the app itself asks.
+Your app runs from a small program in your Small Business Toolkit folder, so it opens like a web page at http://localhost:4747. It only listens on your own computer: nothing on the internet or your network can reach it. It only shows the app and only ever saves your plan file (keeping a backup before every save) and the photos and videos you add to posts, which it never replaces or deletes. When you press Plan, Refresh research or Ask Claude in the app, it can start Claude Code on your computer to do that one job, and only when the app itself asks.
 
 ## Who sees my information?
 

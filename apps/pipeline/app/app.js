@@ -117,7 +117,7 @@
     }
     if (status === "needs-helper") {
       return showGate(gateCard("welcome", "", "Your pipeline opens from Claude.",
-        "<p>Claude runs your pipeline on this computer and gives you a link to it. In Claude Code, in your Small Business Toolkit OS folder, just say:</p>" + C.say("Open my pipeline") +
+        "<p>Claude runs your pipeline on this computer and gives you a link to it. In Claude Code, in your Small Business Toolkit folder, just say:</p>" + C.say("Open my pipeline") +
         '<p class="gate__note">Not set up yet? Say <strong>/setup</strong> instead. Claude asks about your business and the people you sell to, connects your email, calendar and calls, and builds your pipeline first.</p>',
         "",
         '<button type="button" class="link-btn" data-action="connect">Or connect the folder yourself in Chrome</button>'));
@@ -578,7 +578,7 @@
     switch (action) {
       case "connect":
         store.connect().catch(function (err) {
-          renderGate(err && err.kind === "wrong-folder" ? "That folder doesn't have your pipeline in it. Choose your Small Business Toolkit OS folder, the one with START-HERE.md in it." : "That didn't work. Please try again, and click Allow when Chrome asks.");
+          renderGate(err && err.kind === "wrong-folder" ? "That folder doesn't have your pipeline in it. Choose your Small Business Toolkit folder, the one with START-HERE.md in it." : "That didn't work. Please try again, and click Allow when Chrome asks.");
         });
         break;
       case "reconnect": store.reconnect().catch(function () { renderGate(); }); break;

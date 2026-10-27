@@ -4,7 +4,7 @@ description: Look through the person's open tasks and mark the ones Claude could
 ---
 # Spot the tasks Claude can do
 
-The person's list is full of jobs Claude could do or mostly do: drafting an email, chasing an invoice, researching a supplier, writing a post, working out a figure from their accounts. This skill finds them and writes, for each one, the exact prompt that gets it done. The app shows a "Claude can do this" tag on those tasks. Pressing **Open in Claude** opens a new Claude Code session in their Small Business Toolkit OS folder with the prompt typed in, ready for them to read and send. Nothing runs until they press send.
+The person's list is full of jobs Claude could do or mostly do: drafting an email, chasing an invoice, researching a supplier, writing a post, working out a figure from their accounts. This skill finds them and writes, for each one, the exact prompt that gets it done. The app shows a "Claude can do this" tag on those tasks. Pressing **Open in Claude** opens a new Claude Code session in their Small Business Toolkit folder with the prompt typed in, ready for them to read and send. Nothing runs until they press send.
 
 ## What you need
 

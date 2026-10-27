@@ -107,7 +107,7 @@
       '<div class="setup-card__body"><h2>Let’s map your skills</h2>' +
       '<p class="muted">Claude looks through the skills on this computer, works out which ones you use and how they connect, and draws them here. It only reads: nothing is changed, moved or sent.</p>' +
       '<div class="setup-card__actions">' + (c && c.canScan ? '<button type="button" class="btn btn--primary btn--lg" data-action="scan">' + icon("refresh") + "Scan my skills now</button>" : "") + "</div>" +
-      '<p class="muted setup-card__alt">' + (c && c.canScan ? "Or in Claude Code, in your Small Business Toolkit OS folder, say " : "In Claude Code, in your Small Business Toolkit OS folder, say ") + say("Scan my skills") + "</p></div></section>";
+      '<p class="muted setup-card__alt">' + (c && c.canScan ? "Or in Claude Code, in your Small Business Toolkit folder, say " : "In Claude Code, in your Small Business Toolkit folder, say ") + say("Scan my skills") + "</p></div></section>";
   }
 
   window.SM = window.SM || {};

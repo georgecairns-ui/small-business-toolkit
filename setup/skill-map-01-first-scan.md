@@ -28,7 +28,7 @@ If the scan found no Claude Code history, say so plainly: use counts will show a
 
 ## 4. Start the app and give them the link
 
-Follow `.claude/skills/open-task-list` to start the app, then give them this link: **http://localhost:4747/skill-map/**
+Follow `.claude/skills/open-my-toolkit` to start the app, then give them this link: **http://localhost:4747/skill-map/**
 
 ## 5. Walk them through the Map
 

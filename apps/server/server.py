@@ -474,5 +474,5 @@ if __name__ == "__main__":
     except OSError:
         print("Task List OS: port %d is already in use. It may already be running: open http://localhost:%d" % (PORT, PORT), file=sys.stderr)
         sys.exit(1)
-    print("Task List OS is running at http://localhost:%d" % PORT)
+    print("Small Business Toolkit is running at http://localhost:%d" % PORT)
     httpd.serve_forever()

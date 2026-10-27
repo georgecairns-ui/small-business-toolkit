@@ -20,7 +20,7 @@
       '<p class="muted">Claude looks through the folders you choose and draws them as a map you can click into, down to each file. Then it shows what needs tidying: duplicates, very big files, old downloads, untidy names and empty folders.</p>' +
       '<p class="muted"><strong>It reads names, sizes and dates only.</strong> It never opens a file, and nothing is ever deleted. Tidying happens only when you press a Fix button. It starts with ' + roots.map(function (r) { return "<code>" + esc(r) + "</code>"; }).join(", ") + '. You change the list in <button type="button" class="link-btn" data-action="settings">Preferences</button>.</p>' +
       '<div class="setup-card__actions">' + (c.canScan ? '<button type="button" class="btn btn--primary btn--lg" data-action="scan-folders">' + icon("refresh") + "Scan my folders now</button>" : "") + "</div>" +
-      '<p class="muted setup-card__alt">' + (c.canScan ? "Or in Claude Code, in your Small Business Toolkit OS folder, say " : "In Claude Code, in your Small Business Toolkit OS folder, say ") + C.say("Scan my folders") + "</p></div></section>";
+      '<p class="muted setup-card__alt">' + (c.canScan ? "Or in Claude Code, in your Small Business Toolkit folder, say " : "In Claude Code, in your Small Business Toolkit folder, say ") + C.say("Scan my folders") + "</p></div></section>";
   }
   F.foldersCard = foldersCard;
 

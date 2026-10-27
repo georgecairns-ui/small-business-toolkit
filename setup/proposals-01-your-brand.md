@@ -33,7 +33,7 @@ This is what their clients see, so take care. Change only these:
 
 ## 2.4 Show them
 
-Start the app (`.claude/skills/open-task-list`) if it isn't running. There are no proposals yet, so describe it and offer to show them after step 10, or, if they'd like to see it now, tell them:
+Start the app (`.claude/skills/open-my-toolkit`) if it isn't running. There are no proposals yet, so describe it and offer to show them after step 10, or, if they'd like to see it now, tell them:
 
 > Done. Your proposals will use your green and copper, Source Serif for headings, and your logo on a green cover. The app has your colour and logo too: have a look at http://localhost:4747. You'll see a real proposal in your brand before we finish. Anything you'd like different?
 

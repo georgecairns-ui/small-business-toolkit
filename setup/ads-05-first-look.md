@@ -14,7 +14,7 @@ Follow `.claude/skills/how-did-the-ads-do`. Then follow `.claude/skills/what-sho
 
 ## 3. Open the app and show them round
 
-Open **http://localhost:4747/ads/** (follow `.claude/skills/open-task-list` if it isn't running) and walk through it in a few plain lines:
+Open **http://localhost:4747/ads/** (follow `.claude/skills/open-my-toolkit` if it isn't running) and walk through it in a few plain lines:
 
 - **Overview:** spend, results, cost per result against their target, return and the pace this month. The coloured light is green at or under target, amber up to a quarter over and red beyond that.
 - **Campaigns:** each campaign with its light. Click one to see how it's doing against what Claude predicted, its last 12 weeks and each of its ads, and to analyse it, run it again or, on Meta, switch it on or pause it.

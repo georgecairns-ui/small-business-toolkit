@@ -702,7 +702,7 @@
 
   function sheetPath() {
     const b = buildNow(), path = b.refs.sheet;
-    ui.copyText(path).then(function (ok) { toast(ok ? "Copied the path to the build sheet. Open it from your Small Business Toolkit OS folder." : "Couldn’t copy. The build sheet is at " + path); });
+    ui.copyText(path).then(function (ok) { toast(ok ? "Copied the path to the build sheet. Open it from your Small Business Toolkit folder." : "Couldn’t copy. The build sheet is at " + path); });
   }
 
   // ---------- Pictures and videos ----------

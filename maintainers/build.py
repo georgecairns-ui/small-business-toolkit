@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-BUILD: assemble Small Business Toolkit OS from the 7 tools
+BUILD: assemble the Small Business Toolkit from the 7 tools
 ----------------------------------------------------------
 Run it from anywhere:   python3 maintainers/build.py
 
@@ -10,12 +10,16 @@ What it does, in order:
   2. Runs each tool's own release check (maintainers/make-release.sh) on that copy. If any tool fails its
      own check, the build stops: nothing broken or holding real data ever reaches this kit.
   3. Checks the shared parts (apps/server, apps/shared, apps/home, ATTACHING.md) are identical in all 7.
-  4. Starts from Task List OS and attaches the other 6 to it, exactly as ATTACHING.md describes:
+  4. Starts from Task List OS's files (the first tool in the list is only the base the build copies first;
+     it is not special in the product) and attaches the other 6, exactly as ATTACHING.md describes:
      their app folders, skills, setup steps, connection guides, notes templates and files folders (the
-     host's copy wins when both have a file), their entry in apps/installed.json, their own permissions
+     base's copy wins when both have a file), their entry in apps/installed.json, their own permissions
      (by the rule in ATTACHING.md step 7) and their ATTACH-CLAUDE.md section in CLAUDE.md.
+     Then it removes what makes one tool the front door: its opener file, its start scripts and its
+     open-the-app skill (see drop_tool_entry_points).
   5. Copies maintainers/overlay/ on top: the files written for this kit alone (START-HERE.md, README.md,
-     the merged setup steps, the Toolkit app, the extra skills).
+     the toolkit's opener, start scripts and open-my-toolkit skill, the merged setup steps, the Toolkit
+     app, the extra skills). Then points every reference at the toolkit's names (use_toolkit_names).
   6. Writes everything into the kit (the repository root), replacing the last build. maintainers/, .git
      and anything listed in KEEP are left alone. Then records which version of each tool it used in
      maintainers/built-from.json.
@@ -32,7 +36,7 @@ ROOT = HERE.parent
 OVERLAY = HERE / "overlay"
 KEEP = {"maintainers", ".git", "dist"}
 
-# The host first, then the others in the catalogue's order
+# The base the build copies first, then the others in the catalogue's order
 TOOLS = ["task-list", "pipeline", "skill-map", "proposals", "content", "money", "ads"]
 SHARED = ["apps/server", "apps/shared", "apps/home", "ATTACHING.md"]
 
@@ -87,10 +91,10 @@ def release_checks(work):
 
 
 def check_shared(work):
-    host = work / TOOLS[0]
+    base = work / TOOLS[0]
     for part in SHARED:
         for tid in TOOLS[1:]:
-            a, b = host / part, work / tid / part
+            a, b = base / part, work / tid / part
             if a.is_file():
                 same = b.is_file() and digest(a) == digest(b)
             else:
@@ -124,12 +128,12 @@ def allowed_permission(entry, tool_app):
 
 
 def attach(kit, work, report):
-    host = work / TOOLS[0]
-    shutil.copytree(host, kit, dirs_exist_ok=True, ignore=lambda d, names: [n for n in names if pathlib.Path(d) == host and n in ("maintainers", "dist")])
+    base = work / TOOLS[0]
+    shutil.copytree(base, kit, dirs_exist_ok=True, ignore=lambda d, names: [n for n in names if pathlib.Path(d) == base and n in ("maintainers", "dist")])
     claude_md = (kit / "CLAUDE.md").read_text()
     marker = "None yet. When a tool is attached, its day-to-day instructions go here, copied from its `ATTACH-CLAUDE.md`."
     if marker not in claude_md:
-        fail("Task List OS's CLAUDE.md no longer has the 'Attached tools' placeholder this build replaces")
+        fail("Task List OS's CLAUDE.md (the base copy) no longer has the 'Attached tools' placeholder this build replaces")
     sections = []
     installed = json.loads((kit / "apps/installed.json").read_text())
     settings = json.loads((kit / ".claude/settings.json").read_text())
@@ -146,7 +150,7 @@ def attach(kit, work, report):
                 continue  # root files are the tool's own kit files; maintainers are its own
             dest = kit / rel
             if dest.exists() and parts[0] == "docs" and digest(dest) != digest(src / rel):
-                # Each tool's own privacy and customising guide says what that tool may do: keep it beside the host's
+                # Each tool's own privacy and customising guide says what that tool may do: keep it beside the base copy
                 dest = kit / "docs" / tid / pathlib.Path(*parts[1:])
             if dest.exists():
                 skipped_same += 1
@@ -247,10 +251,66 @@ def one_folder_name(kit):
         if not f.is_file() or f.suffix not in (".md", ".js", ".html", ".sh", ".ps1") or "maintainers" in f.relative_to(kit).parts:
             continue
         text = f.read_text()
-        new = FOLDER_NAME.sub(r"\1 Small Business Toolkit OS folder", text)
+        new = FOLDER_NAME.sub(r"\1 Small Business Toolkit folder", text)
         if new != text:
             f.write_text(new)
             n += 1
+    return n
+
+
+# What each tool ships to be the way into the app. The toolkit has its own (in the overlay), so these go.
+TOOL_OPENERS = ["Open Task List.html"]
+TOOL_START_SCRIPTS = ["start-task-list.sh", "start-task-list.ps1", "start-money-view.sh", "start-money-view.ps1"]
+TOOL_OPEN_SKILLS = ["open-task-list"]
+# Old name -> the toolkit's name, in every file (the tools' own docs, skills and CLAUDE.md sections point at them)
+RENAMES = [
+    ("Open Task List.html", "Open Small Business Toolkit.html"),
+    ("start-task-list", "start-toolkit"),
+    ("start-money-view", "start-toolkit"),
+    ("open-task-list", "open-my-toolkit"),
+]
+
+
+def drop_tool_entry_points(kit):
+    """Task List OS's opener, the start scripts of Task List OS and Money View OS, and the open-task-list skill
+    are one tool's way in. The kit has its own (Open Small Business Toolkit.html, start-toolkit.*, the
+    open-my-toolkit skill), added from the overlay, so none of these stay as a second way in."""
+    gone = []
+    for rel in TOOL_OPENERS + ["setup/scripts/" + n for n in TOOL_START_SCRIPTS]:
+        f = kit / rel
+        if f.exists():
+            f.unlink()
+            gone.append(rel)
+    for name in TOOL_OPEN_SKILLS:
+        d = kit / ".claude" / "skills" / name
+        if d.exists():
+            shutil.rmtree(d)
+            gone.append(".claude/skills/" + name)
+    return gone
+
+
+def use_toolkit_names(kit):
+    """Every reference to a tool's own opener, start script or open-the-app skill now names the toolkit's.
+    The permissions list is de-duplicated afterwards (two tools' start scripts were two entries)."""
+    n = 0
+    for f in kit.rglob("*"):
+        if not f.is_file() or f.suffix not in (".md", ".js", ".html", ".sh", ".ps1", ".json", ".py"):
+            continue
+        rel = f.relative_to(kit)
+        if rel.parts[0] in ("maintainers", ".git"):
+            continue
+        text = f.read_text()
+        new = text
+        for old, name in RENAMES:
+            new = new.replace(old, name)
+        if new != text:
+            f.write_text(new)
+            n += 1
+    sp = kit / ".claude/settings.json"
+    settings = json.loads(sp.read_text())
+    allow = settings["permissions"]["allow"]
+    settings["permissions"]["allow"] = list(dict.fromkeys(allow))
+    sp.write_text(json.dumps(settings, indent=2) + "\n")
     return n
 
 
@@ -286,22 +346,24 @@ def main():
         release_checks(work)
         print("3. Checking the shared parts")
         check_shared(work)
-        print("4. Attaching the 6 tools to Task List OS")
+        print("4. Attaching the 6 other tools to the base (Task List OS's files)")
         report = []
         attach(kit, work, report)
         for r in report:
             print("  %-10s %d files added, %d already there, %d permissions added%s" % (
                 r["tool"], r["filesAdded"], r["alreadyThere"], len(r["permissionsAdded"]),
                 (", left out: " + ", ".join(r["permissionsLeftOut"])) if r["permissionsLeftOut"] else ""))
+        print("  removed one tool's way in: " + ", ".join(drop_tool_entry_points(kit)))
         print("5. Adding this kit's own files")
         print("  %d files from maintainers/overlay" % apply_overlay(kit))
         print("  step numbers made neutral in %d notes templates" % neutral_step_numbers(kit))
         print("  folder name made one in %d files" % one_folder_name(kit))
+        print("  opener, start script and open-the-app skill named for the toolkit in %d files" % use_toolkit_names(kit))
         print("6. Writing the kit")
         write_kit(kit)
     (HERE / "built-from.json").write_text(json.dumps({"tools": got, "attach": report}, indent=2) + "\n")
     local = [t for t, g in got.items() if "folder" in g]
-    print("Built Small Business Toolkit OS." + (" WARNING: built from local folders (" + ", ".join(local) + "), not for release." if local else ""))
+    print("Built Small Business Toolkit." + (" WARNING: built from local folders (" + ", ".join(local) + "), not for release." if local else ""))
 
 
 if __name__ == "__main__":

@@ -1,9 +1,9 @@
 # SAVE A KEY (Windows)
 # --------------------
 # Saves a key for one of your apps (for example your Fireflies API key) for your Windows account,
-# so Claude Code can use it, without the key ever appearing in a chat or in your Small Business Toolkit OS folder.
+# so Claude Code can use it, without the key ever appearing in a chat or in your Small Business Toolkit folder.
 #
-# How to use it: open PowerShell in your Small Business Toolkit OS folder and run, for example:
+# How to use it: open PowerShell in your Small Business Toolkit folder and run, for example:
 #   powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 FIREFLIES_API_KEY
 # Then paste your key when asked and press Enter. Nothing shows while you paste; that's normal.
 #

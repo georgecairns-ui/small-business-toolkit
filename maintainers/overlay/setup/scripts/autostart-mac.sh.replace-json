@@ -1,0 +1,30 @@
+[
+  [
+    "# START THE TASK LIST WITH YOUR MAC\n# ---------------------------------\n# Makes the task list helper start",
+    "# START THE TOOLKIT WITH YOUR MAC\n# -------------------------------\n# Makes the Small Business Toolkit helper start"
+  ],
+  [
+    "LABEL=\"com.getaipowers.task-list-os\"",
+    "LABEL=\"com.getaipowers.small-business-toolkit\""
+  ],
+  [
+    "LOG=\"$HOME/Library/Logs/task-list-os.log\"",
+    "LOG=\"$HOME/Library/Logs/small-business-toolkit.log\""
+  ],
+  [
+    "The task list will no longer start by itself.",
+    "The Small Business Toolkit will no longer start by itself."
+  ],
+  [
+    "Your task list needs Node or Python 3",
+    "Your Small Business Toolkit needs Node or Python 3"
+  ],
+  [
+    "Your task list starts by itself from now on",
+    "Your Small Business Toolkit starts by itself from now on"
+  ],
+  [
+    "or the list can't load.",
+    "or the toolkit can't load."
+  ]
+]

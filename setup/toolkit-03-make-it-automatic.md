@@ -12,7 +12,7 @@ The Claude desktop app can run scheduled tasks on their computer, with access to
 
 1. In the Claude desktop app, find **Scheduled tasks** (in the sidebar or the Code area).
 2. Create a new task:
-   - **Folder:** their Small Business Toolkit OS folder.
+   - **Folder:** their Small Business Toolkit folder.
    - **Prompt:** `Run /toolkit-check-in`
    - **When:** every hour, on their working days, between their start and end times (from `context/routines.md`).
 3. Save it, then run it once now to check it works.

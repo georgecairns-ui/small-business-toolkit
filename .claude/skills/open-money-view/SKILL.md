@@ -10,8 +10,8 @@ Money View runs from a small helper on the person's computer (`apps/server/`), s
 ## Steps
 
 1. **Is it running?** Run the start script. It does nothing if the helper is already running, and prints the link:
-   - Mac or Linux: `bash setup/scripts/start-money-view.sh`
-   - Windows: `powershell -ExecutionPolicy Bypass -File setup\scripts\start-money-view.ps1`
+   - Mac or Linux: `bash setup/scripts/start-toolkit.sh`
+   - Windows: `powershell -ExecutionPolicy Bypass -File setup\scripts\start-toolkit.ps1`
 2. **If it says Node or Python is missing**, tell them in one sentence that Money View needs a free program called Node to run, and offer to install it (the LTS version from nodejs.org; on a Mac with Homebrew, `brew install node`; on Windows, `winget install OpenJS.NodeJS.LTS`). Ask before installing anything. Then run step 1 again.
 3. **Make it start with the computer** (once, with their yes), so the link always works, even after a restart:
    > Shall I make Money View start whenever your computer starts? Then the link always works and you can bookmark it.

@@ -18,7 +18,7 @@ If Pipeline OS is attached, `plan-my-content` also brings in the wins as ideas. 
 
 ## 3. Open the Calendar and show them how it works
 
-Open **http://localhost:4747/content/** (follow `.claude/skills/open-task-list` if it isn't running) and walk through it in a few plain lines:
+Open **http://localhost:4747/content/** (follow `.claude/skills/open-my-toolkit` if it isn't running) and walk through it in a few plain lines:
 
 - **Drag a post** to another day, or press its Move button.
 - **Open a post** to see each platform's version, its score and why, and to edit the words.

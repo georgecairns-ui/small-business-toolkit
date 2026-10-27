@@ -117,7 +117,7 @@
     }
     if (status === "needs-helper") {
       return showGate(gateCard("welcome", "", "Your proposals open from Claude.",
-        "<p>Claude runs Proposal Writing OS on this computer and gives you a link to it. In Claude Code, in your Small Business Toolkit OS folder, just say:</p>" + C.say("Open my proposals") +
+        "<p>Claude runs Proposal Writing OS on this computer and gives you a link to it. In Claude Code, in your Small Business Toolkit folder, just say:</p>" + C.say("Open my proposals") +
         '<p class="gate__note">Not set up yet? Say <strong>/setup</strong> instead. Claude learns your brand, your packages and how you write, then writes your first proposal.</p>',
         "",
         '<button type="button" class="link-btn" data-action="connect">Or connect the folder yourself in Chrome</button>'));
@@ -441,7 +441,7 @@
     switch (action) {
       case "connect":
         store.connect().catch(function (err) {
-          renderGate(err && err.kind === "wrong-folder" ? "That folder doesn't have your proposals in it. Choose your Small Business Toolkit OS folder, the one with START-HERE.md in it." : "That didn't work. Please try again, and click Allow when Chrome asks.");
+          renderGate(err && err.kind === "wrong-folder" ? "That folder doesn't have your proposals in it. Choose your Small Business Toolkit folder, the one with START-HERE.md in it." : "That didn't work. Please try again, and click Allow when Chrome asks.");
         });
         break;
       case "reconnect": store.reconnect().catch(function () { renderGate(); }); break;

@@ -23,7 +23,7 @@ The routine that makes the task list feel live. It runs every hour if setup step
 7. **What Claude can do.** Follow `.claude/skills/spot-claude-tasks` for new or changed open tasks, so the ones you could do carry a "Claude can do this" tag and a ready prompt.
 8. Update `triage`: `lastRunAt` now, `nextRunAt` (now plus the schedule interval, or null if this was a one-off), and add this run's counts to `emailsScanned`, `needReply`, `newTasks`, `noAction` and `callsProcessed` if `lastRunAt` was today (start from zero if it was an earlier day).
 9. Save safely: read the file right before writing, write the whole file, read it back and check it parses.
-10. Make sure the task list is running, so the person sees the update: `bash setup/scripts/start-task-list.sh` (Mac or Linux) or `powershell -ExecutionPolicy Bypass -File setup\scripts\start-task-list.ps1` (Windows). It does nothing if it's already running.
+10. Make sure the task list is running, so the person sees the update: `bash setup/scripts/start-toolkit.sh` (Mac or Linux) or `powershell -ExecutionPolicy Bypass -File setup\scripts\start-toolkit.ps1` (Windows). It does nothing if it's already running.
 
 ## What to say
 

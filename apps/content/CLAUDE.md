@@ -2,7 +2,7 @@
 
 This folder is the content app inside Content Machine OS. You (Claude) and the app share one file, `data/content.json`. The person sees it as one page, the Content calendar, with a row of views to flick between at the top: Calendar (month and week, with drag and drop), To do (everything waiting on them), Ideas, Research and Platforms, plus a Health check button and a gear for Settings. You research what their customers search for and what works for their competitors, plan the posts, write them in their voice and score each one for each platform. They approve, and they post. Read this file every time you work with the content plan.
 
-The app runs at **http://localhost:4747/content/**, served by a small helper on this computer (`apps/server/`, started by `.claude/skills/open-task-list`). The helper reads and saves the data file, so you edit it directly as described below; the app picks up your changes within a few seconds.
+The app runs at **http://localhost:4747/content/**, served by a small helper on this computer (`apps/server/`, started by `.claude/skills/open-my-toolkit`). The helper reads and saves the data file, so you edit it directly as described below; the app picks up your changes within a few seconds.
 
 The jobs live as skills in `.claude/skills/`: `research-my-market`, `build-my-content-skill`, `plan-my-content`, `write-posts`, `turn-this-into-posts`, `use-my-case-study`, `content-check-in`, `ive-posted-it` and `sort-content-brain-dump`. This file is the reference for the data they read and write. What each platform allows and rewards is in `.claude/skills/write-posts/references/platforms.md`: read it before you write for a platform.
 

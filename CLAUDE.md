@@ -1,6 +1,6 @@
-# Small Business Toolkit OS: standing instructions for Claude
+# Small Business Toolkit: standing instructions for Claude
 
-This folder holds all 7 tools from the Get AI Powers small business toolkit, attached to each other: Task List OS (the host, described first below), then each other tool's own instructions under "Attached tools" at the end, and the Toolkit section of the app (described just before them).
+This folder is the Small Business Toolkit from Get AI Powers: 7 tools that work together in one app. They are Task List OS, Pipeline OS, Skill and Folder Map OS, Proposal Writing OS, Content Machine OS, Money View OS and Ads OS, plus the Toolkit section that connects them and grows them. Task List OS is 1 of the 7. Its instructions come first below because they cover the everyday basics every tool shares, then each other tool's own instructions under "Attached tools" at the end, and the Toolkit section of the app (described just before them).
 
 This folder is the workspace of the person you work for: a small business owner. Read this file at the start of every conversation here.
 
@@ -8,7 +8,7 @@ Setup: not done yet
 
 If the line above says "not done yet", offer to run setup (they can type `/setup`): read `START-HERE.md` and follow it. If they want something else first, help with that, then offer setup again at a natural moment.
 
-> Developing Small Business Toolkit OS itself (changing it for everyone, rather than using it)? Read `maintainers/MAINTAINING.md` instead of following this file. It's built from the 7 tools' own repositories, so most changes belong in those.
+> Developing Small Business Toolkit itself (changing it for everyone, rather than using it)? Read `maintainers/MAINTAINING.md` instead of following this file. It's built from the 7 tools' own repositories, so most changes belong in those.
 
 ## Who you work for
 
@@ -44,9 +44,9 @@ If one still says "Status: not filled in yet", work with what you have and offer
 
 | Folder | What's in it |
 |---|---|
-| **http://localhost:4747** | The app. It opens on Home (a dashboard of boxes they arrange themselves), then the task list's pages: Tasks (Today, This week or All, as a Board, List or Calendar), Inbox, Review and Calls, plus Preferences (the cog). The Brain dump button at the top records a voice note. A small helper in `apps/server/` runs it on this computer. If it isn't running, use `.claude/skills/open-task-list` |
-| `Open Task List.html` | Double-clicking it goes to the link above when the task list is running |
-| `apps/task-list/` | The task list app. `CLAUDE.md` in there explains its data. Their tasks are in `apps/task-list/data/tasks.json` |
+| **http://localhost:4747** | The Small Business Toolkit app. It opens on Home (a dashboard of boxes they arrange themselves). The sidebar has a section for each of the 7 tools, then the Toolkit section. The Brain dump button at the top records a voice note. A small helper in `apps/server/` runs it on this computer. If it isn't running, use `.claude/skills/open-my-toolkit` |
+| `Open Small Business Toolkit.html` | Double-clicking it goes to the link above when the toolkit is running |
+| `apps/task-list/` | The Task List OS app, 1 of the 7 tools: Tasks (Today, This week or All, as a Board, List or Calendar), Inbox, Review and Calls, plus Preferences (the cog). `CLAUDE.md` in there explains its data. Their tasks are in `apps/task-list/data/tasks.json` |
 | `apps/shared/` | The app's look: `theme.css` holds every colour and font. Also the toolkit menu: `catalogue.json` lists all 7 tools and the booking link |
 | `apps/installed.json` | The tools in this folder (all 7, plus the Toolkit). The menu and the helper both read it |
 | `apps/toolkit/` | The Toolkit section: connections, setup status, ideas and what you've built for them, in `apps/toolkit/data/toolkit.json` |
@@ -73,7 +73,7 @@ When a request matches a skill in `.claude/skills/`, read that skill's `SKILL.md
 | "How do I...?", "research this" | `.claude/skills/research-task` |
 | "When should I do this?", "put it in my diary" | `.claude/skills/schedule-it` |
 | "Set me up", "carry on setting up" | `.claude/skills/setup` |
-| "Open my task list", "open my toolkit", "it's not loading" | `.claude/skills/open-task-list` (it starts the one app every tool shares) |
+| "Open my toolkit", "open the app", "open my task list", "it's not loading" | `.claude/skills/open-my-toolkit` (it starts the one app every tool shares) |
 | "Plan my week", "what does my week look like" | `.claude/skills/plan-my-week` |
 | "Sort my brain dump", "turn my notes into tasks" (and every note from the Brain dump button) | `.claude/skills/sort-brain-dump` (shared by every tool; it hands tasks to `sort-my-brain-dump`) |
 | "Wrap up my day", "what did I get done" | `.claude/skills/wrap-up-my-day` |
@@ -92,7 +92,7 @@ When a request matches a skill in `.claude/skills/`, read that skill's `SKILL.md
 
 Any email or message you draft for them follows `.claude/skills/human-email` and uses `context/voice.md`.
 
-## The task list, day to day
+## Task List OS, day to day
 
 - "Add this to my list": add the task (see `apps/task-list/CLAUDE.md`), confirm in one line.
 - "I've done X": mark it done and log it.
@@ -117,7 +117,7 @@ All 7 tools are already in this folder, so the menu has no locked tools. The las
 
 Every button there opens a new conversation in this folder with a prompt already typed in. Treat it as the person asking you, in their own words: follow it, and ask if anything in it is unclear.
 
-The tools' own instructions follow. Where one tool's rule is stricter than the host's, the stricter one applies to that tool's work.
+The tools' own instructions follow. Where one tool's rule is stricter than the rules above, the stricter one applies to that tool's work.
 
 ## Attached tools
 

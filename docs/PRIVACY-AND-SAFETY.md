@@ -4,7 +4,7 @@ Plain answers to the questions people ask before connecting their email.
 
 ## Where is my information kept?
 
-In this folder on your computer, and in the apps you already use. Small Business Toolkit OS has no account, no server and no database. Your tasks are one file: `apps/task-list/data/tasks.json`. Claude's notes about your business are in `context/`. You can open, read and edit all of it yourself.
+In this folder on your computer, and in the apps you already use. The Small Business Toolkit has no account, no server and no database. Your tasks are one file: `apps/task-list/data/tasks.json`. Claude's notes about your business are in `context/`. You can open, read and edit all of it yourself.
 
 If this folder sits inside Google Drive, OneDrive or Dropbox, it's backed up there like any other folder. If that folder is shared with other people, they can read your tasks and notes too, so keep it in a private part of your drive.
 
@@ -40,7 +40,7 @@ When you press Voice note, your browser turns your speech into text as you talk.
 
 ## What is the task list helper?
 
-Your task list app runs from a small program in your Small Business Toolkit OS folder, so it opens like a web page at http://localhost:4747. It only listens on your own computer: nothing on the internet or your network can reach it. It only shows the app and only ever saves your task file, keeping a backup before every save. Claude can make it start with your computer, and you can turn that off any time by asking Claude.
+Your task list app runs from a small program in your Small Business Toolkit folder, so it opens like a web page at http://localhost:4747. It only listens on your own computer: nothing on the internet or your network can reach it. It only shows the app and only ever saves your task file, keeping a backup before every save. Claude can make it start with your computer, and you can turn that off any time by asking Claude.
 
 ## Does it run when I'm not there?
 

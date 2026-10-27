@@ -50,7 +50,7 @@
 
   // ---------- Opening a task in Claude ----------
   // Opens the Claude desktop app with the prompt typed in, ready for the person to read and send.
-  // With the folder known it opens a Claude Code session in their Small Business Toolkit OS folder (their
+  // With the folder known it opens a Claude Code session in their Small Business Toolkit folder (their
   // connections, skills and notes); otherwise a new chat. Claude never sends it by itself.
   let kitFolder = null;
   function setFolder(f) { kitFolder = f || null; }

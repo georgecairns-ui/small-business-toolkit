@@ -1,6 +1,6 @@
 # The Toolkit app: spec
 
-The 8th section of the app in Small Business Toolkit OS, at `apps/toolkit/`. It sits in the sidebar under the 7 tools as "Toolkit". Its job: make the kit proactive. Every button hands Claude a job, so the person never has to know what to ask for.
+The 8th section of the app in Small Business Toolkit, at `apps/toolkit/`. It sits in the sidebar under the 7 tools as "Toolkit". Its job: make the kit proactive. Every button hands Claude a job, so the person never has to know what to ask for.
 
 ## Why buttons open Claude
 

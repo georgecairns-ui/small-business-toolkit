@@ -12,7 +12,7 @@ The Claude desktop app can run scheduled tasks on their computer, with access to
 
 1. In the Claude desktop app, find **Scheduled tasks** (in the sidebar or the Code area).
 2. Create a new task:
-   - **Folder:** their Small Business Toolkit OS folder.
+   - **Folder:** their Small Business Toolkit folder.
    - **Prompt:** `Run /pipeline-check-in`. If Task List OS is also in this folder, use its check-in instead (`Run /check-in`): it runs the pipeline's steps too, so there's only ever one check-in.
    - **When:** every hour, on their working days, during their working hours.
 3. Save it, then run it once now to check it works.

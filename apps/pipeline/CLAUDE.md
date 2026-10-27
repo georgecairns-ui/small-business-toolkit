@@ -2,7 +2,7 @@
 
 This folder is the pipeline app inside Pipeline OS. You (Claude) and the app share one file, `data/pipeline.json`. The person you work for sees it as a proper piece of software: Pipeline (every deal on a board by stage, or a list; a card with a call booked shows the day and time), Review (what you're waiting for them to decide), Calls (sales calls coming up, and every sales call written up), People (contacts in 5 groups), and Preferences. Each deal opens in a panel with the call notes box, next steps, your tip, the email to send, the deal check, other ways they could help, and everything that has happened. Read this file every time you work with the pipeline.
 
-The app runs at **http://localhost:4747**, served by a small helper on this computer (`apps/server/`, started by `.claude/skills/open-task-list`). The helper reads and saves this same file, so you edit it directly as described below; the app picks up your changes within a few seconds.
+The app runs at **http://localhost:4747**, served by a small helper on this computer (`apps/server/`, started by `.claude/skills/open-my-toolkit`). The helper reads and saves this same file, so you edit it directly as described below; the app picks up your changes within a few seconds.
 
 The routines live as skills in `.claude/skills/`: `pipeline-check-in` (the regular update), `update-a-deal` (call notes and transcripts into a deal), `qualify-a-deal` (the deal check), `research-a-prospect` (who they're meeting, how well they fit, how to run the call), `prep-for-a-sales-call`, `who-to-chase` and `send-approved-emails` (the only skill that sends anything). This file is the reference for the data they read and write. What the business sells, who to and the problems it solves are in `context/sales.md`: read it before you judge any deal.
 
@@ -199,7 +199,7 @@ When Task List OS is attached (it's in `apps/installed.json`):
 | "We won the Hollins deal", "Marlow said no" | Set the stage to `won` or `lost`, set `closedAt`, add a timeline line, ask for the reason if lost (one question). For a win, offer to draft a thank-you. |
 | "What's my pipeline worth?" | Read the deals and answer from them: open total, by stage, won this month. The same numbers the app shows. Change nothing. |
 | "What else could I sell them?" | Read the deal's `alsoHelp` and timeline, and `context/sales.md`. Answer, and offer to add anything new to `alsoHelp`. |
-| "Open my pipeline", "it's not loading" | `.claude/skills/open-task-list` (it starts the app for every tool in this folder) |
+| "Open my pipeline", "it's not loading" | `.claude/skills/open-my-toolkit` (it starts the app for every tool in this folder) |
 
 ## If something goes wrong
 

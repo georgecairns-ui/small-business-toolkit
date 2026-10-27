@@ -1,4 +1,4 @@
-# Maintaining Small Business Toolkit OS
+# Maintaining Small Business Toolkit
 
 For George, Joey and anyone changing this kit for everyone. If you're a client using it, you don't need this folder.
 
@@ -8,7 +8,7 @@ The 7 tools of the small business toolkit, already attached to each other, plus 
 
 **The kit is built, not written by hand.** Everything at the root of this repository is made by `maintainers/build.py` from:
 
-1. **The 7 tools' repositories**, exactly as they are on GitHub's `main` (`sources.json` says where each one is on George's computer). Task List OS is the host; the other 6 are attached to it the way `ATTACHING.md` describes.
+1. **The 7 tools' repositories**, exactly as they are on GitHub's `main` (`sources.json` says where each one is on George's computer). The build copies Task List OS's files first as its base and attaches the other 6 the way `ATTACHING.md` describes. In the product Task List OS is 1 of the 7 tools and nothing more: never write "host" in anything a client or their Claude reads (`check.py` fails on it).
 2. **`maintainers/overlay/`**: the files written for this kit alone. Plain files replace or add (`START-HERE.md`, `README.md`, `LICENSE`, the 4 `setup/toolkit-*.md` steps, the merged accounts guides, `apps/toolkit/`, the 3 new skills). Three special endings change a built file instead:
    - `<file>.append`: added to the end of the built file.
    - `<file>.patch-json`: merged into the built JSON file (`"allow+"` and `"tools+"` add to a list).
@@ -23,11 +23,17 @@ So: **a change to a tool goes in that tool's repository**, gets merged there, th
 1. Fetches each tool and takes `origin/main` (`git archive`), into a temporary folder.
 2. Runs each tool's own `maintainers/make-release.sh`. If any tool fails its own check, the build stops.
 3. Checks the shared parts (`apps/server`, `apps/shared`, `apps/home`, `ATTACHING.md`) are identical in all 7. If not, bring the tools level first.
-4. Attaches the 6 tools to Task List OS: app folders, skills, setup steps, connection guides, notes templates and files folders (the host's copy wins when both have a file; a tool's own differing `docs/` page is kept under `docs/<tool>/`), `apps/installed.json`, the permissions `ATTACHING.md` step 7 allows (it prints anything it left out), and each tool's `ATTACH-CLAUDE.md` in `CLAUDE.md`.
-5. Applies the overlay, then makes the notes templates say "during setup" instead of a tool's own step numbers, and makes every "your Pipeline OS folder" (and so on) say "your Small Business Toolkit OS folder".
+4. Attaches the 6 other tools: app folders, skills, setup steps, connection guides, notes templates and files folders (the first copy wins when both have a file; a tool's own differing `docs/` page is kept under `docs/<tool>/`), `apps/installed.json`, the permissions `ATTACHING.md` step 7 allows (it prints anything it left out), and each tool's `ATTACH-CLAUDE.md` in `CLAUDE.md`. Then it **removes the way in that belongs to one tool**: `Open Task List.html`, `setup/scripts/start-task-list.*`, `setup/scripts/start-money-view.*` and the `open-task-list` skill.
+5. Applies the overlay (which adds the toolkit's own `Open Small Business Toolkit.html`, `setup/scripts/start-toolkit.sh` and `.ps1` and the `open-my-toolkit` skill), then points every remaining mention of a removed name at the toolkit's (`Open Task List.html`, `start-task-list`, `start-money-view` and `open-task-list` become `Open Small Business Toolkit.html`, `start-toolkit` and `open-my-toolkit`, and the permissions list is de-duplicated), then makes the notes templates say "during setup" instead of a tool's own step numbers, and makes every "your Pipeline OS folder" (and so on) say "your Small Business Toolkit folder".
 6. Replaces everything at the root except `maintainers/`, `.git` and `dist/`, and writes `maintainers/built-from.json` with the commit of each tool it used.
 
 `--from <tool>=<folder>` builds one tool from a local folder instead (to try a change before it's merged). `check.py` refuses to pass a build made that way.
+
+## One name, one way in
+
+The product is the **Small Business Toolkit** (repository `small-business-toolkit`, no "OS"). A tool keeps its own name ("Task List OS", "Pipeline OS") only where the words mean that tool. The kit has exactly 1 opener, 1 start script pair and 1 open-the-app skill, all named for the toolkit. `check.py` fails the build if any of these come back: `Open Task List`, `start-task-list`, `start-money-view`, `Small Business Toolkit OS`, `small-business-toolkit-os`, `Task List OS is running`, an `open-task-list` skill, or "the host" / "host tool" in the kit.
+
+The shared helper (`apps/server/server.js` and `server.py`) prints "Task List OS is running at ..." when it starts. The overlay changes that line for this kit (`apps/server/server.js.replace-json` and `server.py.replace-json`). **Known bug to fix separately, in the tools:** every standalone tool's helper prints "Task List OS is running" too, even in Pipeline OS, Money View OS and the rest. The same shared code also says "Task List OS" in a few other places (its other startup messages, a log file name, the `folderName` in `apps/shared/js/store.js` and the "task list helper isn't running" messages). Fix it once in the shared parts and bring all 7 tools level.
 
 ## Releasing
 
@@ -40,7 +46,7 @@ So: **a change to a tool goes in that tool's repository**, gets merged there, th
 
 - Invite a client: GitHub, this repository, Settings, Collaborators, Add people, their GitHub username, **Read** access. They accept from GitHub's email.
 - Take access away: the same page, Remove.
-- A client's copy never updates by itself. To give them a new version, on a call: "Fetch the latest Small Business Toolkit OS and update my copy, keeping my data, notes and settings": their Claude follows the same rules as attaching (`ATTACHING.md` steps 3 and 4: never overwrite `context/`, `files/`, `setup/progress.md`, any data file or their `theme.css`).
+- A client's copy never updates by itself. To give them a new version, on a call: "Fetch the latest Small Business Toolkit and update my copy, keeping my data, notes and settings": their Claude follows the same rules as attaching (`ATTACHING.md` steps 3 and 4: never overwrite `context/`, `files/`, `setup/progress.md`, any data file or their `theme.css`).
 
 ## Things to check
 

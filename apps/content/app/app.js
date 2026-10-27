@@ -89,7 +89,7 @@
     }
     if (status === "needs-helper") {
       return showGate(gateCard("", "Your content machine opens from Claude.",
-        "<p>Claude runs it on this computer and gives you a link. In Claude Code, in your Small Business Toolkit OS folder, just say:</p>" + C.say("Open my content machine") +
+        "<p>Claude runs it on this computer and gives you a link. In Claude Code, in your Small Business Toolkit folder, just say:</p>" + C.say("Open my content machine") +
         "<p class=\"gate__note\">Not set up yet? Say <strong>/setup</strong> instead.</p>",
         '<button type="button" class="link-btn" data-action="connect">Or connect the folder yourself in Chrome</button>'));
     }
@@ -350,7 +350,7 @@
     const btn = e.target.closest("[data-action]");
     if (!btn) return;
     switch (btn.getAttribute("data-action")) {
-      case "connect": store.connect().catch(function (err) { ui.toast(err && err.kind === "wrong-folder" ? "That folder doesn't have a content file in it. Choose the Small Business Toolkit OS folder." : "Couldn't connect that folder. Please try again.", { icon: "alert", duration: 6000 }); }); break;
+      case "connect": store.connect().catch(function (err) { ui.toast(err && err.kind === "wrong-folder" ? "That folder doesn't have a content file in it. Choose the Small Business Toolkit folder." : "Couldn't connect that folder. Please try again.", { icon: "alert", duration: 6000 }); }); break;
       case "reconnect": store.reconnect(); break;
       case "retry": store.retry(); break;
       case "settings": Settings.open(); break;

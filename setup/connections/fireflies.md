@@ -12,7 +12,7 @@ One line: turns call recordings into Calls entries and drafted follow-ups, with 
 
 ## Route 2: API key
 
-If the connector is not available, Fireflies also has a public API. The person logs in at fireflies.ai, goes to Integrations, clicks Fireflies API, and copies the key. Ask the person to open the Terminal app (Mac) or PowerShell (Windows) in their Small Business Toolkit OS folder and run `bash setup/scripts/save-key.sh FIREFLIES_API_KEY` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 FIREFLIES_API_KEY` (Windows), paste the key, then restart Claude Code. Never ask for the key in chat.
+If the connector is not available, Fireflies also has a public API. The person logs in at fireflies.ai, goes to Integrations, clicks Fireflies API, and copies the key. Ask the person to open the Terminal app (Mac) or PowerShell (Windows) in their Small Business Toolkit folder and run `bash setup/scripts/save-key.sh FIREFLIES_API_KEY` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 FIREFLIES_API_KEY` (Windows), paste the key, then restart Claude Code. Never ask for the key in chat.
 
 Claude then uses it with the header `Authorization: Bearer $FIREFLIES_API_KEY`, for example: `curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $FIREFLIES_API_KEY" --data '{ "query": "query Transcripts($userId: String) { transcripts(user_id: $userId) { title id } }" }' https://api.fireflies.ai/graphql`. The Free Fireflies plan allows 50 of these a day.
 

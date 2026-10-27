@@ -2,7 +2,7 @@
 
 This folder is the proposals app inside Proposal Writing OS. You (Claude) and the app share one file, `data/proposals.json`. The person you work for sees it as proper software: Proposals (every proposal by where it's up to), Clients (one card per client folder, with **Write proposal**), Packages (what they sell and what it costs), each proposal laid out like the finished document in their brand, and Preferences. Read this file every time you work with proposals.
 
-The app runs at **http://localhost:4747/proposals/**, served by a small helper on this computer (`apps/server/`, started by `.claude/skills/open-task-list`). The helper reads and saves this same file, so you edit it directly as described below; the app picks up your changes within a few seconds.
+The app runs at **http://localhost:4747/proposals/**, served by a small helper on this computer (`apps/server/`, started by `.claude/skills/open-my-toolkit`). The helper reads and saves this same file, so you edit it directly as described below; the app picks up your changes within a few seconds.
 
 The routines live as skills in `.claude/skills/`: `write-a-proposal` (the main one), `check-client-folders`, `change-a-proposal`, `follow-up-a-proposal`, `import-a-proposal-template`, `build-my-proposal-skill`, `proposals-check-in` and `sort-proposals-brain-dump`. This file is the reference for the data they read and write.
 
@@ -177,7 +177,7 @@ When they're attached (in `apps/installed.json`):
 | "Rebuild my proposal skill", "we've changed our packages" | `.claude/skills/build-my-proposal-skill` |
 | "We won Hollins", "Marlow said no" | Set the status (above), ask why if lost (one question), and for a win offer a short thank-you email and the onboarding steps from `context/proposals.md`. |
 | "What's out?", "how much have I won this month?" | Read the proposals and answer from them. The same numbers the app shows. Change nothing. |
-| "Open my proposals", "it's not loading" | `.claude/skills/open-task-list` (it starts the app for every tool in this folder) |
+| "Open my proposals", "it's not loading" | `.claude/skills/open-my-toolkit` (it starts the app for every tool in this folder) |
 
 ## If something goes wrong
 

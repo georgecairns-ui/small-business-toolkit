@@ -38,7 +38,7 @@
     const list = M.tasksForDate(data, today(), { includeDone: true })
       .concat(M.approvedToday(data).map(function (i) { return M.taskById(data, i.taskId); }))
       .filter(function (t, i, all) { return t && all.indexOf(t) === i; });
-    if (M.notSetUp(data)) return '<div class="hbox__setup"><p><strong>Let\u2019s set up your task list.</strong> In the Claude desktop app, open the Code tab in your Small Business Toolkit OS folder and type <code>/setup</code>. Claude connects your email, calendar and calls, then fills this page with your real work.</p></div>';
+    if (M.notSetUp(data)) return '<div class="hbox__setup"><p><strong>Let\u2019s set up your task list.</strong> In the Claude desktop app, open the Code tab in your Small Business Toolkit folder and type <code>/setup</code>. Claude connects your email, calendar and calls, then fills this page with your real work.</p></div>';
     if (!props.length && !list.length) return empty("Claude hasn't sorted today yet. Say \"sort my day\" to Claude and the plan appears here.");
     const note = M.planIsToday(data) && data.plan.note ? '<p class="hplan__note">' + esc(data.plan.note) + "</p>" : "";
     const rows = props.slice(0, 4).map(function (i) {

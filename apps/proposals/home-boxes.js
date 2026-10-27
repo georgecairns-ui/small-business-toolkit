@@ -21,7 +21,7 @@
 
   // ---------- The boxes ----------
   function overview() {
-    if (M.notSetUp(data)) return '<div class="hbox__setup"><p><strong>Let’s set up your proposals.</strong> In the Claude desktop app, open the Code tab in your Small Business Toolkit OS folder and type <code>/setup</code>. Claude learns your brand, packages and prices, then writes your first proposal from a real client.</p></div>';
+    if (M.notSetUp(data)) return '<div class="hbox__setup"><p><strong>Let’s set up your proposals.</strong> In the Claude desktop app, open the Code tab in your Small Business Toolkit folder and type <code>/setup</code>. Claude learns your brand, packages and prices, then writes your first proposal from a real client.</p></div>';
     const n = M.numbers(data);
     if (!data.proposals.length) return empty("No proposals yet. Put everything about a client in their folder and press Write proposal on the Clients page.");
     return '<p class="hstat"><span class="hstat__num">' + esc(M.money(data, n.sentValue)) + '</span><span class="hstat__label">out with clients, ' + n.sentCount + (n.sentCount === 1 ? " proposal" : " proposals") + "</span></p>" +

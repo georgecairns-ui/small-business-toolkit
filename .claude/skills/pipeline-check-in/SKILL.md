@@ -36,7 +36,7 @@ Runs every hour if setup scheduled it, or whenever the person asks. It adds, upd
 10. **Task list.** If Task List OS is attached, add call prep, chases and next steps due in the next 7 days as suggested tasks there (`source: { "tool": "pipeline", "id": "<deal id>" }`), unless already there.
 11. Update `checkIn`: `lastRunAt` now, `nextRunAt` (now plus the schedule interval, or null for a one-off), and add this run's `emailsRead`, `callsRead` and `dealsUpdated` if `lastRunAt` was today (start from zero on a new day).
 12. Save safely: read right before writing, write the whole file, read it back and check it parses.
-13. Make sure the app is running so the person sees it: `bash setup/scripts/start-task-list.sh` (Mac or Linux) or `powershell -ExecutionPolicy Bypass -File setup\scripts\start-task-list.ps1` (Windows). It does nothing if it's already running.
+13. Make sure the app is running so the person sees it: `bash setup/scripts/start-toolkit.sh` (Mac or Linux) or `powershell -ExecutionPolicy Bypass -File setup\scripts\start-toolkit.ps1` (Windows). It does nothing if it's already running.
 
 ## New deals: your call
 

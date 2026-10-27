@@ -25,7 +25,7 @@
 
   // ---------- The boxes ----------
   function value() {
-    if (M.notSetUp(data)) return '<div class="hbox__setup"><p><strong>Let\u2019s set up your pipeline.</strong> In the Claude desktop app, open the Code tab in your Small Business Toolkit OS folder and type <code>/setup</code>. Claude asks what you sell, connects your email, calendar and calls, then fills this page with your real deals.</p></div>';
+    if (M.notSetUp(data)) return '<div class="hbox__setup"><p><strong>Let\u2019s set up your pipeline.</strong> In the Claude desktop app, open the Code tab in your Small Business Toolkit folder and type <code>/setup</code>. Claude asks what you sell, connects your email, calendar and calls, then fills this page with your real deals.</p></div>';
     const n = M.numbers(data);
     if (!n.open && !n.wonMonthCount) return empty("No open deals yet. Claude adds them from your email, calendar and calls on each check-in, or add one with New deal on the Pipeline page.");
     const stages = M.openStages().map(function (s) { return { s: s, n: M.dealsInStage(data, s.key).length, v: M.stageValue(data, s.key) }; }).filter(function (r) { return r.n; });

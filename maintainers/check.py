@@ -12,6 +12,8 @@ Exits 1 and says why if anything fails. It checks the kit at the repository root
      point to exists.
   5. The words: no em dashes in anything written for this kit, and no tool still says "your <Tool> OS folder".
   6. maintainers/built-from.json says every tool came from GitHub's main, not a local folder.
+  7. It is the Small Business Toolkit, not Task List OS with extras: one opener, one start script pair and one
+     open-the-app skill, all named for the toolkit, and none of the old names or "host" wording left anywhere.
 """
 import ast, json, pathlib, re, subprocess, sys
 
@@ -139,6 +141,35 @@ built = json.loads((ROOT / "maintainers/built-from.json").read_text())["tools"]
 for tid, b in built.items():
     if "folder" in b:
         bad("%s was built from a local folder (%s), not GitHub's main: rebuild without --from before pushing" % (tid, b["folder"]))
+
+# ---------- 7. It stays the Small Business Toolkit ----------
+for need in ("Open Small Business Toolkit.html", "setup/scripts/start-toolkit.sh", "setup/scripts/start-toolkit.ps1", ".claude/skills/open-my-toolkit/SKILL.md"):
+    if not (ROOT / need).is_file():
+        bad("%s is missing" % need)
+if "<title>Opening Small Business Toolkit</title>" not in (ROOT / "Open Small Business Toolkit.html").read_text():
+    bad("Open Small Business Toolkit.html is not titled 'Opening Small Business Toolkit'")
+if (ROOT / ".claude/skills/open-task-list").exists():
+    bad("an open-task-list skill folder is still there (the toolkit's is open-my-toolkit)")
+for rel in ("Open Task List.html", "setup/scripts/start-task-list.sh", "setup/scripts/start-task-list.ps1", "setup/scripts/start-money-view.sh", "setup/scripts/start-money-view.ps1"):
+    if (ROOT / rel).exists():
+        bad("%s is still there: one tool's own way in" % rel)
+if not (ROOT / "setup/scripts/start-toolkit.sh").stat().st_mode & 0o111:
+    bad("setup/scripts/start-toolkit.sh is not executable")
+BANNED = ["Open Task List", "start-task-list", "start-money-view", "Small Business Toolkit OS", "small-business-toolkit-os", "Task List OS is running", "open-task-list"]
+# "the host" is allowed in one place: the person who hosts a Google Meet (setup/connections/google-drive.md)
+HOST_WORDS = re.compile(r"\bthe host\b(?! after each meeting)|\bhost tool\b", re.I)
+for p, rel in kit_files():
+    try:
+        text = p.read_text()
+    except UnicodeDecodeError:
+        continue  # fonts and images
+    for b in BANNED:
+        if b in text:
+            bad("%s still says \"%s\"" % (rel, b))
+    if HOST_WORDS.search(text):
+        bad("%s still talks about \"the host\" or a \"host tool\"" % rel)
+    if re.search(r"\bstart-(?:task-list|money-view)\b", rel.name):
+        bad("%s is one tool's own start script" % rel)
 
 if problems:
     print("CHECK FAILED:")

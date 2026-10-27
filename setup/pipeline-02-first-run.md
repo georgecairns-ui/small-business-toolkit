@@ -23,7 +23,7 @@ Keep a count as you go: emails read, calls written up, deals found, deals checke
 
 ## 2. Open it for them
 
-Follow `.claude/skills/open-task-list`: it starts the app for every tool in this folder, offers to make it start with the computer, then (with their yes) opens **http://localhost:4747** in their browser.
+Follow `.claude/skills/open-my-toolkit`: it starts the app for every tool in this folder, offers to make it start with the computer, then (with their yes) opens **http://localhost:4747** in their browser.
 
 Then tell them what's waiting, in this shape and in your own words:
 

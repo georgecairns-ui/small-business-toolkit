@@ -12,7 +12,7 @@ One line: turns call recordings into Calls entries and drafted follow-ups, with 
 
 ## Route 2: API key
 
-Only available on Otter Enterprise workspaces. If the business is on Otter Enterprise, the person signs in to Otter.ai, opens Integrations in the left navigation, then the Developer tab, and creates a key (maximum 2 per user, shown once). Ask the person to open the Terminal app (Mac) or PowerShell (Windows) in their Small Business Toolkit OS folder and run `bash setup/scripts/save-key.sh OTTER_API_KEY` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 OTTER_API_KEY` (Windows), paste the key, then restart Claude Code. Never ask for the key in chat.
+Only available on Otter Enterprise workspaces. If the business is on Otter Enterprise, the person signs in to Otter.ai, opens Integrations in the left navigation, then the Developer tab, and creates a key (maximum 2 per user, shown once). Ask the person to open the Terminal app (Mac) or PowerShell (Windows) in their Small Business Toolkit folder and run `bash setup/scripts/save-key.sh OTTER_API_KEY` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 OTTER_API_KEY` (Windows), paste the key, then restart Claude Code. Never ask for the key in chat.
 
 Claude then uses it with the header `Authorization: Bearer $OTTER_API_KEY`, for example: `curl -X GET "https://api.otter.ai/v1/conversations?include_shared=false&limit=20" -H "Authorization: Bearer $OTTER_API_KEY"`.
 

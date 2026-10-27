@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Sets up Small Business Toolkit OS for the person - one message of questions, then their apps connected and their business learnt once, then each of the 7 tools in the order that matters to them, then one check-in for everything. Also sets up a single tool they left for later. Use when they type /setup, say "set me up", "carry on setting up", "set up my pipeline" (or any tool), or when CLAUDE.md says setup isn't done.
+description: Sets up the Small Business Toolkit for the person - one message of questions, then their apps connected and their business learnt once, then each of the 7 tools in the order that matters to them, then one check-in for everything. Also sets up a single tool they left for later. Use when they type /setup, say "set me up", "carry on setting up", "set up my pipeline" (or any tool), or when CLAUDE.md says setup isn't done.
 ---
 
 # Setup

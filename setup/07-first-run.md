@@ -21,7 +21,7 @@ Edit `apps/task-list/data/tasks.json`:
 
 ## 7.2 Open it for them
 
-Follow `.claude/skills/open-task-list`: start the task list, offer to make it start with the computer, then (with their yes) open **http://localhost:4747** in their browser. There's nothing for them to set up or connect.
+Follow `.claude/skills/open-my-toolkit`: start the task list, offer to make it start with the computer, then (with their yes) open **http://localhost:4747** in their browser. There's nothing for them to set up or connect.
 
 Then tell them what's waiting, in this shape and in your own words:
 

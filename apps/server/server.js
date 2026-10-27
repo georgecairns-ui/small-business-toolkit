@@ -42,7 +42,7 @@ const { pipeline } = require("stream");
 
 const PORT = Number(process.env.TLOS_PORT || 4747);
 const HOST = "127.0.0.1";
-const ROOT = path.resolve(__dirname, "..", "..");           // the Small Business Toolkit OS folder
+const ROOT = path.resolve(__dirname, "..", "..");           // the Small Business Toolkit folder
 const APPS = path.join(ROOT, "apps");                         // the only folder it serves
 const DATA = path.join(APPS, "task-list", "data", "tasks.json");
 const INSTALLED = path.join(APPS, "installed.json");
@@ -288,7 +288,7 @@ async function writeFile(req, res, file) {
 
 async function handleApi(req, res, url) {
   if (url === "/api/alive.js") {
-    // Used by "Open Task List.html" to check the helper is running
+    // Used by "Open Small Business Toolkit.html" to check the helper is running
     return send(res, 200, "window.tlosAlive = true;", TYPES[".js"]);
   }
   // Where this folder is, so the app can open Claude Code right here ("Open in Claude" on a task)
@@ -381,5 +381,5 @@ server.on("error", function (err) {
 });
 
 server.listen(PORT, HOST, function () {
-  console.log("Task List OS is running at http://localhost:" + PORT);
+  console.log("Small Business Toolkit is running at http://localhost:" + PORT);
 });

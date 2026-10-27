@@ -1,6 +1,6 @@
 # Toolkit: standing instructions for Claude
 
-This folder is the Toolkit app, the 8th section of the app in Small Business Toolkit OS. It sits in the sidebar under the 7 tools as "Toolkit" and has 3 pages: **Connections**, **Set up** and **Build and customise**, plus 2 boxes on Home (**Next steps** and **Connections**). Its job is to make the kit proactive: every button hands you a job, so the person never has to know what to ask for. Read this file every time you work with the Toolkit or its data file.
+This folder is the Toolkit app, the 8th section of the app in the Small Business Toolkit. It sits in the sidebar under the 7 tools as "Toolkit" and has 3 pages: **Connections**, **Set up** and **Build and customise**, plus 2 boxes on Home (**Next steps** and **Connections**). Its job is to make the kit proactive: every button hands you a job, so the person never has to know what to ask for. Read this file every time you work with the Toolkit or its data file.
 
 The app runs at **http://localhost:4747/toolkit/**, served by the helper in `apps/server/`. You (Claude) and the app share one file, `data/toolkit.json`. **You fill it; the app only ever changes an idea's status** (Not now). The app picks up your changes within a few seconds.
 

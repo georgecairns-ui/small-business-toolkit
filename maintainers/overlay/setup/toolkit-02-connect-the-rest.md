@@ -29,7 +29,7 @@ Follow its guide exactly, one app at a time. The order is always: a Claude conne
 
 **If a key is needed**, never ask for it in chat. Tell them where to find it (the guide says), then:
 
-> Open the Terminal app (on Windows, PowerShell) in your Small Business Toolkit OS folder and paste this line, then press Enter:
+> Open the Terminal app (on Windows, PowerShell) in your Small Business Toolkit folder and paste this line, then press Enter:
 > `bash setup/scripts/save-key.sh PIPEDRIVE_API_KEY` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 PIPEDRIVE_API_KEY` (Windows)
 > It asks for your key. Paste it and press Enter (it won't show on screen). Then close and reopen Claude so it can see it.
 

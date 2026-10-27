@@ -3,7 +3,7 @@
 # SAVE A KEY (Mac and Linux)
 # --------------------------
 # Saves a key for one of your apps (for example your Fireflies API key) safely on this computer,
-# so Claude Code can use it, without the key ever appearing in a chat or in your Small Business Toolkit OS folder.
+# so Claude Code can use it, without the key ever appearing in a chat or in your Small Business Toolkit folder.
 #
 # How to use it: open the Terminal app and run, for example:
 #   bash "setup/scripts/save-key.sh" FIREFLIES_API_KEY
@@ -63,4 +63,4 @@ if ! grep -qF "$MARKER" "$PROFILE"; then
 fi
 
 echo "Saved $NAME in $WHERE."
-echo "Next: close this window, open a new Terminal, go to your Small Business Toolkit OS folder and start Claude again with:  claude"
+echo "Next: close this window, open a new Terminal, go to your Small Business Toolkit folder and start Claude again with:  claude"

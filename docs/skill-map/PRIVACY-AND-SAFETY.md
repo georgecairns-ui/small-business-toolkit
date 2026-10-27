@@ -54,7 +54,7 @@ Skill and Folder Map OS doesn't need a sign-in to anything: it only works with f
 
 ## What is the helper?
 
-Your app runs from a small program in your Small Business Toolkit OS folder, so it opens like a web page at http://localhost:4747. It only listens on your own computer: nothing on the internet or your network can reach it. It only shows the app and only ever saves your map files, keeping a backup before every save. When you press Scan, Group or Review in the app, on either side, it can start Claude Code on your computer to do that one job, and only when the app itself asks.
+Your app runs from a small program in your Small Business Toolkit folder, so it opens like a web page at http://localhost:4747. It only listens on your own computer: nothing on the internet or your network can reach it. It only shows the app and only ever saves your map files, keeping a backup before every save. When you press Scan, Group or Review in the app, on either side, it can start Claude Code on your computer to do that one job, and only when the app itself asks.
 
 ## Who sees my information?
 

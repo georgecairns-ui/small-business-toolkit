@@ -13,7 +13,7 @@ One line: fills People with contacts, and Review with deals going quiet.
 
 ## Route 2: API key
 
-In Pipedrive: account name (top right), Company settings, Personal preferences, API (app.pipedrive.com/settings/api). There's 1 active token per user per company, and it gives access to all that user's data; there's no read-only option. Ask the person to open the Terminal app (Mac) or PowerShell (Windows) in their Small Business Toolkit OS folder and run `bash setup/scripts/save-key.sh PIPEDRIVE_API_TOKEN` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 PIPEDRIVE_API_TOKEN` (Windows), paste the token, then restart Claude Code. Never ask for the key in chat.
+In Pipedrive: account name (top right), Company settings, Personal preferences, API (app.pipedrive.com/settings/api). There's 1 active token per user per company, and it gives access to all that user's data; there's no read-only option. Ask the person to open the Terminal app (Mac) or PowerShell (Windows) in their Small Business Toolkit folder and run `bash setup/scripts/save-key.sh PIPEDRIVE_API_TOKEN` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 PIPEDRIVE_API_TOKEN` (Windows), paste the token, then restart Claude Code. Never ask for the key in chat.
 
 Claude then uses it with the header `x-api-token: $PIPEDRIVE_API_TOKEN`, for example: `curl -H "x-api-token: $PIPEDRIVE_API_TOKEN" "https://<companydomain>.pipedrive.com/api/v2/deals"`.
 

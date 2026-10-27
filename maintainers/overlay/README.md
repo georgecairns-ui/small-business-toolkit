@@ -1,4 +1,4 @@
-# Small Business Toolkit OS
+# Small Business Toolkit
 
 **Your whole business, run with Claude, in one app.** All 7 tools from the [Get AI Powers](https://getaipowers.com) small business toolkit, already joined up, for clients of Get AI Powers.
 
@@ -51,10 +51,10 @@ Doing everything takes about 2 hours. You can stop after any tool: the app works
 
 1. **Open Claude Code** in the Claude desktop app (the Code tab) or in the Terminal (on Windows, PowerShell). Any folder will do for this first step.
 2. **Ask Claude to fetch the kit.** Paste this:
-   > Copy the private GitHub repository georgecairns-ui/small-business-toolkit-os into a folder called "Small Business Toolkit OS" in my Documents, then tell me how to open it and set it up. Help me sign in to GitHub first if I need to.
+   > Copy the private GitHub repository georgecairns-ui/small-business-toolkit into a folder called "Small Business Toolkit" in my Documents, then tell me how to open it and set it up. Help me sign in to GitHub first if I need to.
 
    Claude checks you're signed in to GitHub (if not, it gives you one line that opens GitHub in your browser to approve this computer), copies everything onto your computer and gives you one line to open the new folder. In the desktop app, you choose the folder instead.
-3. **Open the Small Business Toolkit OS folder in Claude Code and choose "Yes, I trust this folder".** Claude Code warns that the folder pre-approves some permissions. They only let Claude update your app, your business notes and your files folder, search the web and start the app, without stopping to ask each time. It still can't send, delete or change anything in your email or other apps. Press the down arrow, then Enter.
+3. **Open the Small Business Toolkit folder in Claude Code and choose "Yes, I trust this folder".** Claude Code warns that the folder pre-approves some permissions. They only let Claude update your app, your business notes and your files folder, search the web and start the app, without stopping to ask each time. It still can't send, delete or change anything in your email or other apps. Press the down arrow, then Enter.
 4. **Type `/setup`.**
 
 When it's done, your app is at **http://localhost:4747**. Bookmark it.

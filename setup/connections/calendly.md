@@ -13,7 +13,7 @@ One line: fills Calendar and People with upcoming bookings, and flags meetings t
 
 ## Route 2: API key
 
-In Calendly: Integrations page, API & Webhooks, Get a token now (or Generate new token), name it, Create Token, Copy (shown once only; scopes are chosen at creation). Ask the person to open the Terminal app (Mac) or PowerShell (Windows) in their Small Business Toolkit OS folder and run `bash setup/scripts/save-key.sh CALENDLY_TOKEN` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 CALENDLY_TOKEN` (Windows), paste the token, then restart Claude Code. Never ask for the key in chat.
+In Calendly: Integrations page, API & Webhooks, Get a token now (or Generate new token), name it, Create Token, Copy (shown once only; scopes are chosen at creation). Ask the person to open the Terminal app (Mac) or PowerShell (Windows) in their Small Business Toolkit folder and run `bash setup/scripts/save-key.sh CALENDLY_TOKEN` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 CALENDLY_TOKEN` (Windows), paste the token, then restart Claude Code. Never ask for the key in chat.
 
 The exact header format and a read-only test request are not verified: check Calendly's developer docs before relying on this route: https://developer.calendly.com/docs/authentication/how-to-authenticate-with-personal-access-tokens.
 

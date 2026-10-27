@@ -128,7 +128,7 @@
     }
     if (status === "needs-helper") {
       return showGate(gateCard("welcome", "", "Your task list opens from Claude.",
-        "<p>Claude runs your task list on this computer and gives you a link to it. In Claude Code, in your Small Business Toolkit OS folder, just say:</p>" +
+        "<p>Claude runs your task list on this computer and gives you a link to it. In Claude Code, in your Small Business Toolkit folder, just say:</p>" +
         C.say("Open my task list") +
         "<p class=\"gate__note\">Not set up yet? Say <strong>/setup</strong> instead. Claude connects your email, calendar and calls and builds your list first.</p>",
         "",
@@ -199,7 +199,7 @@
       pill.hidden = false;
       pill.className = "save-status" + (just ? " is-saving" : "");
       pill.innerHTML = '<span class="save-status__dot"></span><span class="save-status__text">' + (just ? "Saved" : "All changes saved") + "</span>";
-      pill.title = statusDetail.helper ? "Saved in your Small Business Toolkit OS folder" : "Connected to " + (statusDetail.folderName || "your folder");
+      pill.title = statusDetail.helper ? "Saved in your Small Business Toolkit folder" : "Connected to " + (statusDetail.folderName || "your folder");
       if (just) setTimeout(function () { if (status === "ready") renderChrome(); }, 3100);
     } else if (status === "error" && data) {
       pill.hidden = false; pill.className = "save-status is-error";
@@ -608,7 +608,7 @@
       // getting in
       case "connect":
         store.connect().catch(function (err) {
-          renderGate(err && err.kind === "wrong-folder" ? "That folder doesn't have your task list in it. Choose your Small Business Toolkit OS folder, the one with START-HERE.md in it." : "That didn't work. Please try again, and click Allow when Chrome asks.");
+          renderGate(err && err.kind === "wrong-folder" ? "That folder doesn't have your task list in it. Choose your Small Business Toolkit folder, the one with START-HERE.md in it." : "That didn't work. Please try again, and click Allow when Chrome asks.");
         });
         break;
       case "reconnect": store.reconnect().catch(function () { renderGate(); }); break;

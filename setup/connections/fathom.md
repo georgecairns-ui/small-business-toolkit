@@ -13,7 +13,7 @@ One line: turns call recordings into Calls entries and drafted follow-ups, with 
 
 ## Route 2: API key
 
-If neither of the above works, Fathom also has a public API. The person finds their key in Fathom under User Settings, API Access section (fathom.video/customize#api-access-header), then generates an API key. Ask the person to open the Terminal app (Mac) or PowerShell (Windows) in their Small Business Toolkit OS folder and run `bash setup/scripts/save-key.sh FATHOM_API_KEY` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 FATHOM_API_KEY` (Windows), paste the key, then restart Claude Code. Never ask for the key in chat.
+If neither of the above works, Fathom also has a public API. The person finds their key in Fathom under User Settings, API Access section (fathom.video/customize#api-access-header), then generates an API key. Ask the person to open the Terminal app (Mac) or PowerShell (Windows) in their Small Business Toolkit folder and run `bash setup/scripts/save-key.sh FATHOM_API_KEY` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 FATHOM_API_KEY` (Windows), paste the key, then restart Claude Code. Never ask for the key in chat.
 
 Claude then uses it with the header `X-Api-Key: $FATHOM_API_KEY`, for example a read-only test: `curl https://api.fathom.ai/external/v1/meetings -H "X-Api-Key: $FATHOM_API_KEY"`.
 

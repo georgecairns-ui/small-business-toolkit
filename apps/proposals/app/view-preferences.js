@@ -85,7 +85,7 @@
       });
       if (!sections.some(function (s) { return s.on; })) error = "Keep at least one section switched on.";
       const folder = e.clientsFolder.value.trim().replace(/\\/g, "/").replace(/^\.?\/+/, "").replace(/\/+$/, "");
-      if (!folder || /(^|\/)\.\.(\/|$)/.test(folder)) error = "The client folders need to be inside your Small Business Toolkit OS folder.";
+      if (!folder || /(^|\/)\.\.(\/|$)/.test(folder)) error = "The client folders need to be inside your Small Business Toolkit folder.";
       return { error: error, sections: sections, values: {
         yourName: e.yourName.value.trim(), businessName: e.businessName.value.trim(),
         signOff: { name: e.soName.value.trim(), role: e.soRole.value.trim(), email: e.soEmail.value.trim(), phone: e.soPhone.value.trim() },

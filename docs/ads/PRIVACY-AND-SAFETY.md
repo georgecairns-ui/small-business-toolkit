@@ -73,7 +73,7 @@ No. It doesn't send emails, messages or posts. Your ads data is saved in files o
 
 ## What is the helper?
 
-Your app runs from a small program in your Small Business Toolkit OS folder, so it opens like a web page at http://localhost:4747. It only listens on your own computer: nothing on the internet or your network can reach it. It only shows the app and only ever saves your ads file (keeping a backup before every save) and the photos and videos you add to ads, which it never replaces or deletes. It can't read an ad account. When you press Refresh figures, New campaign or another Claude button in the app, it can start Claude Code on your computer to do that one job, and only when the app itself asks.
+Your app runs from a small program in your Small Business Toolkit folder, so it opens like a web page at http://localhost:4747. It only listens on your own computer: nothing on the internet or your network can reach it. It only shows the app and only ever saves your ads file (keeping a backup before every save) and the photos and videos you add to ads, which it never replaces or deletes. It can't read an ad account. When you press Refresh figures, New campaign or another Claude button in the app, it can start Claude Code on your computer to do that one job, and only when the app itself asks.
 
 ## Who sees my information?
 

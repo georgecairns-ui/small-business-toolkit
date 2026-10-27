@@ -40,7 +40,7 @@ Yes. `context/tools.md` lists every connected app and what Claude may do in each
 
 ## What is the helper?
 
-Your proposals app runs from a small program in your Small Business Toolkit OS folder, so it opens like a web page at http://localhost:4747. It only listens on your own computer: nothing on the internet or your network can reach it. It only shows the app and only ever saves your proposals file, keeping a backup before every save. When you press Write proposal, Ask Claude or Check for new folders, it starts Claude Code on your computer for that one job only, and only when the app itself asks. Claude can make it start with your computer, and you can turn that off any time by asking Claude.
+Your proposals app runs from a small program in your Small Business Toolkit folder, so it opens like a web page at http://localhost:4747. It only listens on your own computer: nothing on the internet or your network can reach it. It only shows the app and only ever saves your proposals file, keeping a backup before every save. When you press Write proposal, Ask Claude or Check for new folders, it starts Claude Code on your computer for that one job only, and only when the app itself asks. Claude can make it start with your computer, and you can turn that off any time by asking Claude.
 
 ## Does it run when I'm not there?
 

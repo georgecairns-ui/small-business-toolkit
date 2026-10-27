@@ -159,7 +159,7 @@
     }
     if (status === "needs-helper") {
       return showGate(gateCard("welcome", "", "Your map opens from Claude.",
-        "<p>Claude runs your map on this computer and gives you a link to it. In Claude Code, in your Small Business Toolkit OS folder, just say:</p>" + C.say("Open my map") +
+        "<p>Claude runs your map on this computer and gives you a link to it. In Claude Code, in your Small Business Toolkit folder, just say:</p>" + C.say("Open my map") +
         '<p class="gate__note">Not set up yet? Say <strong>/setup</strong> instead. Claude scans your skills and your folders and draws the maps for you.</p>',
         "",
         '<button type="button" class="link-btn" data-action="connect">Or connect the folder yourself in Chrome</button>'));
@@ -409,7 +409,7 @@
     askClaude(kind).then(function (started) {
       if (started) return;
       $("#genericBody").innerHTML = '<div class="modal__head"><h2>Ask Claude to do it</h2><button type="button" class="icon-btn" data-close aria-label="Close">' + icon("x") + "</button></div>" +
-        '<div class="modal__body"><p>Claude can\u2019t be started from this page on this computer. In Claude Code, in your Small Business Toolkit OS folder, say:</p>' + C.say(JOBS[kind].say) +
+        '<div class="modal__body"><p>Claude can\u2019t be started from this page on this computer. In Claude Code, in your Small Business Toolkit folder, say:</p>' + C.say(JOBS[kind].say) +
         '<p class="muted">Claude does it straight away and this page updates by itself.</p></div>';
       $("#genericDialog").showModal();
     });
@@ -542,7 +542,7 @@
     const id = btn.getAttribute("data-id");
     switch (action) {
       // connecting
-      case "connect": store.connect().catch(function (err) { renderGate(err && err.kind === "wrong-folder" ? "That folder doesn't have a map in it. Choose the Small Business Toolkit OS folder." : ""); }); break;
+      case "connect": store.connect().catch(function (err) { renderGate(err && err.kind === "wrong-folder" ? "That folder doesn't have a map in it. Choose the Small Business Toolkit folder." : ""); }); break;
       case "reconnect": store.reconnect(); break;
       case "retry": store.retry(); break;
       // Claude's jobs

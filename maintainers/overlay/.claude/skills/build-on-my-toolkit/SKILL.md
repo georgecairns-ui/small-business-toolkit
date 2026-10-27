@@ -1,6 +1,6 @@
 ---
 name: build-on-my-toolkit
-description: Builds something new on top of Small Business Toolkit OS for the person - a new page in the app for something they track, a skill for a job they repeat, a change to how a tool works, their brand on the app, a routine Claude checks on a schedule, or their team set up - safely, without breaking the 7 tools or their data. Use when they press a card on the Toolkit's Build and customise page, or say "build me a page for...", "add a skill for...", "can you change how...", "automate...", "make it do...".
+description: Builds something new on top of the Small Business Toolkit for the person - a new page in the app for something they track, a skill for a job they repeat, a change to how a tool works, their brand on the app, a routine Claude checks on a schedule, or their team set up - safely, without breaking the 7 tools or their data. Use when they press a card on the Toolkit's Build and customise page, or say "build me a page for...", "add a skill for...", "can you change how...", "automate...", "make it do...".
 ---
 
 # Build on my toolkit

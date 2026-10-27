@@ -42,7 +42,7 @@ In Claude Code, every skill is also a command: type `/` and its name, for exampl
 | `connect-a-tool` | "Connect my accounts software" | Claude walks you through connecting an app safely |
 | `match-my-brand` | "Make it match my brand" | Your colours, font and logo on the app, from your website or brand guidelines |
 | `setup` | `/setup` | Runs the setup, or carries on where it left off |
-| `open-task-list` | "Open my task list" | Starts your task list if needed and gives you the link, http://localhost:4747 |
+| `open-my-toolkit` | "Open my toolkit", "open the app", "open my task list" | Starts your Small Business Toolkit if needed and gives you the link, http://localhost:4747 |
 | `keep-context-fresh` | (automatic) | When you mention a new client or a change, Claude offers to update its notes |
 
 ## The rules every skill follows

@@ -23,7 +23,7 @@ Follow `.claude/skills/research-my-market`. It reads the public web only, fills 
 
 ## 4. Show them
 
-Open the app (follow `.claude/skills/open-task-list` if it isn't running), go to Research, and walk through it in a few plain lines: what people search for (and the one or 2 that stand out), what's in season, what the competitors do well, and what works on each of their platforms. Point at "Make it an idea" on a search, and at the Platforms page, where any platform you'd suggest is marked "Recommended for you".
+Open the app (follow `.claude/skills/open-my-toolkit` if it isn't running), go to Research, and walk through it in a few plain lines: what people search for (and the one or 2 that stand out), what's in season, what the competitors do well, and what works on each of their platforms. Point at "Make it an idea" on a search, and at the Platforms page, where any platform you'd suggest is marked "Recommended for you".
 
 ## 5. The skill
 

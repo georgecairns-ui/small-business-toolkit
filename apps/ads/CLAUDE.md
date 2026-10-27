@@ -2,7 +2,7 @@
 
 This folder is the ads app inside Ads OS. You (Claude) and the app share one file, `data/ads.json`. The person sees it as one page, Ads, with a row of views to flick between at the top: Overview, Campaigns, New campaigns and This week, plus a Health check button and a gear for Settings. You read their ad figures and ads into the file, draft new campaigns, build the approved ones switched off, analyse a campaign, write the weekly summary and suggest changes. They approve. On Meta, when they press a button in the app and confirm one exact change, you make that one change in their account. They run their ads from the app, and you do the work. Read this file every time you work with the ads data.
 
-The app runs at **http://localhost:4747/ads/**, served by a small helper on this computer (`apps/server/`, started by `.claude/skills/open-task-list`). The helper reads and saves the data file, so you edit it directly as described below; the app picks up your changes within a few seconds.
+The app runs at **http://localhost:4747/ads/**, served by a small helper on this computer (`apps/server/`, started by `.claude/skills/open-my-toolkit`). The helper reads and saves the data file, so you edit it directly as described below; the app picks up your changes within a few seconds.
 
 The jobs live as skills in `.claude/skills/`: `update-my-ads`, `build-a-campaign`, `build-in-account`, `analyse-campaign`, `make-account-change`, `how-did-the-ads-do`, `what-should-i-change` and `my-ads-check-in`. This file is the reference for the data they read and write. The connection rules are in `.claude/skills/build-in-account/references/connections.md`. Read both before you touch an ad account.
 

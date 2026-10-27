@@ -25,7 +25,7 @@
 
   // ---------- The boxes ----------
   function skills() {
-    if (M.notSetUp(data)) return '<div class="hbox__setup"><p><strong>Let’s map your skills.</strong> In the Claude desktop app, open the Code tab in your Small Business Toolkit OS folder and type <code>/setup</code>, or just say “Scan my skills”. Claude finds your skills and draws them as a map.</p></div>';
+    if (M.notSetUp(data)) return '<div class="hbox__setup"><p><strong>Let’s map your skills.</strong> In the Claude desktop app, open the Code tab in your Small Business Toolkit folder and type <code>/setup</code>, or just say “Scan my skills”. Claude finds your skills and draws them as a map.</p></div>';
     const n = M.numbers(data);
     return '<p class="hstat"><span class="hstat__num">' + n.total + '</span><span class="hstat__label">' + (n.total === 1 ? "skill" : "skills") + " mapped, " + n.used90 + " used in the last " + M.usageDays(data) + " days</span></p>" +
       '<p class="hbox__more">' + esc(M.scanLabel(data)) + ".</p>";

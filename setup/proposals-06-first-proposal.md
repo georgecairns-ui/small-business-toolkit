@@ -6,7 +6,7 @@ Goal: a real proposal, for a real client, in their brand, before setup ends. Thi
 
 1. Pick the client who's most ready: `ready: true`, a live conversation, and the most in their folder. Tell them which and why in one line ("Hollins Lettings: you had the discovery call last week and Dev's confirmed the budget by email").
 2. Add a write request for them and follow `.claude/skills/write-a-proposal`, exactly as the app's Write proposal button would.
-3. Start the app if it isn't running (`.claude/skills/open-task-list`) and, with their yes, open **http://localhost:4747/proposals/** in their browser.
+3. Start the app if it isn't running (`.claude/skills/open-my-toolkit`) and, with their yes, open **http://localhost:4747/proposals/** in their browser.
 
 ## 10.2 Walk them through it (briefly)
 
@@ -27,7 +27,7 @@ Explain the trade-off first, in one breath:
 The Claude desktop app can run scheduled tasks on their computer, with access to this folder. Menus change, so describe what to look for and ask what they see:
 
 1. In the Claude desktop app, find **Scheduled tasks** (in the sidebar or the Code area).
-2. Create a new task: **Folder:** their Small Business Toolkit OS folder. **Prompt:** `Run /proposals-check-in`. If another toolkit tool with its own check-in is in this folder (Task List OS's `/check-in`), use that one instead: it runs the proposals check-in too, so there's only ever one. **When:** every hour, on their working days, during their working hours.
+2. Create a new task: **Folder:** their Small Business Toolkit folder. **Prompt:** `Run /proposals-check-in`. If another toolkit tool with its own check-in is in this folder (Task List OS's `/check-in`), use that one instead: it runs the proposals check-in too, so there's only ever one. **When:** every hour, on their working days, during their working hours.
 3. Save it, then run it once now to check it works.
 
 If scheduled tasks aren't available, the simple alternative: they say "check my proposals" (or `/proposals-check-in`) when they've added something. Write proposal in the app works straight away either way.

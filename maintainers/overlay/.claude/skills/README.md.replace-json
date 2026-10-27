@@ -1,0 +1,6 @@
+[
+  [
+    "| `open-task-list` | \"Open my task list\" | Starts your task list if needed and gives you the link, http://localhost:4747 |",
+    "| `open-my-toolkit` | \"Open my toolkit\", \"open the app\", \"open my task list\" | Starts your Small Business Toolkit if needed and gives you the link, http://localhost:4747 |"
+  ]
+]
