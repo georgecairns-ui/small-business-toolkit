@@ -8,12 +8,12 @@ One line: fills People with contacts, and Review with deals going quiet or ticke
 
 1. Say "Let's connect your customer records" to the person. Say "connect" and "a connection", never MCP, API, JSON or repo.
 2. In the Claude app or on claude.ai, go to Connectors, Browse, find "HubSpot", click Connect, authenticate, and choose permissions.
-3. In Claude Code: it appears automatically once Claude Code is signed in with a claude.ai subscription. Check with `/mcp`. Backup if needed: `claude mcp add --transport http hubspot --scope user https://mcp.hubspot.com`, then `/mcp` to sign in.
+3. In Claude Code: it appears once Claude Code is signed in with a claude.ai subscription. Check your own list of connections; if it isn't there yet, ask them to close Claude Code and open it again (in the Terminal, `/mcp` also lists them). Backup if needed: `claude mcp add --transport http hubspot --scope user https://mcp.hubspot.com`, then `/mcp` to sign in.
 4. HubSpot recommends setting the connector to always ask before updates; choose that option if offered.
 
 ## Route 2: API key
 
-If the connector isn't available, a legacy private app can give read-only access. In HubSpot: Development, Legacy apps, Create legacy app, Private, tick only read scopes (exact scope names not verified, check HubSpot's developer docs), then the Auth tab, Show token, Copy. Ask the person to open the Terminal app (Mac) or PowerShell (Windows) in their Small Business Toolkit folder and run `bash setup/scripts/save-key.sh HUBSPOT_ACCESS_TOKEN` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 HUBSPOT_ACCESS_TOKEN` (Windows), paste the token, then restart Claude Code. Never ask for the key in chat.
+If the connector isn't available, a legacy private app can give read-only access. In HubSpot: Development, Legacy apps, Create legacy app, Private, tick only read scopes (exact scope names not verified, check HubSpot's developer docs), then the Auth tab, Show token, Copy. Ask the person to open the Terminal app (Mac) or PowerShell (Windows) in this folder and run `bash setup/scripts/save-key.sh HUBSPOT_ACCESS_TOKEN` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 HUBSPOT_ACCESS_TOKEN` (Windows), paste the token, then restart Claude Code. Never ask for the key in chat.
 
 Claude then uses it with the header `Authorization: Bearer $HUBSPOT_ACCESS_TOKEN`, for example: `curl -H "Authorization: Bearer $HUBSPOT_ACCESS_TOKEN" "https://api.hubapi.com/crm/v3/objects/contacts"`.
 

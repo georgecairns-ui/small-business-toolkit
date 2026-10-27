@@ -52,7 +52,7 @@ If one still says "Status: not filled in yet", work with what you have and offer
 | `apps/toolkit/` | The Toolkit section: connections, setup status, ideas and what you've built for them, in `apps/toolkit/data/toolkit.json` |
 | `context/` | Your notes about the business (see above) |
 | `files/` | Their documents, in numbered folders. `files/README.md` maps anything that lives elsewhere, such as Google Drive |
-| `.claude/skills/` | Saved know-how for common jobs. They load automatically in Claude Code and work as commands (`/sort-my-day`). `.claude/skills/README.md` lists them. Includes the skills you built for this business in setup step 6 |
+| `.claude/skills/` | Saved know-how for common jobs. They load automatically in Claude Code and work as commands (`/sort-my-day`). `.claude/skills/README.md` lists them. Includes the skills you built for this business during setup |
 | `skills-to-upload/` | The skills you built for this business, packed as zips for them to add to Claude (Customize, then Skills). Keep it in step with `.claude/skills/` when you change one of their skills |
 | `setup/connections/` | How to connect each app (email, calendar, call recorders, accounts, CRM) |
 | `setup/` | The setup steps and `progress.md` |
@@ -87,6 +87,7 @@ When a request matches a skill in `.claude/skills/`, read that skill's `SKILL.md
 | "Where should this go?", "save this" | `.claude/skills/file-it` |
 | "Connect my Xero", "can you see my calendar?" | `.claude/skills/connect-a-tool` |
 | "Make it match my brand", "use our colours", "put our logo on it" | `.claude/skills/match-my-brand` |
+| "Get the latest version", "any updates?", "update the app" | `.claude/skills/get-updates` |
 | They mention a new client, price or preference | `.claude/skills/keep-context-fresh` |
 | "What can you do off my list?", and on every check-in | `.claude/skills/spot-claude-tasks` |
 
@@ -121,14 +122,6 @@ The tools' own instructions follow. Where one tool's rule is stricter than the r
 
 ## Attached tools
 
-# Pipeline OS: what goes into CLAUDE.md when it's attached
-
-When Pipeline OS is attached to a folder that started with another tool, Claude copies everything below the line into the main `CLAUDE.md`, under "Attached tools". In Pipeline OS's own download these instructions are already in `CLAUDE.md`, so nothing is copied.
-
-Attaching also runs Pipeline OS's own setup steps: `setup/pipeline-01-your-customers.md` (required: what they sell, who to and the problems they solve, skipping anything `context/` already answers), `setup/pipeline-02-first-run.md` and `setup/pipeline-03-check-ins.md`.
-
----
-
 ### Pipeline OS
 
 Every deal on one board. Claude writes up sales calls, checks every deal against 8 questions (based on MEDDPICC), sets the next steps, drafts the email back and the chases, and moves deals on when it's clear. Their deals are in `apps/pipeline/data/pipeline.json`; `apps/pipeline/CLAUDE.md` explains the format and the rules. How the business sells is in `context/sales.md`: read it before judging any deal, call or meeting. Open it at http://localhost:4747/pipeline/.
@@ -151,14 +144,6 @@ Day to day:
 - "Add a deal", "we won it", "they said no": see `apps/pipeline/CLAUDE.md`.
 - Never mark a deal won or lost yourself, never send anything, and never guess a deal check answer, a value or a service.
 
-# Skill and Folder Map OS: what goes into CLAUDE.md when it's attached
-
-When Skill and Folder Map OS is attached to a folder that started with another tool, Claude copies everything below the line into the main `CLAUDE.md`, under "Attached tools". In Skill and Folder Map OS's own download these instructions are already in `CLAUDE.md`, so nothing is copied.
-
-Attaching also runs Skill and Folder Map OS's own setup steps: `setup/skill-map-01-first-scan.md` (the first scan), `setup/skill-map-03-map-your-folders.md` (mapping their folders) and `setup/skill-map-02-group-by-business.md` (grouping and the Gaps page). It reuses the shared `setup/05-get-to-know-the-business.md` step rather than asking about the business twice.
-
----
-
 ### Skill and Folder Map OS
 
 2 maps, switched with a Skills | Files switch in the top bar. Skills: every skill and command Claude can use, drawn as a map, Claude in the middle, a hub per business area, a dot per skill, dot size showing how much it's been used in the last 90 days. Files: the folders and files in the folders the person has chosen, the same network look, click a folder to go inside it. Scanning only reads, and nothing is ever sent or leaves their computer. Tidying happens only when they press a Fix button, never deletes, and can be undone. Their maps are in `apps/skill-map/data/skillmap.json` and `apps/skill-map/data/filemap.json`, and tidy-ups are recorded in `apps/skill-map/data/tidy.json`; `apps/skill-map/CLAUDE.md` explains the format and the rules. Open it at http://localhost:4747/skill-map/.
@@ -178,14 +163,6 @@ Day to day:
 - **Claude suggests; the person's Fix button acts.** `review-my-skills` and `review-my-folders` add to `recommendations`; the person marks each Done or Not now, or presses a Fix button. Claude never retires, merges, moves or edits a skill, a file or a folder on its own. After a Fix button, `tidy-up` moves or renames (never deletes) and records it in `tidy.json` so it can be undone.
 - **Suggestions can land in the task list.** When Task List OS is attached (`apps/installed.json`, id `task-list`), every new open suggestion from `review-my-skills` or `review-my-folders` also becomes a suggested task there, in its own format (`apps/task-list/CLAUDE.md`), with `"source": { "tool": "skill-map", "id": "<recommendation id>" }`. It shows on the task list's Review page with a New tag, and needs the person's click there before anything happens. Skill and Folder Map OS reads nothing from the task list; it only sends these suggestions.
 - Never type a number into either map by hand; every count comes from its scan.
-
-# Proposal Writing OS: what goes into CLAUDE.md when it's attached
-
-When Proposal Writing OS is attached to a folder that started with another tool, Claude copies everything below the line into the main `CLAUDE.md`, under "Attached tools". In Proposal Writing OS's own download these instructions are already in `CLAUDE.md`, so nothing is copied.
-
-Attaching also runs Proposal Writing OS's own setup steps, skipping anything `context/` already answers: `setup/proposals-01-your-brand.md` (skip it if the app already has their brand, and only do "The proposal's look"), `setup/proposals-02-what-you-sell.md` (required: packages and prices; `context/sales.md` may already be filled in by Pipeline OS), `setup/proposals-03-your-templates.md`, `setup/proposals-04-your-client-folders.md`, `setup/proposals-05-your-proposal-skill.md` and `setup/proposals-06-first-proposal.md`. Also copy `context/proposals.md` into `context/` if it isn't there.
-
----
 
 ### Proposal Writing OS
 
@@ -207,14 +184,6 @@ Day to day:
 - **Pipeline OS.** Read the client's deal before writing (summary, the deal check, calls) and link it with `pipelineDealId`. A deal that reaches its proposal stage with no proposal makes that client ready. When a proposal is sent, won or lost, add a suggestion to the pipeline to move the deal; never edit the pipeline's deals. One write-up per call: if Pipeline OS or Task List OS already wrote a call up, read theirs and save a short summary into the client's folder.
 - **Task List OS.** A proposal ready to check and a follow-up that's due become suggested tasks there, with `"source": { "tool": "proposals", "id": "<proposal id>" }`. Contacts live in the task list; link to them rather than keeping a second copy.
 - Never send anything, never invent a price, number or quote, and never write legal terms.
-
-# Content Machine OS: what goes into CLAUDE.md when it's attached
-
-When Content Machine OS is attached to a folder that started with another tool, Claude copies everything below the line into the main `CLAUDE.md`, under "Attached tools". In Content Machine OS's own download these instructions are already in `CLAUDE.md`, so nothing is copied.
-
-Attaching also runs Content Machine OS's own setup steps: `setup/content-01-your-business.md` (required: what they sell, the problems they solve, what makes them different, who for and where, skipping anything `context/` already answers), `setup/content-02-your-platforms.md`, `setup/content-03-research.md` and `setup/content-04-first-plan.md`. It reuses the shared `setup/05-get-to-know-the-business.md` step rather than asking about the business twice.
-
----
 
 ### Content Machine OS
 
@@ -241,14 +210,6 @@ Day to day:
 - **Wins become ideas.** When Pipeline OS is attached (`apps/installed.json`, id `pipeline`), each deal newly in the `won` stage in `apps/pipeline/data/pipeline.json` becomes an idea (`source: "pipeline"`) with a case-study need, once per deal. Content Machine OS only reads these; it never edits a deal.
 - **Actions land in the task list.** When Task List OS is attached (`apps/installed.json`, id `task-list`), these also become suggested tasks there, in its own format (`apps/task-list/CLAUDE.md`): a post due today ("Post to Instagram: Before and after, the Clifton café menu", due that day, with "The words are ready to copy in Content Machine OS" in the notes) and every open need ("Record a video for Tuesday's TikTok", due the day before the post). Each has `"suggested": true`, `"addedBy": "claude"` and `"source": { "tool": "content", "id": "<post id>" }`, using the need's id as `id` for a need and `<post id>:<platform>` for a post. It shows on the task list's Review page with a New tag, and needs the person's click there before anything happens. Don't add one that's already there (check `source.id` and the title), and don't add a task for a post already posted or a need already done. Content Machine OS keeps its own To do list either way.
 - Never post, schedule, message or log in anywhere, never invent a result, quote or statistic, and never write a total score.
-
-# Money View OS: what goes into CLAUDE.md when it's attached
-
-When Money View OS is attached to a folder that started with another tool, Claude copies everything below the line into the main `CLAUDE.md`, under "Attached tools". In Money View OS's own download these instructions are already in `CLAUDE.md`, so nothing is copied.
-
-Attaching also runs Money View OS's own setup steps: `setup/money-01-your-accounts.md` (required: an accounts app connected), `setup/money-02-your-bank.md`, `setup/money-03-money-out.md` and `setup/money-04-first-view.md`. It reuses the shared `setup/05-get-to-know-the-business.md` step rather than asking about the business twice.
-
----
 
 ### Money View OS
 
@@ -277,14 +238,6 @@ Day to day:
 - **Actions land in the task list.** When Task List OS is attached (`apps/installed.json`, id `task-list`), these also become suggested tasks there, in its own format (`apps/task-list/CLAUDE.md`): a chase for each overdue invoice that has been sent ("Chase Greenway Café for INV-0042, £850, 12 days late", due that day; never for a draft or an invoice still waiting in the accounts app to be sent), "Send INV-0043 from Xero" for each invoice sitting as a draft in their accounts software, and "Move £640 to your Tax pot" when the app's tax pot says more than £50 is left to move. The amounts are the ones the app shows. Each has `"suggested": true`, `"addedBy": "claude"` and `"source": { "tool": "money", "id": "<invoice id>" }` (for the tax pot, `"tax-pot:<date>"`). It shows on the task list's Review page with a New tag, and needs the person's click there before anything happens. Don't add one that's already there (check `source.id` and the title), and don't add a task for an invoice already paid or a draft already sent, and no chase for an invoice that hasn't been sent. Money View OS keeps its own flags either way.
 - Estimates to help them plan, not financial advice. Check big decisions with their accountant.
 
-# Ads OS: what goes into CLAUDE.md when it's attached
-
-When Ads OS is attached to a folder that started with another tool, Claude copies everything below the line into the main `CLAUDE.md`, under "Attached tools". In Ads OS's own download these instructions are already in `CLAUDE.md`, so nothing is copied.
-
-Attaching also runs Ads OS's own setup steps: `setup/ads-01-install-claude-ads.md`, `setup/ads-02-where-your-ads-are.md` (required: which platforms, and connecting them or downloading a report), `setup/ads-03-your-customer.md` (skipping anything `context/` already answers), `setup/ads-04-budget-and-results.md` and `setup/ads-05-first-look.md`. It reuses the shared `setup/05-get-to-know-the-business.md` step rather than asking about the business twice.
-
----
-
 ### Ads OS
 
 Shows their Google and Meta ads on one screen (spend, results, cost per result and return, by platform and campaign), shows each campaign's ads and how it is doing against a prediction, drafts new campaigns, analyses a campaign, and builds the ones they approve switched off. **Nothing spends until they say yes.** On Meta, Claude switches a campaign on, pauses a campaign or an ad, or changes a daily budget only when they pressed the button in the app and confirmed that exact change (the `make-account-change` skill, one change at a time, read back). It never acts on its own, never goes over their limits and never deletes anything. On Meta it builds an approved campaign in their account with every part paused and reads it back to check. On Google, whose own connection only reads, Claude changes nothing: it writes an import file for Google Ads Editor and a build sheet, and every Google change is a task for them with a link to Google Ads. No ad account tool is pre-approved: Claude Code asks them before every call. Their data is in `apps/ads/data/ads.json`; `apps/ads/CLAUDE.md` explains the format and the rules, and `.claude/skills/build-in-account/references/connections.md` has the connection rules. How the business sounds is in `context/voice.md`; their customer, limits and seasons are in `context/ads.md`: read both before drafting anything. Open it at http://localhost:4747/ads/.
@@ -302,7 +255,7 @@ Shows their Google and Meta ads on one screen (spend, results, cost per result a
 
 Day to day:
 
-- **Nothing spends until they say yes.** A draft waits for their Approve. Building is a second step they ask for. On Meta, switching on is a third: they press Switch it on in the app and confirm, and that creates an `actions` entry for `make-account-change`. On Google it is theirs, in Google Ads, then "I've switched it on" in the app. Never mark a campaign live because a date has passed.
+- **Nothing spends until they say yes.** A draft waits for their Approve. Building is a second step they ask for. On Meta, switching on is a third: they press Switch it on in the app and confirm, and that saves their confirmation in `approvals.json` (never write it), creates an `actions` entry and opens Claude Code on screen with `make-account-change` typed in. Act only on a `requested` action that has a matching confirmation. On Google it is theirs, in Google Ads, then "I've switched it on" in the app. Never mark a campaign live because a date has passed.
 - **Create paused, read back, confirm.** If any part of a build isn't paused, stop and tell them at once. In build skills, never call a tool that activates, updates, pauses, re-budgets or deletes. Only `make-account-change` may, for the one approved change, after `node apps/ads/app/report.js action <id>` says OK.
 - **Figures come from the platforms, sums come from the app.** Claude writes raw daily figures, one row per campaign per day, and never a total. Summaries and suggestions quote only numbers from `node apps/ads/app/report.js week`.
 - **Limits and seasons.** Never draft or build a campaign over their daily limit, weekly limit or monthly budget. A seasonal campaign only runs inside its season.

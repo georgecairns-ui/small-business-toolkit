@@ -2,7 +2,7 @@
 
 This folder is the money app inside Money View OS. You (Claude) and the app share one file, `data/money.json`. The person sees it as one page, Money view, with a row of views to flick between at the top: Overview, Months, Invoices, In and out and What if, plus a Refresh numbers button, New invoice and a gear for Settings. You read their accounts software and its bank feed (read only), write what you find into the file, draft their reminders and put invoices into their accounts software as drafts. The app works out every total, forecast and tax figure. Read this file every time you work with the money view.
 
-The app runs at **http://localhost:4747/money/**, served by a small helper on this computer (`apps/server/`, started by `.claude/skills/open-money-view`). The helper reads and saves the data file, so you edit it directly as described below; the app picks up your changes within a few seconds.
+The app runs at **http://localhost:4747/money/**, served by a small helper on this computer (`apps/server/`, started by `.claude/skills/open-my-toolkit`). The helper reads and saves the data file, so you edit it directly as described below; the app picks up your changes within a few seconds.
 
 The jobs live as skills in `.claude/skills/`: `update-my-money-view`, `raise-an-invoice`, `put-invoices-in-my-accounts`, `who-owes-me-money`, `whats-coming-in`, `can-i-afford-this`, `set-aside-for-tax` and `sort-money-brain-dump`. This file is the reference for the data they read and write. The app's own rules, which work out every figure, are in `app/model.js`: read the top of it for how each function is called.
 

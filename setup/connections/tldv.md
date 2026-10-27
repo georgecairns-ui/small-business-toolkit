@@ -8,11 +8,11 @@ One line: turns Google Meet, Zoom and Teams meeting recordings into Calls entrie
 
 1. Say "Let's connect your call recordings" to the person. Say "connect" and "a connection", never MCP, API, JSON or repo.
 2. In the Claude app or on claude.ai, go to the connectors area (ask the person what they see), find "tldv", click Connect, sign in to tl;dv, and approve.
-3. In Claude Code: it appears automatically once Claude Code is signed in with a claude.ai subscription. Check with `/mcp`. Backup if needed: `claude mcp add --transport http tldv https://mcp.tldv.io/mcp`, then `/mcp` to sign in.
+3. In Claude Code: it appears once Claude Code is signed in with a claude.ai subscription. Check your own list of connections; if it isn't there yet, ask them to close Claude Code and open it again (in the Terminal, `/mcp` also lists them). Backup if needed: `claude mcp add --transport http tldv https://mcp.tldv.io/mcp`, then `/mcp` to sign in.
 
 ## Route 2: API key
 
-The person finds their key in tl;dv under Settings, Personal Settings, API Keys (tldv.io/app/settings/personal-settings/api-keys). Ask the person to open the Terminal app (Mac) or PowerShell (Windows) in their Small Business Toolkit folder and run `bash setup/scripts/save-key.sh TLDV_API_KEY` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 TLDV_API_KEY` (Windows), paste the key, then restart Claude Code. Never ask for the key in chat.
+The person finds their key in tl;dv under Settings, Personal Settings, API Keys (tldv.io/app/settings/personal-settings/api-keys). Ask the person to open the Terminal app (Mac) or PowerShell (Windows) in this folder and run `bash setup/scripts/save-key.sh TLDV_API_KEY` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 TLDV_API_KEY` (Windows), paste the key, then restart Claude Code. Never ask for the key in chat.
 
 Claude then uses it with the header `x-api-key: $TLDV_API_KEY`, for example: `curl -H "x-api-key: $TLDV_API_KEY" "https://pasta.tldv.io/v1alpha1/meetings?page=1&limit=50"`.
 

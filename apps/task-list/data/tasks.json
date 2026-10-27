@@ -3,7 +3,7 @@
     "This is your task list. The app (Open Small Business Toolkit.html) and Claude both read and write this file.",
     "Claude: read apps/task-list/CLAUDE.md before changing anything here.",
     "Sections: settings, tasks, plan (today), week (goals), events (calendar copy), people, dump (brain dump), replies (emails to answer, with drafts), meetings (calls), triage (last check), activity.",
-    "Tasks marked \"example\": true are samples. Replace them with the person's real tasks during setup."
+    "It starts empty. Claude fills it with the person's real work during setup."
   ],
   "formatVersion": 2,
   "settings": {

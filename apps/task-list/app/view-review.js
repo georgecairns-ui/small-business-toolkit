@@ -45,7 +45,7 @@
   function render(ctx) {
     const d = ctx.d;
     const q = M.reviewQueue(d);
-    const total = q.plan.length + q.newTasks.length + q.schedule.length;
+    const total = M.reviewCount(d);
 
     if (!total) {
       return '<div class="page page--narrow">' +

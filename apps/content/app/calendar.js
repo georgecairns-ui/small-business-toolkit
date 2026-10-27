@@ -224,7 +224,7 @@
     current.root.querySelectorAll("[data-media-drop]").forEach(function (el) {
       const now = Media.pending(el.getAttribute("data-id"));
       el.classList.toggle("is-uploading", now.length > 0);
-      if (now.length) el.style.setProperty("--up", Math.round(now.reduce(function (a, u) { return a + u.percent; }, 0) / now.length) + "%");
+      if (now.length) el.style.setProperty("--up", M.averagePercent(now) + "%");
     });
   }
   function dropOn(ctx, drag, target) {
@@ -405,7 +405,7 @@
 
   function line(ctx) {
     const today = ctx.today(), week = M.weekDays(today, M.weekStartsOf(ctx.data));
-    const thisWeek = week.reduce(function (n, iso) { return n + M.postsForDay(ctx.data, iso).length; }, 0);
+    const thisWeek = M.postsOnDays(ctx.data, week);
     const waiting = unplanned(ctx);
     const loose = waiting.posts.length + waiting.ideas.length;
     return plural(thisWeek, "post", "posts") + " this week" + (loose ? ", " + loose + " unplanned" : "");

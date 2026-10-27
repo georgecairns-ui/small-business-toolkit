@@ -8,7 +8,7 @@ With the connections from steps 2 to 4, quietly gather:
 - From their **sent email** (last 2 to 3 weeks): who they deal with most, their clients and suppliers, how they write.
 - From their **calendar**: their working pattern and regular meetings.
 - From **calls**: what they sell and what's in progress.
-- From their **website** (from their email signature), if you can read web pages: what the business does.
+- From their **website** (from step 1, or their email signature): what the business does.
 - From **accounts or CRM**: key customers.
 
 Don't present guesses as facts. Use them to skip questions.
@@ -45,6 +45,6 @@ Fix what they correct.
 
 ## 5.5 Make the app look like their business
 
-Follow `.claude/skills/match-my-brand`: ask for their brand guidelines or website (or 3 quick questions if they have neither), then put their colour, font and logo on the app. If you found their website in 5.1, say so and offer to use it, so they only have to say yes. Show them the result in light and dark before moving on. If they'd rather keep the standard look, that's fine: skip it.
+Follow `.claude/skills/match-my-brand`: take their colour, font and logo from their website (you have it from step 1, so don't ask again) or their brand guidelines, or ask 3 quick questions if they have neither, then put them on the app. Show them the result in light and dark before moving on. If they'd rather keep the standard look, that's fine: skip it.
 
 Tick step 5.

@@ -119,7 +119,8 @@ Every `id` is a short prefix plus 6 random lowercase letters or digits, made the
 
 The account changes the owner approved. `{ id, kind: "switch-on" or "pause" or "budget", platform: "meta", campaignId, buildId, adId, budgetFrom, budgetTo, status: "requested" or "doing" or "done" or "failed", requestedAt, doneAt, readBack: "", note: "" }`.
 
-- **The app creates it** with status `requested` after the owner confirms the pop-up, then runs the `make-account-change` job. You never create one.
+- **The app creates it** with status `requested` after the owner confirms the pop-up. It also saves the owner's yes in its own file, `apps/ads/data/approvals.json` (`{ version, approvals: [{ id, kind, platform, campaignId, buildId, adId, budgetFrom, budgetTo, confirmedAt, closedAt }] }`), which you never write, and then opens Claude Code on screen with the `make-account-change` job typed in, so the owner sees Claude Code's own question before each Meta call. It is never run as a background job. You never create an action. Act only on a `requested` action that has a matching, unclosed entry in `approvals.json`; `report.js action <id>` checks that and prints BLOCKED without it.
+- A missing or unknown `status` is read as `failed` ("unclear entry, not acted on"). If a change is still `requested` or `doing` after 30 minutes the owner can mark it failed in the campaign panel; never put a finished action back to `requested`.
 - You set `doing`, then `done` with `readBack` ("Campaign is now ACTIVE, daily budget £15") or `failed` with a plain `note`.
 - Only `platform: "meta"`. Run `node apps/ads/app/report.js action <id>` first and refuse on BLOCKED.
 - A `switch-on` of a build also sets the build `live` with `switchedOnAt`, copies its `prediction` to the campaign and sets the campaign's `buildId`.
@@ -166,9 +167,9 @@ The light, the prediction score, the pace, the budget guard and the seasonal gua
 
 ## What the app can and cannot do
 
-It can show the figures, let the person edit a draft, approve it, drop it, tick the checks, add photos and videos, copy and open the platform's own page, ask you to refresh, draft, change, build, analyse, summarise or suggest, and, on Meta, ask for one account change at a time through its confirm pop-up. It **cannot** read an ad account, create a campaign, or change one. Those jobs are yours (`claude-jobs.json`), and only on the buttons and the rules above. Everything else the app does by itself.
+It can show the figures, let the person edit a draft, approve it, drop it, tick the checks, add photos and videos, copy and open the platform's own page, ask you to refresh, draft, change, build, analyse, summarise or suggest, and, on Meta, ask for one account change at a time through its confirm pop-up. It **cannot** read an ad account, create a campaign, or change one. Those jobs are yours: the background ones are in `claude-jobs.json`, and an account change is never one of them but runs on screen in Claude Code, only on the buttons and the rules above. Everything else the app does by itself.
 
-- **Switch it on** (a Meta build that is `in-account`, or a paused Meta campaign): the pop-up says the exact change and the limits check. **Yes, do it** creates an action and runs `make-account-change`. "I've switched it on myself" stays as a small link for people who did it in Meta's own page. A Google build keeps "I've switched it on".
+- **Switch it on** (a Meta build that is `in-account`, or a paused Meta campaign): the pop-up says the exact change and the limits check. **Yes, do it** saves the owner's confirmation, creates an action and opens Claude Code on screen with `make-account-change` typed in (with a copy-the-words fallback). "I've switched it on myself" stays as a small link for people who did it in Meta's own page. A Google build keeps "I've switched it on".
 - **Run campaign**: 5 questions (who sees it, budget, dates, the ads, anything else) create a new draft build with `fromCampaignId` and `brief`, and run `build-a-campaign`.
 
 ## Working with other tools

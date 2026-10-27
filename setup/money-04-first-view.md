@@ -14,7 +14,7 @@ If Pipeline OS or Proposal Writing OS is attached, check `apps/money/ATTACH-CLAU
 
 ## 2. Open the app
 
-Open **http://localhost:4747/money/** (follow `.claude/skills/open-money-view` if it isn't running) on the Overview, and walk through it in a few plain lines:
+Open **http://localhost:4747/money/** (follow `.claude/skills/open-my-toolkit` if it isn't running) on the Overview, and walk through it in a few plain lines:
 
 - **The 4 numbers at the top**: cash today (and where it's from), your lowest point in the next 12 weeks, what's owed to you, and your tax pot. Each is a button to the page behind it.
 - **The chart**: the balance week by week for the next 12 weeks. The dashed line is the balance that makes you nervous. Rest the mouse on a week to see what's coming in and going out.

@@ -1,5 +1,5 @@
 {
-  "about": "Jobs the app can ask Claude to do straight away, through the helper (apps/server). The app sends only the job's name; these words are what Claude follows. See maintainers/SHARED-V4-CHANGES.md.",
+  "about": "Jobs the app can ask Claude to do straight away, through the helper (apps/server). The app sends only the job's name; these words are what Claude follows. See maintainers/SHARED-V4-CHANGES.md. Changing the ad account is deliberately not a job here: it runs only in Claude Code on screen, after the owner's yes (see .claude/skills/make-account-change).",
   "jobs": {
     "update-my-ads": {
       "label": "refreshing your ad figures",
@@ -32,10 +32,6 @@
     "analyse-campaign": {
       "label": "analysing your campaign",
       "prompt": "The person has pressed Analyse campaign in Ads OS. Follow .claude/skills/analyse-campaign for every campaign in apps/ads/data/ads.json with a request of kind analyse: run node apps/ads/app/report.js campaign <id> and quote only the numbers it prints. Write an analysis (a plain summary, what is working, what is wasting money and what you could not see) into analyses, and add up to 3 suggestions for that campaign. If the campaign has no prediction, add one with its assumptions. Then clear the request. Do not change anything in an ad account. Change only what the person approved in the app, and nothing else."
-    },
-    "make-account-change": {
-      "label": "making the change you approved",
-      "prompt": "The person has confirmed a change to their Meta ad account in Ads OS. Follow .claude/skills/make-account-change for every action in apps/ads/data/ads.json with the status requested. For each one, set it to doing, run node apps/ads/app/report.js action <id> and refuse if it says BLOCKED. Otherwise make exactly that one change with the Meta connection, read it back to confirm, and set it to done with what you read back, or to failed with a plain note. Never delete anything, never touch Google Ads, and never make a second change for one action. When a switch-on of a build is done, also set that build to live and record when (switchedOnAt). Change only what the person approved in the app, and nothing else."
     }
   }
 }

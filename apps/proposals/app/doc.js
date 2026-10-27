@@ -156,7 +156,7 @@
     const price = M.money(d, pr.unit) + M.billingSuffix(pr.billing);
     const lines = [];
     if (pr.months) lines.push("For " + pr.months + " months: " + M.money(d, pr.total));
-    if (d.settings.vatRegistered) lines.push("With VAT: " + M.money(d, pr.gross, { pence: pr.gross % 1 !== 0 }));
+    if (d.settings.vatRegistered) lines.push("With VAT" + (pr.months ? ", for " + pr.months + " months" : "") + ": " + M.money(d, pr.gross, { pence: pr.gross % 1 !== 0 }));
     return '<article class="doc-option' + (o.recommended ? " is-recommended" : "") + '">' +
       (o.recommended ? '<span class="doc-option__badge">Recommended</span>' : "") +
       "<h3>" + esc(pkg.name) + "</h3>" + (pkg.summary ? '<p class="doc-option__summary">' + esc(pkg.summary) + "</p>" : "") +
@@ -167,7 +167,7 @@
       (o.why || (editable && o.recommended) ? '<div class="doc-option__why">' + text("p", "sections.investment.options." + i + ".why", o.why, "", "Why this one is right for them") + "</div>" : "") +
       (editable ? '<div class="doc-option__edit no-print">' +
         (o.recommended ? '<span class="chip chip--accent">' + icon("check") + "Recommended</span>" : '<button type="button" class="btn btn--sm" data-action="recommend" data-index="' + i + '">Recommend this</button>') +
-        '<label class="doc-option__custom"><span>Price for this proposal</span><input class="input input--sm num" type="number" min="0" step="1" data-custom-price="' + i + '" value="' + esc(o.customPrice != null ? o.customPrice : "") + '" placeholder="' + esc(String(pkg.price)) + '"></label>' +
+        '<label class="doc-option__custom"><span>Price for this proposal</span><input class="input input--sm num" type="number" min="0" step="0.01" data-custom-price="' + i + '" value="' + esc(o.customPrice != null ? o.customPrice : "") + '" placeholder="' + esc(String(pkg.price)) + '"></label>' +
         "</div>" : "") +
       "</article>";
   }

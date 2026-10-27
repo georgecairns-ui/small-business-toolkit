@@ -5,17 +5,18 @@ Goal: in one short exchange, learn what the person uses, so every later step is 
 ## 1.1 Check what you can reach (quietly, before asking anything)
 
 1. **This folder.** Read `setup/progress.md`, write a test line to its "Notes for next time" section, read it back and remove it. If you can't, stop and ask them to open this folder in Claude Code (`cd` into it and run `claude`), or give the Claude app access to it.
-2. **Your connections.** List the tools you have right now. In Claude Code, the person can type `/mcp` to see them. Note any for email, calendar, call recording, files, accounts or CRM. Connectors added to their Claude account appear automatically in Claude Code when it's signed in with a Claude subscription.
+2. **Your connections.** Look at the connections you can use right now (your own list of tools: names like Gmail, Google Calendar, Fathom or Xero). Note any for email, calendar, call recording, files, accounts or CRM. Connectors added to their Claude account appear in Claude Code when it's signed in with a Claude subscription; one they add part-way through may only appear after Claude Code is closed and opened again.
 3. **Where the folder lives.** From its path: Downloads or Desktop (suggest moving it to Documents first, because the task list app remembers the location), a cloud-synced folder (fine, it's backed up), or a folder shared with other people (point out that anyone with access can read their tasks).
 4. **Their computer.** Mac or Windows, from the path or by running a harmless command.
+5. **What they've already told you.** Read this conversation from the start, and any notes already in `context/` (files that don't say "Status: not filled in yet") or `files/`. If they've said their name, business, website, email provider or anything else the questions below ask, write it down now and don't ask it again.
 
 ## 1.2 Ask everything in one message
 
-Open with what you found in 1.1, so they see you've already looked: "You've already got Gmail and Google Calendar connected to Claude, so I'll use those." Then send the questions as one friendly, numbered message. Skip anything you already know from 1.1 and say so. Tell them short answers are fine.
+Open with what you found in 1.1, so they see you've already looked: "You've already got Gmail and Google Calendar connected to Claude, so I'll use those." Then send the questions as one friendly, numbered message. Leave out every question you already have the answer to from 1.1, say in one line what you already know, and renumber the rest. Tell them short answers are fine.
 
 > To set this up properly I need to know a few things. Short answers are fine.
 >
-> 1. Your first name, your business's name, and in a sentence what it does.
+> 1. Your first name, your business's name, and in a sentence what it does. And what's your website? (I'll use it to learn about the business and to make your task list look like it.)
 > 2. Which email do you use for work? (Gmail or Google Workspace, Outlook with a work Microsoft account, Outlook.com or Hotmail, or something else.)
 > 3. Which calendar? (Usually the same as your email.)
 > 4. Do you record your calls or meetings? If so, with what? (For example Fathom, Fireflies, Otter, Granola, tl;dv, Read AI, Zoom, Microsoft Teams or Google Meet.)
@@ -25,6 +26,8 @@ Open with what you found in 1.1, so they see you've already looked: "You've alre
 > 8. Would you like me to check your inbox, calls and calendar automatically every hour while you work, so your task list keeps itself up to date? (It uses a little of your Claude allowance and needs the Claude app open on your computer.)
 
 ## 1.3 Write it down
+
+Put their website in `context/business.md` ("Website:"), so step 5 can use it without asking again.
 
 Fill in `context/tools.md`:
 - "Your setup": computer, Claude version (Claude Code or the Claude app), workspace location, email provider, calendar provider, solo or team.

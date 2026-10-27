@@ -9,7 +9,7 @@ One line: fills People and Review with files the business already keeps, and tur
 1. Say "Let's connect your Google Drive" to the person. Say "connect" and "a connection", never MCP, API, JSON or repo.
 2. In the Claude app or on claude.ai, go to the connectors area (Customize, then Connectors). Menus change over time, so ask the person what they actually see.
 3. Find "Google Drive", click Connect, sign in with the business Google account, and approve.
-4. In Claude Code: it appears automatically once Claude Code is signed in with a claude.ai subscription. Check with `/mcp`.
+4. In Claude Code: it appears once Claude Code is signed in with a claude.ai subscription. Check your own list of connections; if it isn't there yet, ask them to close Claude Code and open it again (in the Terminal, `/mcp` also lists them).
 5. For a call held on Google Meet, search Drive for the "Google Meet" folder (there is a sub-folder per meeting) for the transcript or the Gemini notes document for that meeting.
 
 Google Drive connectors follow the same plan rules as Gmail: free for all Claude and Claude Desktop users, with a Team or Enterprise Owner needing to switch it on first.

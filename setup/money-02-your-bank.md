@@ -2,6 +2,8 @@
 
 Goal: Claude can see recent transactions in the business bank account, read only, through the bank feed inside their accounts app. Claude never gets a login, a card number, a sort code or an account number, and it can't move money. **This is the only way Money View sees the bank, and the bank feed is required: don't carry on without it.**
 
+> **Already answered in step 1.** The quick questions in `setup/toolkit-01-quick-questions.md` already asked which bank the business account is with. Read that answer from `setup/progress.md` (under "Answers from step 1") and from `apps/money/data/money.json` first. Confirm the bank back in a sentence rather than asking its name again, and carry on from the bank feed. Still ask the questions below that step 1 didn't cover (the feed, the online-banking link, the tax pot).
+
 ## 1. Ask, one question at a time
 
 The questions below come in order. Questions 4 and 5 happen only once you've seen real bank transactions.

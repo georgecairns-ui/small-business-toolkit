@@ -398,6 +398,19 @@
     return out;
   }
 
+  // How many things are waiting across all of the To do groups
+  function todoTotal(t) {
+    return Object.keys(t).reduce(function (n, k) { return n + t[k].length; }, 0);
+  }
+  // How many posts sit on the given days (used for "posts this week")
+  function postsOnDays(data, days) {
+    return days.reduce(function (n, iso) { return n + postsForDay(data, iso).length; }, 0);
+  }
+  // The average percent saved across files that are still uploading, as a whole number
+  function averagePercent(uploads) {
+    return uploads.length ? Math.round(uploads.reduce(function (a, u) { return a + u.percent; }, 0) / uploads.length) : 0;
+  }
+
   // ---------- What was posted, and the numbers behind the stats strip and the Health check ----------
   function postedDates(data) {
     const out = [];
@@ -610,7 +623,7 @@
     weekDays: weekDays, monthGrid: monthGrid, weekStartsOf: weekStartsOf, charCount: charCount, weeklyTarget: weeklyTarget,
     newPost: newPost, postFromIdea: postFromIdea, planIdea: planIdea, unplanIdea: unplanIdea, hasResearchIdea: hasResearchIdea,
     blankPlatform: blankPlatform, markPosted: markPosted, unmarkPosted: unmarkPosted, answerNeed: answerNeed,
-    needDue: needDue, todo: todo, postedCounts: postedCounts, weeklyPosted: weeklyPosted, stats: stats, health: health,
+    needDue: needDue, todo: todo, todoTotal: todoTotal, postsOnDays: postsOnDays, averagePercent: averagePercent, postedCounts: postedCounts, weeklyPosted: weeklyPosted, stats: stats, health: health,
     healthOverall: healthOverall, HEALTH_LABELS: HEALTH_LABELS, preview: preview,
     mediaUrl: mediaUrl, mediaKind: mediaKind, mediaMime: mediaMime, checkMediaFile: checkMediaFile, mediaItem: mediaItem, cover: cover,
     mediaCounts: mediaCounts, mediaWords: mediaWords, tickable: tickable, attachMedia: attachMedia, undoAttach: undoAttach, detachMedia: detachMedia,

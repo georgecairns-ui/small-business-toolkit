@@ -17,7 +17,9 @@
     activity     a log of what happened
 
   Every number the person relies on (each option's price, VAT, totals, what's out, won this
-  month) is worked out here from the packages, never typed in by Claude.
+  month) is worked out here from the packages, never typed in by Claude. Once a proposal is
+  approved or sent, each option keeps its own copy of the package's name, price and length
+  (option.snapshot), so changing or removing a package later never changes a proposal that is out.
 */
 (function () {
   "use strict";
@@ -93,7 +95,7 @@
     d.clients = d.clients.filter(function (c) { return c && c.id && c.name; });
     d.clients.forEach(function (c) { c.sources = arr(c.sources).filter(function (f) { return f && (f.file || f.summary); }); c.missing = arr(c.missing); c.contact = Object.assign({ name: "", role: "", email: "" }, c.contact || {}); });
     d.proposals = d.proposals.filter(function (p) { return p && p.id; });
-    d.proposals.forEach(normaliseProposal);
+    d.proposals.forEach(function (p) { normaliseProposal(p); snapshotOptions(d, p, false); });
     d.requests = d.requests.filter(function (r) { return r && r.id && r.kind; });
     d.checkIn = Object.assign({ lastRunAt: null, foldersChecked: 0, proposalsWritten: 0 }, d.checkIn || {});
     return d;
@@ -158,11 +160,38 @@
   function packageById(d, id) { return id ? d.packages.find(function (p) { return p.id === id; }) || null : null; }
   function extraById(d, id) { return id ? d.extras.find(function (x) { return x.id === id; }) || null : null; }
 
-  // One option in a proposal: the package's price, or the price the person set for this proposal
-  // (customPrice, only ever set in the app). Monthly packages show the monthly price and, when the
-  // package has a length in months, the total over that time.
-  function optionPrice(d, o) {
+  // Once a proposal is approved or sent, each option keeps its own copy of what the package was
+  // (name, price, billing, months and the wording shown), so the price on a proposal that is out
+  // never moves when the package is changed or removed. Proposals made before this existed are
+  // copied from the package as it is now, the first time they load, so their numbers stay the same.
+  const LOCKED = ["approved", "sent", "won", "lost"];
+  function snapshotOption(d, o, force) {
+    if (!force && o.snapshot && o.snapshot.packageId === o.packageId) return;
     const pkg = packageById(d, o.packageId);
+    if (!pkg) return;
+    o.snapshot = { packageId: pkg.id, name: pkg.name, price: num(pkg.price), billing: pkg.billing || "one-off",
+      months: pkg.billing === "monthly" ? Math.max(0, Math.round(num(pkg.months))) : 0,
+      summary: str(pkg.summary), timeline: str(pkg.timeline), includes: arr(pkg.includes).map(str) };
+  }
+  function snapshotOptions(d, p, force) {
+    if (LOCKED.indexOf(p.status) === -1) return;
+    p.sections.investment.options.forEach(function (o) { snapshotOption(d, o, force); });
+  }
+  // What an option sells: the snapshot when there is one, otherwise the package as it is now
+  function optionPackage(d, o) {
+    const s = o.snapshot;
+    if (s && s.packageId === o.packageId) {
+      return { id: s.packageId, name: str(s.name), price: num(s.price), billing: s.billing || "one-off", months: num(s.months),
+        summary: str(s.summary), timeline: str(s.timeline), includes: arr(s.includes).map(str) };
+    }
+    return packageById(d, o.packageId);
+  }
+
+  // One option in a proposal: the package's price (as it was when the proposal went out, if it has),
+  // or the price the person set for this proposal (customPrice, only ever set in the app). Monthly
+  // packages show the monthly price and, when the package has a length in months, the total over that time.
+  function optionPrice(d, o) {
+    const pkg = optionPackage(d, o);
     if (!pkg) return null;
     const unit = o.customPrice != null && o.customPrice !== "" ? num(o.customPrice) : pkg.price;
     const months = pkg.billing === "monthly" ? Math.max(0, Math.round(num(pkg.months))) : 0;
@@ -182,11 +211,19 @@
     const opts = p.sections.investment.options;
     return opts.find(function (o) { return o.recommended; }) || opts[0] || null;
   }
-  // What a proposal is worth: the recommended option before VAT (its first year, for a monthly one)
+  // What a proposal is worth: the recommended option before VAT (its first year, for a monthly one).
+  // A rate by the day or the hour has no total (nobody knows how many days), so it counts as 0 in
+  // the totals and the screens say so; see ratesLeftOut.
+  function isRate(pr) { return !!pr && (pr.billing === "per-day" || pr.billing === "per-hour"); }
+  function proposalRate(d, p) {
+    const o = recommended(p);
+    const pr = o ? optionPrice(d, o) : null;
+    return isRate(pr) ? pr : null;
+  }
   function proposalValue(d, p) {
     const o = recommended(p);
     const pr = o ? optionPrice(d, o) : null;
-    if (!pr) return 0;
+    if (!pr || isRate(pr)) return 0;
     if (pr.billing === "monthly" && !pr.months) return pr.unit * 12;
     return pr.total;
   }
@@ -250,6 +287,8 @@
       toCheck: byStatus(d, "draft").length,
       writing: byStatus(d, "writing").length + waitingRequests(d, "write").length,
       sentCount: sent.length,
+      sentRates: sent.filter(function (p) { return !!proposalRate(d, p); }).length,
+      wonMonthRates: wonMonth.filter(function (p) { return !!proposalRate(d, p); }).length,
       sentValue: sent.reduce(function (sum, p) { return sum + proposalValue(d, p); }, 0),
       wonMonthCount: wonMonth.length,
       wonMonthValue: wonMonth.reduce(function (sum, p) { return sum + proposalValue(d, p); }, 0),
@@ -357,7 +396,8 @@
       p.status = status;
       p.updatedAt = now();
       if (status === "approved") p.approvedAt = p.updatedAt;
-      if (status === "sent") p.sentAt = p.sentAt && from === "sent" ? p.sentAt : p.updatedAt;
+      if (status === "sent") p.sentAt = p.sentAt || p.updatedAt;
+      if (status === "approved" || status === "sent") snapshotOptions(d, p, false);
       if (status === "won" || status === "lost") p.closedAt = p.updatedAt; else delete p.closedAt;
       if (status === "lost" && extra && extra.reason) p.lostReason = str(extra.reason).slice(0, 200);
       if (status !== "lost") delete p.lostReason;
@@ -413,7 +453,7 @@
     DEFAULT_SECTIONS: DEFAULT_SECTIONS, STATUS: STATUS, STATUS_ORDER: STATUS_ORDER, BILLING: BILLING, SOURCE_KINDS: SOURCE_KINDS,
     validate: validate, normalise: normalise, sectionsOn: sectionsOn, sectionLabel: sectionLabel,
     money: money, billingLabel: billingLabel, billingSuffix: billingSuffix,
-    packageById: packageById, extraById: extraById, optionPrice: optionPrice, extraPrice: extraPrice, recommended: recommended, proposalValue: proposalValue,
+    packageById: packageById, optionPackage: optionPackage, proposalRate: proposalRate, extraById: extraById, optionPrice: optionPrice, extraPrice: extraPrice, recommended: recommended, proposalValue: proposalValue,
     proposalById: proposalById, clientById: clientById, clientFor: clientFor, clientName: clientName, proposalsFor: proposalsFor,
     waitingRequests: waitingRequests, requestFor: requestFor, changeWaiting: changeWaiting,
     notSetUp: notSetUp, needsPackages: needsPackages, clientState: clientState, ageDays: ageDays, validUntil: validUntil, needsChase: needsChase,

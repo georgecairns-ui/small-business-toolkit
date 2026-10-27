@@ -2,8 +2,8 @@
   ADS OS ON HOME: the boxes this tool adds to the Home dashboard
   --------------------------------------------------------------
   Loaded by apps/home/home.js after app/model.js and app/charts.js (listed under "home" in the tool's menu
-  file). It reads the same data file as the app itself, through the same shared store. Every box starts
-  switched off, so attaching never changes someone's Home: the person switches boxes on from Home's list.
+  file). It reads the same data file as the app itself, through the same shared store. The boxes start switched on when Ads OS is on its own, and off when Task List OS is in the
+  folder, so attaching never changes someone's Home: the person switches boxes on from Home's list.
 */
 (function () {
   "use strict";
@@ -13,6 +13,12 @@
   const PAGE = "../ads/#";
   const STYLE_ID = "ad-home-style";
   let data = null;
+
+  // Boxes start switched on only when Ads OS is on its own. When Task List OS is in the folder
+  // (its Home scripts load first and set window.TL), they start off, so attaching never changes
+  // someone's Home. Home reads this once, when it first builds the layout.
+  function startOn() { return !window.TL; }
+  function box(def) { Object.defineProperty(def, "defaultOn", { get: startOn, enumerable: true }); return def; }
 
   function empty(text) { return '<p class="hbox__empty">' + esc(text) + "</p>"; }
   function today() { return ui.isoDate(new Date()); }
@@ -83,9 +89,9 @@
   // ---------- What Home asks of this tool ----------
   window.TaskListOS.home.register("ads", {
     boxes: [
-      { id: "week", title: "Ads this week", icon: "barChart", size: 2, defaultOn: false, page: PAGE + "overview", render: thisWeek },
-      { id: "waiting", title: "Ads to do", icon: "checkSquare", size: 1, defaultOn: false, page: PAGE + "todo", render: waiting },
-      { id: "trend", title: "Cost per result trend", icon: "trendingUp", size: 1, defaultOn: false, page: PAGE + "overview", render: trend }
+      box({ id: "week", title: "Ads this week", icon: "barChart", size: 2, page: PAGE + "overview", render: thisWeek }),
+      box({ id: "waiting", title: "Ads to do", icon: "checkSquare", size: 1, page: PAGE + "todo", render: waiting }),
+      box({ id: "trend", title: "Cost per result trend", icon: "trendingUp", size: 1, page: PAGE + "overview", render: trend })
     ],
     greetingName: function () { return data && data.settings.ownerName; },
     businessName: function () { return data && data.settings.businessName; },

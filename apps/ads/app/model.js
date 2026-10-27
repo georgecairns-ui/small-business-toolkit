@@ -647,6 +647,9 @@
 
   // ---------- Changes the owner asks Claude to make in their ad account ----------
   const IN_FLIGHT = ["requested", "doing"];
+  const STUCK_AFTER_MS = 30 * 60 * 1000;
+  const UNCLEAR_NOTE = "unclear entry, not acted on";
+  const STUCK_NOTE = "You marked this as not done. Claude did not confirm it, so check Ads Manager to see whether the change was made.";
   function actionInFlight(data, match) {
     return (data.actions || []).some(function (a) { return IN_FLIGHT.indexOf(a.status) > -1 && match(a); });
   }
@@ -986,9 +989,63 @@
   // An account change, or null when its kind isn't one Claude can make
   function normaliseAction(a) {
     if (ACTION_KINDS.indexOf(a.kind) === -1) return null;
+    const known = ACTION_STATUSES.indexOf(a.status) > -1;   // a missing or unknown status is never read as a waiting change
     return { id: text(a.id), kind: a.kind, platform: text(a.platform) || "meta", campaignId: text(a.campaignId), buildId: text(a.buildId), adId: text(a.adId),
-      budgetFrom: positive(a.budgetFrom), budgetTo: positive(a.budgetTo), status: ACTION_STATUSES.indexOf(a.status) > -1 ? a.status : "requested",
-      requestedAt: text(a.requestedAt), doneAt: typeof a.doneAt === "string" && a.doneAt ? a.doneAt : null, readBack: text(a.readBack), note: text(a.note) };
+      budgetFrom: positive(a.budgetFrom), budgetTo: positive(a.budgetTo), status: known ? a.status : "failed",
+      requestedAt: text(a.requestedAt), doneAt: typeof a.doneAt === "string" && a.doneAt ? a.doneAt : null, readBack: text(a.readBack), note: known ? text(a.note) : UNCLEAR_NOTE };
+  }
+  // The owner's confirmations, kept in their own file (apps/ads/data/approvals.json) that Claude can't write without asking.
+  // One entry for each change the owner confirmed in the pop-up.
+  function normaliseApprovals(d) {
+    d.version = 1;
+    if (!Array.isArray(d.approvals)) d.approvals = [];
+    d.approvals = d.approvals.filter(isObject).map(function (a) {
+      return { id: text(a.id), kind: text(a.kind), platform: text(a.platform) || "meta", campaignId: text(a.campaignId), buildId: text(a.buildId), adId: text(a.adId),
+        budgetFrom: positive(a.budgetFrom), budgetTo: positive(a.budgetTo), confirmedAt: text(a.confirmedAt), closedAt: typeof a.closedAt === "string" && a.closedAt ? a.closedAt : null };
+    });
+    return d;
+  }
+  function validateApprovals(d) {
+    if (!isObject(d)) throw new Error("The approvals file is empty or isn't set out the way the app expects.");
+    if (d.approvals !== undefined && !Array.isArray(d.approvals)) throw new Error("The approvals file has a small mistake: approvals should be a list.");
+  }
+  // What the owner's yes records: the exact change, stamped with the moment the action was created
+  function newApproval(action) {
+    return { id: action.id, kind: action.kind, platform: action.platform, campaignId: action.campaignId, buildId: action.buildId, adId: action.adId,
+      budgetFrom: action.budgetFrom, budgetTo: action.budgetTo, confirmedAt: action.requestedAt, closedAt: null };
+  }
+  // The owner's confirmation for this action, or null. It must match the action's id, kind, platform, campaign, build, ad and both
+  // amounts, carry the moment of the owner's yes (the action's own requestedAt) and not have been closed.
+  function approvalFor(approvals, action) {
+    if (!action || !Array.isArray(approvals)) return null;
+    const x = isObject(action) ? normaliseAction(action) : null;
+    if (!x) return null;
+    const found = approvals.filter(isObject).map(function (a) { return normaliseApprovals({ approvals: [a] }).approvals[0]; }).find(function (a) {
+      return a.id !== "" && a.id === x.id && a.kind === x.kind && a.platform === x.platform && a.campaignId === x.campaignId && a.buildId === x.buildId && a.adId === x.adId &&
+        a.budgetFrom === x.budgetFrom && a.budgetTo === x.budgetTo && a.confirmedAt !== "" && a.confirmedAt === x.requestedAt && !a.closedAt;
+    });
+    return found || null;
+  }
+  // A change Claude has not finished after 30 minutes: the owner may mark it failed, so it stops blocking new changes
+  function actionStuck(action, nowMs) {
+    if (!action || IN_FLIGHT.indexOf(action.status) === -1) return false;
+    const t = Date.parse(action.requestedAt);
+    return isFinite(t) && nowMs - t >= STUCK_AFTER_MS;
+  }
+  // Marks a stuck change failed, in what the owner's button saves
+  function failStuckAction(action) {
+    action.status = "failed";
+    action.doneAt = null;
+    action.note = STUCK_NOTE;
+    return action;
+  }
+  // The words typed into Claude Code once the owner has confirmed. Claude Code then asks before each Meta tool call.
+  function changePrompt(actions) {
+    const list = (actions || []).map(function (a) { return a.id; }).join(", ");
+    return "I have confirmed a change to my Meta ad account in Ads OS. Follow .claude/skills/make-account-change for this action only: " + list + ". " +
+      "Check that the approvals file in apps/ads/data holds my confirmation for it, then run node apps/ads/app/report.js action <id> and refuse if it says BLOCKED. " +
+      "Otherwise say what you are about to change, make exactly that one change with the Meta connection (I will approve each call), read it back, and set the action to done with what you read back, or to failed with a plain note. " +
+      "Never delete anything, never touch Google Ads, and never make a second change for one action. When a switch-on of a build is done, also set that build to live and record when (switchedOnAt).";
   }
 
   const model = {
@@ -1005,7 +1062,8 @@
     mediaUrl: mediaUrl, mediaKind: mediaKind, mediaMime: mediaMime, checkMediaFile: checkMediaFile,
     ACTION_LABELS: ACTION_LABELS, ACTION_STATUS_LABELS: ACTION_STATUS_LABELS, PREDICTION_STATES: PREDICTION_STATES,
     predictionScore: predictionScore, predictionWords: predictionWords, adsFor: adsFor, actionChecks: actionChecks, actionSentence: actionSentence,
-    todoList: todoList, newAction: newAction,
+    todoList: todoList, newAction: newAction, newApproval: newApproval, approvalFor: approvalFor, normaliseApprovals: normaliseApprovals, validateApprovals: validateApprovals,
+    actionStuck: actionStuck, failStuckAction: failStuckAction, changePrompt: changePrompt, STUCK_AFTER_MS: STUCK_AFTER_MS,
     logActivity: logActivity, addDaysIso: addDays, validIso: validIso, localDay: localDay, dayLabel: dayLabel, shortDate: shortDate, rangeLabel: rangeLabel,
     daysBetween: daysBetween, makeId: makeId, nowIso: nowIso
   };

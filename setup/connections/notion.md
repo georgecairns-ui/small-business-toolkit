@@ -8,7 +8,7 @@ One line: fills People and Review with notes, pages and project trackers already
 
 1. Say "Let's connect your Notion workspace" to the person. Say "connect" and "a connection", never MCP, API, JSON or repo.
 2. In the Claude app or on claude.ai, go to Customize, Connectors, find "Notion", click Connect, sign in to Notion, and approve.
-3. In Claude Code: it appears automatically once Claude Code is signed in with a claude.ai subscription. Check with `/mcp`. Backup if needed: `claude mcp add --transport http notion https://mcp.notion.com/mcp`, then `/mcp` to sign in.
+3. In Claude Code: it appears once Claude Code is signed in with a claude.ai subscription. Check your own list of connections; if it isn't there yet, ask them to close Claude Code and open it again (in the Terminal, `/mcp` also lists them). Backup if needed: `claude mcp add --transport http notion https://mcp.notion.com/mcp`, then `/mcp` to sign in.
 
 ## Route 2: API key
 

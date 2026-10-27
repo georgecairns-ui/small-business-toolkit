@@ -189,6 +189,10 @@
     const q = reviewQueue(d);
     return q.plan.length + q.newTasks.length + q.schedule.length;
   }
+  // How many cards a Tasks column shows: its tasks, and on the first column Claude's planned ones too
+  function stageCount(tasks, stageKey, planned) {
+    return tasks.length + (stageKey === "todo" ? (planned || []).length : 0);
+  }
 
   // The date a task is planned for: its scheduled day, or failing that its due date
   function plannedDate(t) { return t.scheduledDate || t.due || null; }
@@ -624,7 +628,7 @@
     splitLocal: splitLocal, timeLabel: timeLabel,
     taskById: taskById, personById: personById, planIsToday: planIsToday, claudeHasPlanned: claudeHasPlanned, notSetUp: notSetUp,
     isSuggestion: isSuggestion, isOnList: isOnList, proposals: proposals, approvedToday: approvedToday,
-    reviewQueue: reviewQueue, reviewCount: reviewCount, plannedDate: plannedDate, tasksForDate: tasksForDate,
+    reviewQueue: reviewQueue, reviewCount: reviewCount, stageCount: stageCount, plannedDate: plannedDate, tasksForDate: tasksForDate,
     overdue: overdue, unscheduled: unscheduled, openTasks: openTasks, waitingList: waitingList,
     doneTasks: doneTasks, doneToday: doneToday, eventsForDate: eventsForDate, timedTasksForDate: timedTasksForDate,
     unsortedDump: unsortedDump, tasksForPerson: tasksForPerson, personSummary: personSummary,

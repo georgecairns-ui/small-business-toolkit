@@ -325,6 +325,14 @@
     return (ctx.data.actions || []).filter(match).sort(function (a, b) { return String(b.requestedAt).localeCompare(String(a.requestedAt)); })[0] || null;
   }
   function inFlight(a) { return !!a && (a.status === "requested" || a.status === "doing"); }
+  // Under a change Claude hasn't finished: the button that opens Claude on screen with the job typed in, and after 30 minutes
+  // the button that marks it as not done (so it stops blocking the next change)
+  function flightHelp(ctx, a) {
+    const stuck = M.actionStuck(a, Date.now());
+    return '<span class="actline__help">' + (stuck ? "It has been more than 30 minutes and Claude hasn’t confirmed it. Check Ads Manager to see whether it went through." : "Nothing happening? Open Claude and send the words that are typed in. Claude Code asks you before each call to your ad account.") + "</span>" +
+      '<span class="actline__btns"><button type="button" class="btn btn--sm" data-d="open-change" data-id="' + esc(a.id) + '">Open Claude</button>' +
+      (stuck ? '<button type="button" class="btn btn--sm" data-d="fail-change" data-id="' + esc(a.id) + '">Mark as not done</button>' : "") + "</span>";
+  }
   // One line: what was asked and where it has got to. Done shows what Claude read back, a failure shows why.
   function actionLine(ctx, a) {
     if (!a) return "";
@@ -333,7 +341,7 @@
     const detail = status === "done" ? (a.readBack || "Claude made the change.") : status === "failed" ? (a.note || "Claude couldn’t make the change. Nothing else was touched.") : M.actionSentence(ctx.data, a, todayOf(ctx));
     const iconName = status === "done" ? "check" : status === "failed" ? "alert" : "loader";
     return '<div class="actline actline--' + esc(status) + '" role="status">' + icon(iconName, inFlight(a) ? "adspin" : "") + '<div class="actline__text"><strong>' + esc(label + ": " + words) + "</strong><span>" + esc(detail) + "</span>" +
-      (status === "requested" ? '<span class="actline__help">Nothing happening? Open the folder in Claude and say ' + C.say("make the account change I approved") + "</span>" : "") + "</div></div>";
+      (inFlight(a) ? flightHelp(ctx, a) : "") + "</div></div>";
   }
 
   // The buttons for where the campaign has got to
@@ -824,6 +832,8 @@
       ctxNow().analyse(state.id, note);
     },
     run: function () { ctxNow().runCampaign(state.id); },
+    "open-change": function (b) { ctxNow().openChange(b.getAttribute("data-id")); },
+    "fail-change": function (b) { ctxNow().markChangeFailed(b.getAttribute("data-id")); },
     "pause-campaign": function () { ctxNow().confirmChange({ kind: "pause", campaignId: state.id }); },
     "switch-on-campaign": function () { ctxNow().confirmChange({ kind: "switch-on", campaignId: state.id }); },
     budget: function () { const c = campaignNow(); ctxNow().confirmChange({ kind: "budget", campaignId: c.id, budgetFrom: c.dailyBudget }); },

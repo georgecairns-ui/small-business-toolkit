@@ -203,8 +203,9 @@
   function isSuggested(x) { return !!x.suggested && x.stage !== "lost"; }
   function openDeals(d) { return d.deals.filter(isOpen); }
   function dealsInStage(d, key) { return d.deals.filter(function (x) { return x.stage === key && !x.suggested; }); }
-  function stageValue(d, key) { return dealsInStage(d, key).reduce(function (sum, x) { return sum + (Number(x.value) || 0); }, 0); }
-  function pipelineValue(d) { return openDeals(d).reduce(function (sum, x) { return sum + (Number(x.value) || 0); }, 0); }
+  function dealsValue(list) { return list.reduce(function (sum, x) { return sum + (Number(x.value) || 0); }, 0); }
+  function stageValue(d, key) { return dealsValue(dealsInStage(d, key)); }
+  function pipelineValue(d) { return dealsValue(openDeals(d)); }
 
   // The deal check score: Known counts 1, Partly known 0.5, out of 8, as a percentage
   function checkScore(x) {
@@ -524,7 +525,7 @@
     todayISO: todayISO, daysSince: daysSince, splitLocal: splitLocal, timeLabel: timeLabel, whenLabel: whenLabel, money: money,
     dealById: dealById, callById: callById, suggestionById: suggestionById,
     setLinkedPeople: setLinkedPeople, allPeople: allPeople, personById: personById,
-    isOpen: isOpen, isSuggested: isSuggested, openDeals: openDeals, dealsInStage: dealsInStage, stageValue: stageValue, pipelineValue: pipelineValue,
+    isOpen: isOpen, isSuggested: isSuggested, openDeals: openDeals, dealsInStage: dealsInStage, dealsValue: dealsValue, stageValue: stageValue, pipelineValue: pipelineValue,
     checkScore: checkScore, checkGaps: checkGaps, hasBeenChecked: hasBeenChecked,
     quietDays: quietDays, needsChase: needsChase, notesWaiting: notesWaiting, upcomingMeeting: upcomingMeeting, meetingsThisWeek: meetingsThisWeek,
     waitingSuggestions: waitingSuggestions, reviewCount: reviewCount, callsSorted: callsSorted, callsForDeal: callsForDeal, dealsForPerson: dealsForPerson,

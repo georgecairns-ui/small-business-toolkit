@@ -145,7 +145,7 @@
     title: "To do",
     line: function (ctx) {
       const t = ctx.model.todo(ctx.data, ctx.today());
-      const total = GROUPS.reduce(function (n, g) { return n + t[g.key].length; }, 0);
+      const total = ctx.model.todoTotal(t);
       const urgent = t.overdue.length + t.today.length;
       if (!total) return "Nothing waiting on you";
       return total + (total === 1 ? " thing" : " things") + " waiting, " + urgent + " due today or overdue";

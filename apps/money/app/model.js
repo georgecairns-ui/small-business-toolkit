@@ -36,6 +36,8 @@
     { key: "bills", label: "Bills" }, { key: "staff", label: "Staff" }, { key: "rent", label: "Rent" }, { key: "software", label: "Software" },
     { key: "suppliers", label: "Suppliers" }, { key: "loan", label: "Loans" }, { key: "tax", label: "Tax" }, { key: "ads", label: "Advertising" }, { key: "other", label: "Other" }
   ];
+  // Wages, loan payments and tax carry no VAT to reclaim, whatever the box says
+  const NO_VAT_CATEGORIES = ["staff", "loan", "tax"];
   const STATE_LABELS = {
     draft: "Draft", waiting: "Waiting for Claude", "in-accounts": "Waiting for you to send", sent: "Sent", "part-paid": "Part paid", paid: "Paid", overdue: "Overdue", void: "Cancelled", linked: "Linked"
   };
@@ -383,7 +385,7 @@
     }
     const rate = num(v.rate, 20);
     list(data, "outgoings").forEach(function (o) {
-      if (o.status !== "confirmed" || o.vatIncluded === false) return;
+      if (o.status !== "confirmed" || o.vatIncluded === false || NO_VAT_CATEGORIES.indexOf(o.category) !== -1) return;
       occurrences(o, start, end).forEach(function () { inn += rp(toP(o.amount) * rate / (100 + rate)); });
     });
     return { out: out, inn: inn };
@@ -442,6 +444,16 @@
 
   function optsOf(opts) { return { scenarioIds: (opts && opts.scenarioIds) || [], maybes: !!(opts && opts.maybes) }; }
 
+  // Whether a customer is lost on a date under the scenarios chosen in opts ("lose a customer" what-ifs)
+  function lostFn(data, o) {
+    const loses = [];
+    list(data, "scenarios").forEach(function (s) {
+      if (o.scenarioIds.indexOf(s.id) === -1) return;
+      (Array.isArray(s.changes) ? s.changes : []).forEach(function (c) { if (isObj(c) && c.kind === "lose" && validIso(c.from) && String(c.customer || "").trim()) loses.push(c); });
+    });
+    return function (customer, date) { return loses.some(function (c) { return sameName(c.customer, customer) && date >= c.from; }); };
+  }
+
   // Every item of money in or out between two dates, using the rules at the top of this file. Amounts are pounds.
   function itemsBetween(data, today, from, to, opts) {
     const o = optsOf(opts), items = [];
@@ -449,7 +461,7 @@
     const changes = [];
     chosen.forEach(function (s) { (Array.isArray(s.changes) ? s.changes : []).forEach(function (c) { if (isObj(c)) changes.push({ change: c, scenario: s }); }); });
     const loses = changes.filter(function (x) { return x.change.kind === "lose" && validIso(x.change.from) && String(x.change.customer || "").trim(); }).map(function (x) { return x.change; });
-    function lost(customer, date) { return loses.some(function (c) { return sameName(c.customer, customer) && date >= c.from; }); }
+    const lost = lostFn(data, o);
     function push(it) { if (it.date >= from && it.date <= to) items.push(it); }
 
     list(data, "invoices").forEach(function (inv) {
@@ -547,7 +559,7 @@
     const b = back == null ? 3 : back, a = ahead == null ? 6 : ahead, o = optsOf(opts);
     const nowKey = monthKey(today), rows = [];
     const tx = list(data, "transactions").filter(function (t) { return validIso(t.date) && !isTransfer(t); });
-    const invoices = liveInvoices(data);
+    const invoices = liveInvoices(data), lost = lostFn(data, o);
     for (let k = -b; k <= a; k += 1) {
       const key = addMonthsKey(nowKey, k), start = monthStart(key), end = monthEnd(key);
       const kind = key < nowKey ? "actual" : key === nowKey ? "now" : "estimate", past = key < nowKey;
@@ -568,7 +580,7 @@
         });
         if (isUnpaid(st)) {
           const dueDate = validIso(inv.dueDate), eff = !past && dueDate && dueDate < today ? today : dueDate;
-          if (inRange(eff, start, end)) {
+          if (inRange(eff, start, end) && !lost(inv.customer, eff)) {
             const out = invoiceOutstanding(inv);
             due += toP(out);
             items.push({ date: eff, name: (inv.number ? inv.number + " " : "") + (inv.customer || "Invoice"), amount: out, dir: "in", kind: "due", ref: inv.id, late: st === "overdue" });
@@ -624,7 +636,8 @@
   //    (if registered), less any VAT already paid for that earlier quarter (a confirmed outgoing, or a bank line, in
   //    the category tax whose name or text says VAT, dated after that quarter ended), plus
   //  - the owner's set-aside percent of money received after VAT since the tax year began, minus
-  //  - income or corporation tax already paid this year (VAT payments are not counted here: they settle the VAT part).
+  //  - income or corporation tax already paid this year, only when the pot's balance is not known (a known balance has already
+  //    had it taken out; VAT payments are not counted here: they settle the VAT part).
   // inPot is the tax pot account's balance when there is one, else the total of the moves the owner logged this year.
   function taxPot(data, today) {
     const s = settingsOf(data), v = vatOf(data), pct = num(s.tax && s.tax.setAsidePercent);
@@ -641,7 +654,7 @@
     });
     // Tax paid out: bank lines in the category tax, or if there are none the confirmed tax outgoings. VAT is told apart
     // by "VAT" in the name or text.
-    const isVat = function (text) { return /vat/i.test(String(text || "")); };
+    const isVat = function (text) { return /\bvat\b/i.test(String(text || "")); };
     function taxPayments(from, vatOnly) {
       const fromTx = [], fromOut = [];
       list(data, "transactions").forEach(function (t) {
@@ -681,13 +694,15 @@
     }
     const taxPaid = taxPayments(yearStart, false).reduce(function (sum, x) { return sum + x.p; }, 0);
     const incomePart = rp(netReceived * pct / 100);
-    const shouldHave = Math.max(0, vatPart + incomePart - taxPaid);
 
     const movedP = list(data, "potMoves").reduce(function (sum, m) { return inRange(validIso(m.date), yearStart, today) ? sum + toP(m.amount) : sum; }, 0);
     const potId = s.tax && s.tax.potAccountId;
     const acct = list(data, "accounts").filter(function (a) { return (potId && a.id === potId) || (!potId && a.isTaxPot === true); })[0];
     const potKnown = !!acct && isFinite(Number(acct.balance));
     const inPot = potKnown ? toP(acct.balance) : movedP;
+    // Tax paid out already came out of the pot, so when the pot's real balance is known it is not taken off again.
+    // Without a pot balance the moves the owner logged are all there is, so the tax paid is taken off the target instead.
+    const shouldHave = Math.max(0, vatPart + incomePart - (potKnown ? 0 : taxPaid));
     return {
       shouldHave: fromP(shouldHave), inPot: fromP(inPot), moved: fromP(movedP), toMove: fromP(Math.max(0, shouldHave - inPot)),
       vatPart: fromP(vatPart), vatPaid: fromP(vatPaid), incomePart: fromP(incomePart), taxPaid: fromP(taxPaid), percent: pct, potKnown: potKnown, potName: potKnown ? acct.name : "", yearStart: yearStart

@@ -31,7 +31,7 @@ Meta's connection can also do more than that, such as edit live campaigns in oth
 
 ## Will Claude ask before it touches my account?
 
-Yes, every time. No Meta or Google tool is pre-approved in `.claude/settings.json`, so Claude Code stops and asks you before each call, and Claude says what it's about to do first. For a change on Meta that means you approve twice: in the app, then in Claude Code. Don't change that. When you press "Trust this folder" you are not giving Claude permission to use your ad accounts.
+Yes, every time. No Meta or Google tool is pre-approved in `.claude/settings.json`, so Claude Code stops and asks you before each call, and Claude says what it's about to do first. For a change on Meta that means you approve twice: in the app, then in Claude Code. When you press Yes in the app, it saves your yes in a separate record that Claude can't change without asking you, then opens Claude on screen with the job typed in. Claude only makes a change that matches your recorded yes. Don't change that. When you press "Trust this folder" you are not giving Claude permission to use your ad accounts.
 
 ## Will Claude spend my money?
 

@@ -10,7 +10,7 @@ One line: fills the Inbox (Outlook email), the calendar in This week (Outlook me
 2. In the Claude app or on claude.ai, go to the connectors area (Customize, then Connectors). Menus change over time, so ask the person what they actually see.
 3. Find "Microsoft 365", click Connect, sign in with the work Microsoft account, and approve.
 4. If a Global Administrator needs to approve it first, offer to draft a short message the person can send them. Claude never sends this itself.
-5. In Claude Code: it appears automatically once Claude Code is signed in with a claude.ai subscription. Check with `/mcp`.
+5. In Claude Code: it appears once Claude Code is signed in with a claude.ai subscription. Check your own list of connections; if it isn't there yet, ask them to close Claude Code and open it again (in the Terminal, `/mcp` also lists them).
 
 Microsoft does not publish a standalone Teams transcript MCP server; transcripts come through this same Microsoft 365 connector, not a separate one.
 

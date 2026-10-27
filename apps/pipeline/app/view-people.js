@@ -27,7 +27,7 @@
     const d = ctx.d;
     const deals = M.dealsForPerson(d, p.id);
     const open = deals.filter(M.isOpen);
-    const value = open.reduce(function (s, x) { return s + (Number(x.value) || 0); }, 0);
+    const value = M.dealsValue(open);
     const role = M.ROLES.find(function (r) { return r.key === p.role; });
     const main = open[0] || deals[0];
     const meeting = open.map(M.upcomingMeeting).filter(Boolean)[0];

@@ -14,7 +14,7 @@ If they skip, set `sources.accounts.mode` to `read` and carry on. They can come 
 
 - The read-only Xero connection from `setup/connections/xero.md`, working.
 - Someone who can sign in to Xero as an adviser or admin for the organisation (usually them).
-- The free program Node, which the app already needs (`.claude/skills/open-money-view` installs it).
+- The free program Node, which the app already needs (`.claude/skills/open-my-toolkit` installs it).
 
 ## Click by click
 

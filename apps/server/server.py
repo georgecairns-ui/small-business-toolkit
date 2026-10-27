@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 """
-TASK LIST OS: the little helper that runs your task list on this computer (Python version)
------------------------------------------------------------------------------------------
+THE HELPER: the little helper that runs this folder's tools on this computer (Python version)
+---------------------------------------------------------------------------------------------
+It calls itself by the folder's name: "name" in toolkit.json (for example "Ads OS").
 The same as server.js, for computers that have Python 3 but not Node. Claude uses whichever
-is available. It serves the task list app at http://localhost:4747 and lets it read and save
-apps/task-list/data/tasks.json, plus the data files of any attached tools listed in apps/installed.json.
+is available. It serves the app at http://localhost:4747 and lets it read and save
+the data files of the tools listed in apps/installed.json (for example apps/task-list/data/tasks.json).
 For a tool marked "media": true there, it also keeps the photos and videos added to that tool's posts in
 the tool's own data/media folder (only a safe file name, the right kind of file, up to 200 MB, never over a
 file that is already there, no delete) and plays them back.
 
 Safety: only listens on this computer (127.0.0.1), only serves the apps folder, only ever saves
 the task file and attached tools' listed data files, keeps a backup (for example tasks.backup.json)
-before every save, refuses requests from other websites.
+before every save, refuses requests from other websites, refuses a save that was based on an older copy
+of the file (409) so a change made in between is never overwritten, and answers a badly formed request with
+an error instead of stopping.
 
 It can also run a small Claude job straight away (sort a voice note, update a deal from call notes),
 one at a time, only when the app asks, and only for a job a tool lists in apps/<tool>/claude-jobs.json.
@@ -19,6 +22,7 @@ one at a time, only when the app asks, and only for a job a tool lists in apps/<
 Run it:      python3 apps/server/server.py
 Other port:  TLOS_PORT=4848 python3 apps/server/server.py
 """
+import hashlib
 import json
 import os
 import re
@@ -36,6 +40,22 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 APPS = os.path.join(ROOT, "apps")
 DATA = os.path.join(APPS, "task-list", "data", "tasks.json")
 INSTALLED = os.path.join(APPS, "installed.json")
+
+
+def read_name():
+    """The folder's name, for messages: toolkit.json's "name", else the first tool's in apps/installed.json."""
+    for read in (lambda: json.load(open(os.path.join(ROOT, "toolkit.json"), encoding="utf-8"))["name"],
+                 lambda: json.load(open(INSTALLED, encoding="utf-8"))["tools"][0]["name"]):
+        try:
+            name = read()
+        except (OSError, ValueError, KeyError, IndexError, TypeError):
+            continue
+        if isinstance(name, str) and name.strip():
+            return name.strip()
+    return "Your toolkit"
+
+
+NAME = read_name()
 # A tool's data file must live in its own data folder: apps/<tool>/data/<name>.json
 HOME_LAYOUT = os.path.join(APPS, "home", "data", "layout.json")
 BRAIN_DUMP = os.path.join(APPS, "home", "data", "braindump.json")  # the shared Brain dump, every tool's notes
@@ -52,7 +72,7 @@ MEDIA_CHUNK = 64 * 1024
 # Asking Claude to do a small job: sort a voice note, update a deal (see server.js for the plain-English explanation)
 AUTO_CLAUDE = os.environ.get("TLOS_AUTO_CLAUDE", "on") != "off"
 _logs = os.path.join(os.path.expanduser("~"), "Library", "Logs")
-CLAUDE_LOG = os.path.join(_logs if os.path.isdir(_logs) else os.environ.get("TMPDIR", "/tmp"), "task-list-os-claude.log")
+CLAUDE_LOG = os.path.join(_logs if os.path.isdir(_logs) else os.environ.get("TMPDIR", "/tmp"), (re.sub(r"[^a-z0-9]+", "-", NAME.lower()).strip("-") or "toolkit") + "-claude.log")
 RUN_LIMIT_S = 10 * 60
 UNWATCHED = " Nobody is watching this run, so do not ask questions: make your best reading of anything unclear and say so in your notes."
 SORT_JOB = {"key": "shared:brain-dump", "label": "sorting the brain dump",
@@ -206,6 +226,22 @@ def home_page():
     return "/" + app[5:] if isinstance(app, str) and re.match(r"^apps/[a-z0-9-]+/$", app) else "/task-list/"
 
 
+# A fingerprint of a file's contents, sent as the ETag header on every read and every save. A save that
+# sends it back in If-Match is only accepted while the file is still exactly that (otherwise 409), so an
+# edit made in between, for example by Claude, is never overwritten. A save without it works as before.
+save_lock = threading.Lock()
+IF_MATCH_RE = re.compile(r'^\s*(?:W/)?"?([0-9a-f]{8,64})"?\s*$', re.I)
+
+
+def version_of(text):
+    data = text if isinstance(text, bytes) else text.encode("utf-8")
+    return hashlib.sha256(data).hexdigest()[:24]
+
+
+def version_header(text):
+    return {"ETag": '"%s"' % version_of(text)}
+
+
 def save_file(path, text):
     """Keep a backup, write a temporary file, then swap it in, so a save is never half-written."""
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -213,13 +249,13 @@ def save_file(path, text):
         with open(path, "rb") as src, open(path[:-5] + ".backup.json", "wb") as dst:
             dst.write(src.read())
     tmp = path + ".saving"
-    with open(tmp, "w", encoding="utf-8") as f:
+    with open(tmp, "w", encoding="utf-8", newline="") as f:  # newline="": the file holds exactly what its version is taken from
         f.write(text)
     os.replace(tmp, path)
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "TaskListOS"
+    server_version = "ToolkitHelper"
 
     def log_message(self, *args):  # keep the terminal quiet
         pass
@@ -249,11 +285,11 @@ class Handler(BaseHTTPRequestHandler):
 
     def read_file(self, path):
         try:
-            with open(path, "r", encoding="utf-8") as f:
+            with open(path, "r", encoding="utf-8", newline="") as f:
                 text = f.read()
         except OSError:
             return self.send_json(404, {"error": "missing"})
-        return self.send(200, text, TYPES[".json"], {"X-Modified": str(modified(path))})
+        return self.send(200, text, TYPES[".json"], dict({"X-Modified": str(modified(path))}, **version_header(text)))
 
     def get_media(self, directory, name):
         """Plays a saved photo or video back. Supports Range requests, which browsers use to play and skip around a video."""
@@ -354,8 +390,8 @@ class Handler(BaseHTTPRequestHandler):
         url = self.path.split("?")[0]
         if url == "/api/alive.js":
             return self.send(200, "window.tlosAlive = true;", TYPES[".js"])
-        if url == "/api/info":  # where this folder is, so "Open in Claude" can start Claude Code right here
-            return self.send_json(200, {"folder": ROOT})
+        if url == "/api/info":  # where this folder is and its name, so "Open in Claude" can start Claude Code right here
+            return self.send_json(200, {"folder": ROOT, "name": NAME})
         if url == "/api/tasks/meta":
             return self.send_json(200, {"modified": modified()})
         if url == "/api/tasks":
@@ -387,7 +423,14 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Location", home_page())
             self.end_headers()
             return
-        rel = unquote(url)
+        try:
+            if re.search(r"%(?![0-9a-fA-F]{2})", url):
+                raise ValueError("bad percent sign")  # for example GET /%
+            rel = unquote(url, errors="strict")
+        except (ValueError, UnicodeDecodeError):
+            return self.send(400, "Bad request")
+        if "\0" in rel:
+            return self.send(400, "Bad request")
         if rel.endswith("/"):
             rel += "index.html"
         path = os.path.abspath(os.path.join(APPS, "." + rel))
@@ -450,7 +493,12 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send_json(404, {"error": "not an installed tool's data file"})
         if "application/json" not in self.headers.get("Content-Type", ""):
             return self.send_json(415, {"error": "json only"})
-        length = int(self.headers.get("Content-Length", "0") or 0)
+        try:
+            length = int(self.headers.get("Content-Length", "0") or 0)
+        except ValueError:
+            return self.send_json(400, {"error": "not valid"})
+        if length < 0:
+            return self.send_json(400, {"error": "not valid"})
         if length > MAX_BODY:
             return self.send_json(413, {"error": "too large"})
         try:
@@ -461,18 +509,34 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json(400, {"error": "not valid"})
         if path == DATA and not isinstance(data.get("tasks"), list):
             return self.send_json(400, {"error": "no tasks list"})
+        # Check and save under one lock, so 2 saves can't both pass the check
+        sent = (self.headers.get("If-Match") or "").strip()
+        m = IF_MATCH_RE.match(sent) if sent else None
+        if sent and not m:
+            return self.send_json(400, {"error": "not valid"})  # a version this helper never gave out
+        based = m.group(1).lower() if m else None
+        out = json.dumps(data, indent=2, ensure_ascii=False) + "\n"
         try:
-            save_file(path, json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+            with save_lock:
+                if based is not None:
+                    try:
+                        with open(path, "r", encoding="utf-8", newline="") as f:
+                            current = f.read()
+                    except OSError:
+                        current = None  # the file is gone: also a change
+                    if current is None or version_of(current) != based:
+                        return self.send_json(409, {"error": "changed since you read it"})
+                save_file(path, out)
         except OSError:
             return self.send_json(500, {"error": "save failed"})
-        self.send_json(200, {"modified": modified(path)})
+        self.send(200, json.dumps({"modified": modified(path), "version": version_of(out)}), TYPES[".json"], version_header(out))
 
 
 if __name__ == "__main__":
     try:
         httpd = ThreadingHTTPServer((HOST, PORT), Handler)
     except OSError:
-        print("Task List OS: port %d is already in use. It may already be running: open http://localhost:%d" % (PORT, PORT), file=sys.stderr)
+        print("%s: port %d is already in use. It may already be running: open http://localhost:%d" % (NAME, PORT, PORT), file=sys.stderr)
         sys.exit(1)
-    print("Small Business Toolkit is running at http://localhost:%d" % PORT)
+    print("%s is running at http://localhost:%d" % (NAME, PORT))
     httpd.serve_forever()

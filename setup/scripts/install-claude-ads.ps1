@@ -7,7 +7,7 @@
 # What it does:
 #   1. Fetches George's copy of claude-ads at one fixed, tested version (tag v2.0.1) into a
 #      temporary folder outside this folder, with git, or as a zip download if git isn't installed.
-#   2. Checks it is exactly the tested commit. If not, it stops and installs nothing.
+#   2. Checks it is exactly the tested commit (a zip must also match its recorded SHA-256). If not, it stops and installs nothing.
 #   3. Runs claude-ads' own installer, skills and agents only (no Python packages), into this
 #      folder's .claude\skills and .claude\agents. Nothing is installed anywhere else.
 #   4. Copies the MIT licence and third-party notices in beside it, and writes a note saying where it came from.
@@ -24,6 +24,9 @@ $ForkUrl = 'https://github.com/georgecairns-ui/claude-ads'
 $UpstreamUrl = 'https://github.com/AgriciDaniel/claude-ads'
 $Tag = 'v2.0.1'
 $Commit = '669c7608ecb50dd95c941a71fa3ca0a1c0e40512'
+# SHA-256 of GitHub's zip of tag v2.0.1, worked out on 27 October 2026 from a download of the real tag. A zip's own comment
+# proves nothing, so the zip route trusts only this hash.
+$ZipSha256 = if ($env:CLAUDE_ADS_ZIP_SHA256) { $env:CLAUDE_ADS_ZIP_SHA256 } else { '40fb78610d8618e7f23db4d62e52f87f1b8cba0c83457c2394b08b5df49f67f6' }
 $ZipUrl = if ($env:CLAUDE_ADS_ZIP_URL) { $env:CLAUDE_ADS_ZIP_URL } else { "$ForkUrl/archive/refs/tags/$Tag.zip" }
 
 $Kit = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
@@ -73,6 +76,8 @@ try {
         $zip = Join-Path $Work 'claude-ads.zip'
         try { Invoke-WebRequest -Uri $ZipUrl -OutFile $zip -UseBasicParsing }
         catch { Stop-Install "could not download $ZipUrl. Check the internet connection and try again" }
+        $zipHash = (Get-FileHash -Algorithm SHA256 -Path $zip).Hash.ToLower()
+        if ($zipHash -ne $ZipSha256.ToLower()) { Stop-Install "the download is not the tested file (expected SHA-256 $ZipSha256 but got $zipHash). Nothing was installed. Install git and run this again" }
         $Found = Get-ZipComment $zip
         $unzipped = Join-Path $Work 'unzipped'
         Expand-Archive -Path $zip -DestinationPath $unzipped

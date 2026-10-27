@@ -23,7 +23,7 @@ Shows their Google and Meta ads on one screen (spend, results, cost per result a
 
 Day to day:
 
-- **Nothing spends until they say yes.** A draft waits for their Approve. Building is a second step they ask for. On Meta, switching on is a third: they press Switch it on in the app and confirm, and that creates an `actions` entry for `make-account-change`. On Google it is theirs, in Google Ads, then "I've switched it on" in the app. Never mark a campaign live because a date has passed.
+- **Nothing spends until they say yes.** A draft waits for their Approve. Building is a second step they ask for. On Meta, switching on is a third: they press Switch it on in the app and confirm, and that saves their confirmation in `approvals.json` (never write it), creates an `actions` entry and opens Claude Code on screen with `make-account-change` typed in. Act only on a `requested` action that has a matching confirmation. On Google it is theirs, in Google Ads, then "I've switched it on" in the app. Never mark a campaign live because a date has passed.
 - **Create paused, read back, confirm.** If any part of a build isn't paused, stop and tell them at once. In build skills, never call a tool that activates, updates, pauses, re-budgets or deletes. Only `make-account-change` may, for the one approved change, after `node apps/ads/app/report.js action <id>` says OK.
 - **Figures come from the platforms, sums come from the app.** Claude writes raw daily figures, one row per campaign per day, and never a total. Summaries and suggestions quote only numbers from `node apps/ads/app/report.js week`.
 - **Limits and seasons.** Never draft or build a campaign over their daily limit, weekly limit or monthly budget. A seasonal campaign only runs inside its season.

@@ -16,8 +16,11 @@ THE RULES THIS SCRIPT HOLDS TO, whatever the file says:
   - It never deletes anything. Every change is a move or a rename, so every change can be undone.
   - It only touches things inside the folders the person chose in Preferences (the folder map), or
     inside their skill folders. Anything else is refused.
-  - A move can only end up in the same chosen folder (folder map) or in the matching "-archive"
-    folder next to the skill folder (skills). It never moves anything somewhere else.
+  - A folder-map move can only end up in the "Tidied by Claude" folder inside the same chosen folder.
+    A rename stays in its own folder, and a sort goes into a sub-folder of the folder it is in.
+    A skill can only end up in the matching "-archive" folder next to its skill folder, and only a
+    skill sitting directly in that folder can move. This toolkit's own skills are never touched.
+    Undo puts things back anywhere inside the same chosen folder.
   - It never overwrites: if the new name is taken it adds " (2)", " (3)" and so on.
   - It never opens a file, and it skips a file whose size has changed since the scan.
   - It never follows a shortcut (symbolic link) out of a chosen folder.
@@ -35,6 +38,8 @@ KIT = os.path.abspath(os.environ.get("SKILLMAP_KIT") or os.path.join(os.path.dir
 DATA = os.path.join(KIT, "apps", "skill-map", "data")
 DRY = "--dry-run" in sys.argv
 MAX_MOVES = 5000
+TIDIED = "Tidied by Claude"
+KIT_SKILLS = os.path.join(KIT, ".claude", "skills")
 
 
 def now():
@@ -90,8 +95,9 @@ def roots_for(lens):
         return [{"root": r, "archive": None} for r in map(expand, lst) if real(r)]
     sm = read_json(os.path.join(DATA, "skillmap.json"))
     extra = sm["settings"]["extraFolders"] if sm and isinstance(sm.get("settings"), dict) and isinstance(sm["settings"].get("extraFolders"), list) else []
-    lst = [os.path.join(HOME, ".claude", "skills"), os.path.join(HOME, ".claude", "commands"), os.path.join(KIT, ".claude", "skills")] + [expand(e) for e in extra]
-    return [{"root": r, "archive": r + "-archive"} for r in lst if real(r)]
+    lst = [os.path.join(HOME, ".claude", "skills"), os.path.join(HOME, ".claude", "commands")] + [expand(e) for e in extra]
+    # This toolkit's own skills are never a chosen folder, whatever the settings say
+    return [{"root": r, "archive": r + "-archive"} for r in lst if real(r) and not touches_kit(r)]
 
 
 def root_of(roots, p):
@@ -103,16 +109,45 @@ def root_of(roots, p):
     return None, None
 
 
+def touches_kit(p):
+    """True when a path is this toolkit's own skills folder, its archive, or anything inside either
+    (checked by name and by where the path really leads)."""
+    kit_dirs = [KIT_SKILLS, KIT_SKILLS + "-archive"]
+    rc = real(os.path.join(KIT, ".claude"))
+    if rc:
+        kit_dirs += [os.path.join(rc, "skills"), os.path.join(rc, "skills-archive")]
+    here = [p]
+    rd = real(os.path.dirname(p))
+    if rd:
+        here.append(os.path.join(rd, os.path.basename(p)))
+    rp = real(p)
+    if rp:
+        here.append(rp)
+    return any(x == k or inside(k, x) for x in here for k in kit_dirs)
+
+
+def leads_inside(guard, d):
+    """Walks up to the nearest folder that exists; if that is the guard or inside it, it must really lead
+    inside the guard (a shortcut called "Tidied by Claude" can't lead out)."""
+    a = d
+    while not exists(a) and os.path.dirname(a) != a:
+        a = os.path.dirname(a)
+    if a != guard and not inside(guard, a):
+        return True  # above the guard: the folders below it get made fresh
+    rg, ra = real(guard), real(a)
+    return bool(rg) and bool(ra) and (ra == rg or inside(rg, ra))
+
+
 def parent_inside(root, p):
     rp, rr = real(os.path.dirname(p)), real(root)
     return bool(rp) and bool(rr) and (rp == rr or inside(rr, rp))
 
 
-def unique_to(to):
+def unique_to(to, is_dir=False):
     if not exists(to):
         return to
     d, name = os.path.dirname(to), os.path.basename(to)
-    base, ext = os.path.splitext(name)
+    base, ext = (name, "") if is_dir else os.path.splitext(name)
     for n in range(2, 1000):
         t = os.path.join(d, "%s (%d)%s" % (base, n, ext))
         if not exists(t):
@@ -120,13 +155,17 @@ def unique_to(to):
     return None
 
 
-def do_move(lens, roots, mv, undo):
+def do_move(lens, kind, roots, mv, undo):
     src, wanted = expand(mv.get("from")), expand(mv.get("to"))
+    if touches_kit(src) or touches_kit(wanted):
+        return {"status": "refused", "why": "It came with this toolkit, so it was left alone"}
     r, base = root_of(roots, src)
     if not r:
         return {"status": "refused", "why": "It isn't inside a folder you chose"}
     if not parent_inside(base, src):
         return {"status": "refused", "why": "It sits behind a shortcut out of your chosen folder"}
+    if lens == "skills" and not undo and (base != r["root"] or os.path.dirname(src) != r["root"]):
+        return {"status": "refused", "why": "Only a skill sitting directly in your skills folder can be moved"}
     try:
         st = os.lstat(src)
     except OSError:
@@ -146,19 +185,38 @@ def do_move(lens, roots, mv, undo):
             b = mv.get("bytes")
             if isinstance(b, (int, float)) and not isinstance(b, bool) and st.st_size != b:
                 return {"status": "skipped", "why": "It has changed since the scan"}
-    allowed = r["root"] if (lens == "files" or undo) else r["archive"]
-    if not inside(allowed, wanted):
+    # Where it may go. Undo: anywhere in the chosen folder. Skills: the archive. Folder moves: the "Tidied by Claude"
+    # folder; a rename: the same folder; a sort: a sub-folder of the folder it is in
+    if undo:
+        allowed = r["root"]
+    elif lens == "skills":
+        allowed = r["archive"]
+    elif kind in ("rename", "sort"):
+        allowed = os.path.dirname(src)
+    else:
+        allowed = os.path.join(r["root"], TIDIED)
+    guard = r["archive"] if (lens == "skills" and not undo) else r["root"]
+    file_side = lens == "files" and not undo
+    if file_side and kind == "rename":
+        ok_place = os.path.dirname(wanted) == allowed
+    elif file_side and kind == "sort":
+        ok_place = inside(allowed, os.path.dirname(wanted))
+    else:
+        ok_place = inside(allowed, wanted)
+    if not ok_place:
         return {"status": "refused", "why": "That isn't somewhere it is allowed to go"}
     if wanted == src:
         return {"status": "skipped", "why": "It already has that name"}
-    to = unique_to(wanted)
+    to = unique_to(wanted, stat.S_ISDIR(st.st_mode))
     if not to:
         return {"status": "skipped", "why": "Couldn't find a free name"}
     if DRY:
         return {"status": "would-move", "to": to}
+    if not leads_inside(guard, os.path.dirname(to)):
+        return {"status": "refused", "why": "That isn't somewhere it is allowed to go"}
     try:
         os.makedirs(os.path.dirname(to), exist_ok=True)
-        if not parent_inside(allowed, to):
+        if not parent_inside(guard, to):
             return {"status": "refused", "why": "That isn't somewhere it is allowed to go"}
         os.rename(src, to)
     except OSError as e:
@@ -186,7 +244,7 @@ def run_action(a, actions):
         if len(moves) > MAX_MOVES:
             a["status"] = "failed"; a["note"] = "That is more than %d things at once. Do it in smaller parts" % MAX_MOVES; return
     for mv in moves:
-        res = do_move(lens, roots, mv, a.get("kind") == "undo")
+        res = do_move(lens, a.get("kind"), roots, mv, a.get("kind") == "undo")
         row = {"from": mv.get("from"), "to": res.get("to") or mv.get("to"), "status": res["status"]}
         if mv.get("type"):
             row["type"] = mv["type"]

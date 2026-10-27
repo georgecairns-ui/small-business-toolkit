@@ -7,7 +7,7 @@ Goal: prove it all works, both ways, then leave them with a clear picture of wha
 Check these yourself. Fix anything that fails, then check again.
 
 **The task file** (`apps/task-list/data/tasks.json`)
-- [ ] Valid, and reads back cleanly. No task still has `"example": true`.
+- [ ] Valid, and reads back cleanly.
 - [ ] Every task has a unique `id`, a `title`, a valid `category` and `status`. Every suggested task has a `source`.
 - [ ] `replies` has a draft for every email that needs an answer, in their voice, with `to` filled in.
 - [ ] `meetings` has the recent calls (if a recorder is connected), each with `actionTaskIds` that point at real tasks.
@@ -53,4 +53,5 @@ Mention it once. Never suggest the task list is broken without it.
    - Their link, **http://localhost:4747**, and whether it starts with their computer.
    - Whether you're checking in automatically, and when.
    - The phrases that do most of the work: "sort my day", "check my inbox", "plan my week", "sort my brain dump", "wrap up my day". In Claude Code each also works as a command, for example `/sort-my-day`.
+   - That they can say "get the latest version" any time and you will bring the app up to date, keeping everything of theirs.
    - That they can ask for anything in plain words, and change how the app looks by asking you (see `docs/CUSTOMISING.md`).

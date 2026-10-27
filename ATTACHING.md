@@ -1,6 +1,6 @@
 # How the tools attach to each other
 
-Version 3, 23 October 2026. This file is identical in every tool in the small business toolkit. If it changes, it changes in all of them at once.
+Version 4, 27 October 2026. This file is identical in every tool in the small business toolkit. If it changes, it changes in all of them at once.
 
 ## The idea
 
@@ -83,7 +83,7 @@ A tool that keeps photos or videos (Content Machine OS) adds `"media": true`. St
 
 Usually on a call with Get AI Powers (see the menu section above). When the person says "attach the proposal writer", "add the pipeline" or similar, and they're cleared to go ahead, their Claude:
 
-1. Fetches the tool into a temporary folder outside their workspace (the same way they fetched the first kit).
+1. Fetches the tool into a temporary folder outside their workspace (the same way they fetched the first kit), and saves the download to `setup/as-installed/<repository>.tar.gz` (the tool's `repository` is in `apps/shared/catalogue.json`), so the `get-updates` skill can tell their changes from the kit's.
 2. Reads its `toolkit.json` and tells them in plain words what will be added.
 3. Copies in the tool's own parts: its `apps/<tool>/` folder, its skills, its setup steps and any connection guides they don't already have. It never overwrites `context/`, `files/`, `setup/progress.md` or another tool's data.
 4. Shared parts: if the incoming `sharedVersion` is newer, updates `apps/server/` and `apps/shared/`, keeping the person's own `theme.css` values (colours, fonts, logo).
