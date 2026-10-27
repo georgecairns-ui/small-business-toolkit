@@ -19,6 +19,9 @@ import ast, json, pathlib, re, subprocess, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OVERLAY = ROOT / "maintainers" / "overlay"
+# --allow-local lets a build made with build.py --from pass, for testing a change before it's merged.
+# Never release such a build.
+ALLOW_LOCAL = "--allow-local" in sys.argv
 problems = []
 
 
@@ -96,11 +99,17 @@ for t in installed:
         if not (ROOT / d).is_file():
             bad("%s lists %s, which is missing" % (t["id"], d))
 settings = json.loads((ROOT / ".claude/settings.json").read_text())["permissions"]["allow"]
+# Data files a tool gates on purpose: Claude writes them only with the owner's recorded yes, through a
+# prompt, so they are not in the free-edit list (Ads OS's approvals file).
+GATED_DATA = {"apps/ads/data/approvals.json"}
 for t in installed:
     for d in t.get("dataFiles", []):
-        want = "Edit(./%s/**)" % str(pathlib.Path(d).parent)
-        if want not in settings:
-            bad(".claude/settings.json can't edit %s's data without asking (%s)" % (t["id"], want))
+        if str(pathlib.Path(d)) in GATED_DATA:
+            continue
+        # A tool may allow its whole data folder (Edit(./apps/x/data/**)) or just the one file it narrows to.
+        ok = ("Edit(./%s/**)" % pathlib.Path(d).parent in settings) or ("Edit(./%s)" % pathlib.Path(d) in settings)
+        if not ok:
+            bad(".claude/settings.json can't edit %s's data without asking (%s)" % (t["id"], d))
 
 # ---------- 4. Everything pointed to exists ----------
 pointers = re.compile(r"`((?:setup|\.claude/skills|apps|docs)/[A-Za-z0-9_./-]+?)`")
@@ -108,8 +117,8 @@ written_here = [ROOT / "START-HERE.md"] + [ROOT / rel for rel in (p.relative_to(
 for f in written_here:
     for ref in pointers.findall(f.read_text()):
         ref = ref.rstrip(".")
-        if "<" in ref or "*" in ref:
-            continue
+        if "<" in ref or "*" in ref or ref.startswith("setup/as-installed/"):
+            continue  # setup/as-installed/ is written when the person installs, not shipped
         if not (ROOT / ref).exists():
             bad("%s points to %s, which is missing" % (f.relative_to(ROOT), ref))
 apps_list = ROOT / "apps/toolkit/app/apps-list.js"
@@ -139,37 +148,72 @@ for p, rel in kit_files():
 # ---------- 6. Built from GitHub ----------
 built = json.loads((ROOT / "maintainers/built-from.json").read_text())["tools"]
 for tid, b in built.items():
-    if "folder" in b:
-        bad("%s was built from a local folder (%s), not GitHub's main: rebuild without --from before pushing" % (tid, b["folder"]))
+    if "folder" in b and not ALLOW_LOCAL:
+        bad("%s was built from a local folder (%s), not GitHub's main: rebuild without --from before pushing (or run check.py --allow-local to test)" % (tid, b["folder"]))
 
-# ---------- 7. It stays the Small Business Toolkit ----------
+# ---------- 7. One name, one way in ----------
+# The toolkit's own way in is there and named for the toolkit.
 for need in ("Open Small Business Toolkit.html", "setup/scripts/start-toolkit.sh", "setup/scripts/start-toolkit.ps1", ".claude/skills/open-my-toolkit/SKILL.md"):
     if not (ROOT / need).is_file():
         bad("%s is missing" % need)
 if "<title>Opening Small Business Toolkit</title>" not in (ROOT / "Open Small Business Toolkit.html").read_text():
     bad("Open Small Business Toolkit.html is not titled 'Opening Small Business Toolkit'")
-if (ROOT / ".claude/skills/open-task-list").exists():
-    bad("an open-task-list skill folder is still there (the toolkit's is open-my-toolkit)")
-for rel in ("Open Task List.html", "setup/scripts/start-task-list.sh", "setup/scripts/start-task-list.ps1", "setup/scripts/start-money-view.sh", "setup/scripts/start-money-view.ps1"):
-    if (ROOT / rel).exists():
-        bad("%s is still there: one tool's own way in" % rel)
 if not (ROOT / "setup/scripts/start-toolkit.sh").stat().st_mode & 0o111:
     bad("setup/scripts/start-toolkit.sh is not executable")
-BANNED = ["Open Task List", "start-task-list", "start-money-view", "Small Business Toolkit OS", "small-business-toolkit-os", "Task List OS is running", "open-task-list"]
-# "the host" is allowed in one place: the person who hosts a Google Meet (setup/connections/google-drive.md)
+
+# Rule, not a fixed list: no skill folder named for one tool's way in.
+for d in sorted((ROOT / ".claude/skills").iterdir()):
+    if d.is_dir() and d.name.startswith("open-") and d.name != "open-my-toolkit":
+        bad(".claude/skills/%s is one tool's own way in (only open-my-toolkit belongs in the kit)" % d.name)
+# Rule: no start-* script other than start-toolkit.
+for f in sorted((ROOT / "setup/scripts").glob("start-*")):
+    if f.name not in ("start-toolkit.sh", "start-toolkit.ps1"):
+        bad("setup/scripts/%s is one tool's own start script (only start-toolkit.* belongs in the kit)" % f.name)
+# Rule: no "Open *.html" opener at the root other than the toolkit's.
+for f in sorted(ROOT.glob("Open *.html")):
+    if f.name != "Open Small Business Toolkit.html":
+        bad("%s is one tool's own opener (only Open Small Business Toolkit.html belongs in the kit)" % f.name)
+
+# Rule: no reference anywhere to a .claude/skills/<x> or setup/scripts/<x> that isn't in the kit.
+# This catches a rename the build missed (for example a leftover open-the-app or start-app).
+# Ads OS's Claude Ads skills are installed into .claude/skills/ by the person during setup, so they
+# are allowed to be absent in a blank kit.
+EXTERNAL_SKILLS = {"ads", "ads-audit", "ads-meta", "ads-google", "ads-math"}
+ref_re = re.compile(r"(?:\.claude/skills|setup/scripts)/([A-Za-z0-9][A-Za-z0-9._-]*)")
+for p, rel in kit_files():
+    if p.suffix not in (".md", ".js", ".json", ".html", ".sh", ".ps1"):
+        continue
+    try:
+        text = p.read_text()
+    except UnicodeDecodeError:
+        continue
+    for m in ref_re.finditer(text):
+        name = m.group(1).rstrip(".")  # drop a sentence-ending period
+        if m.group(0).startswith("setup/scripts"):
+            if not (ROOT / "setup/scripts" / name).exists():
+                bad("%s points to setup/scripts/%s, which isn't in the kit" % (rel, name))
+        elif name not in EXTERNAL_SKILLS:  # .claude/skills/<name>: a skill folder, or a file like README.md
+            target = ROOT / ".claude/skills" / name
+            if not (target.exists() or (target / "SKILL.md").exists()):
+                bad("%s points to .claude/skills/%s, which isn't in the kit" % (rel, name))
+
+# toolkit.json's shared version must match the real shared files.
+tj = json.loads((ROOT / "toolkit.json").read_text())
+version_file = (ROOT / "apps/shared/VERSION").read_text().splitlines()[0].strip()
+if tj.get("sharedVersion") != version_file:
+    bad("toolkit.json sharedVersion (%s) doesn't match apps/shared/VERSION (%s)" % (tj.get("sharedVersion"), version_file))
+
+# The one name, and "host" (allowed only for the person who hosts a Google Meet).
 HOST_WORDS = re.compile(r"\bthe host\b(?! after each meeting)|\bhost tool\b", re.I)
 for p, rel in kit_files():
     try:
         text = p.read_text()
     except UnicodeDecodeError:
         continue  # fonts and images
-    for b in BANNED:
-        if b in text:
-            bad("%s still says \"%s\"" % (rel, b))
+    if "Small Business Toolkit OS" in text or "small-business-toolkit-os" in text:
+        bad("%s still says \"Small Business Toolkit OS\" (the product is the Small Business Toolkit, no OS)" % rel)
     if HOST_WORDS.search(text):
         bad("%s still talks about \"the host\" or a \"host tool\"" % rel)
-    if re.search(r"\bstart-(?:task-list|money-view)\b", rel.name):
-        bad("%s is one tool's own start script" % rel)
 
 if problems:
     print("CHECK FAILED:")
