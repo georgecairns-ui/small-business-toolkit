@@ -2,7 +2,7 @@
 
 Use `skills/connect-a-tool/SKILL.md` for the general method (order of preference, safety rules, never ask for a key in chat). This folder has the specifics for each app. Follow the file for the app the person names.
 
-| App | What it gives Task List OS | Recommended route | File |
+| App | What it gives your toolkit | Recommended route | File |
 |---|---|---|---|
 | Gmail | The Inbox (drafted emails waiting to be sent) and new tasks in Review | Claude connector | `gmail-and-google-calendar.md` |
 | Google Calendar | Calendar (today's and this week's meetings) | Claude connector | `gmail-and-google-calendar.md` |

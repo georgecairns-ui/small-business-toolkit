@@ -2,7 +2,7 @@
 
 Goal: 3 to 5 skills written for this business, saved twice: in `.claude/skills/` so they work here straight away, and as files in `skills-to-upload/` that they add to Claude, so the same know-how works in every Claude conversation, on their phone and on the web. This is the moment they see Claude learn their business, so make it feel like a gift, not homework.
 
-A skill is a short set of instructions Claude follows for one job. The ones that come with Task List OS are general. These are about **their** services, **their** prices and **their** way of doing things.
+A skill is a short set of instructions Claude follows for one job. The ones that come with your toolkit are general. These are about **their** services, **their** prices and **their** way of doing things.
 
 ## 6.1 Ask about their services
 

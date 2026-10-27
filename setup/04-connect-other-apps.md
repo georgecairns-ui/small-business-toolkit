@@ -6,7 +6,7 @@ Goal: connect the 2 or 3 other apps from step 1 that hold work which turns into 
 
 Rule of thumb: connect what holds **money owed or due**, **customers going quiet**, or **requests from the team**.
 
-| App type | What it gives Task List OS | Guide |
+| App type | What it gives your toolkit | Guide |
 |---|---|---|
 | Accounts: Xero | Unpaid invoices and bills due become tasks; you can answer "who owes me money?" | `setup/connections/xero.md` |
 | Accounts: QuickBooks, FreeAgent | Usually no simple connection; a monthly export works | `setup/connections/quickbooks.md`, `setup/connections/freeagent.md` |
