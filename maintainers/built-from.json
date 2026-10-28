@@ -2,31 +2,31 @@
   "tools": {
     "task-list": {
       "repository": "georgecairns-ui/task-list-os",
-      "commit": "237f5656c32319c74d51dd85b42530a6692613f7"
+      "commit": "4163d9e04a3bde8b1902ec3d5221cbe9d7c2fd7e"
     },
     "pipeline": {
       "repository": "georgecairns-ui/pipeline-os",
-      "commit": "186dee5813ba0f93560937330831fb5286c82255"
+      "commit": "0214d90d89c84df776dd2d57fd472dd81b2480c7"
     },
     "skill-map": {
       "repository": "georgecairns-ui/skill-and-folder-map-os",
-      "commit": "4b0f0ac48b88e1900d6da09ab0fe4c69ee334fb2"
+      "commit": "4fd7104730c8a8fe9cb1353cea2d031850db909a"
     },
     "proposals": {
       "repository": "georgecairns-ui/proposal-writing-os",
-      "commit": "ecc779ce744db3284cbc8d387b0ab68ec42b2081"
+      "commit": "e2af6254490bdfe03473ab50eb75a4685001c242"
     },
     "content": {
       "repository": "georgecairns-ui/content-machine-os",
-      "commit": "50f67d7b817ec7557180512defd9bad0cb8a2209"
+      "commit": "64e97ca2724df78b916e376fbf3f8f1d662ef174"
     },
     "money": {
       "repository": "georgecairns-ui/money-view-os",
-      "commit": "728d7d34c51ae513e2445e25113ec565a8b77e4a"
+      "commit": "a4017d73156e8d86628edc00844655c2418c1c2f"
     },
     "ads": {
       "repository": "georgecairns-ui/ads-os",
-      "commit": "58eaa5bc1361a001954ffd9482710c7040e6e8c1"
+      "commit": "d8bc9a541959968cbb163788b0c9e0c528dca10f"
     }
   },
   "attach": [
