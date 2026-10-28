@@ -5,7 +5,7 @@ description: Bring this folder up to the latest version of the tools installed i
 
 # Get updates
 
-This folder is a plain copy. It is not linked to the public version, so nothing in it changes unless they ask. When they ask, you fetch the latest version, work out what is new, show them, and apply it once they say yes. Everything that is theirs stays exactly as it is.
+This folder is a plain copy. It is not linked to the version online, so nothing in it changes unless they ask. When they ask, you fetch the latest version, work out what is new, show them, and apply it once they say yes. Everything that is theirs stays exactly as it is.
 
 Never use git in their folder. If it has a hidden `.git` folder, stop and say: "This folder is set up for someone building the kit, so it is updated a different way." Do nothing else.
 
@@ -26,25 +26,26 @@ Make **one** temporary folder outside their workspace, once, and fetch every too
 - Mac: `T="$(mktemp -d)" || exit 1; echo "$T"`
 - Windows (PowerShell): `$T = Join-Path $env:TEMP ("update-" + (Get-Random)); New-Item -ItemType Directory -Force $T | Out-Null; $T`
 
-**Public downloads** (every tool except the private toolkit). For each tool in `apps/installed.json`, find its `repository` in the catalogue, and run, with `<T>` the path you noted:
+**Their GitHub sign-in.** Every tool is private: Get AI Powers gives access by inviting the person's GitHub account, and every download uses their own sign-in. Check it first with `gh auth status`. If they are not signed in, give them the one line `gh auth login -h github.com -p https -w`, say it opens GitHub in their browser to approve this computer, and wait. If `gh` is not installed, help them install it (Mac: `brew install gh`, or the installer from cli.github.com; Windows: `winget install --id GitHub.cli -e`, then open a new PowerShell window).
 
-- Mac: `T="<T>"; mkdir -p "$T/new/<repository>" && curl -fsL -o "$T/new/<repository>.tar.gz" https://github.com/georgecairns-ui/<repository>/archive/refs/heads/main.tar.gz && tar -xzf "$T/new/<repository>.tar.gz" --strip-components 1 -C "$T/new/<repository>"`
-- Windows (PowerShell): `$T = "<T>"; New-Item -ItemType Directory -Force "$T\new\<repository>" | Out-Null; curl.exe -fsL -o "$T\new\<repository>.tar.gz" https://github.com/georgecairns-ui/<repository>/archive/refs/heads/main.tar.gz; tar -xzf "$T\new\<repository>.tar.gz" --strip-components 1 -C "$T\new\<repository>"`
+**The downloads.** For each tool in `apps/installed.json`, find its `repository` in the catalogue (for the whole toolkit, `small-business-toolkit`, once), and run, with `<T>` the path you noted:
 
-`-f` makes curl stop with an error on a failed download (a missing page, a refused request) instead of saving the error page as if it were the kit. If a download fails, say so and stop.
+- Mac: `T="<T>"; mkdir -p "$T/new/<repository>" && curl -fsSL -H "Authorization: Bearer $(gh auth token)" -o "$T/new/<repository>.tar.gz" https://api.github.com/repos/georgecairns-ui/<repository>/tarball/main && tar -xzf "$T/new/<repository>.tar.gz" --strip-components 1 -C "$T/new/<repository>"`
+- Windows (PowerShell): `$T = "<T>"; New-Item -ItemType Directory -Force "$T\new\<repository>" | Out-Null; curl.exe -fsSL -H "Authorization: Bearer $(gh auth token)" -o "$T\new\<repository>.tar.gz" https://api.github.com/repos/georgecairns-ui/<repository>/tarball/main; if ($LASTEXITCODE -eq 0) { tar -xzf "$T\new\<repository>.tar.gz" --strip-components 1 -C "$T\new\<repository>" }`
 
-**The private toolkit.** It is private, so it downloads with the person's own GitHub sign-in. Fetch it as one piece into `$T/new/small-business-toolkit`, then pack it so it can be saved in step 7:
+`-f` makes curl stop with an error on a failed download instead of saving the error page as if it were the kit. If a download fails, say so in 1 sentence and stop:
 
-- `gh repo clone georgecairns-ui/small-business-toolkit "$T/new/small-business-toolkit" -- --depth 1`, or `git clone --depth 1` of the same address, in the temporary folder only. Then remove the `.git` folder inside that temporary copy (`rm -rf` on a Mac, `Remove-Item -Recurse -Force` on Windows).
-- `tar -czf "$T/new/small-business-toolkit.tar.gz" -C "$T/new" small-business-toolkit`
-- If they are not signed in to GitHub, or the download is refused, say so in 1 sentence and ask them to sign in (`gh auth login`). If they have no GitHub access to it, stop and tell them to ask Get AI Powers. Do not try another way in.
+- `error: 404`: their GitHub account cannot see that tool. Either they have not accepted the invitation from Get AI Powers yet, or they are signed in to a different GitHub account (`gh auth status` names it). Ask them to accept the invitation from the email GitHub sent them (it is also at github.com/notifications), then try again. If they never had an invitation, tell them to ask Get AI Powers.
+- `error: 401`: the sign-in has expired. Ask them to sign in again with `gh auth login -h github.com -p https -w`.
+
+Do not try another way in.
 
 **The old copies.** Unpack each `setup/as-installed/*.tar.gz` the same way into `$T/old/<repository>` (`mkdir -p` it, then `tar -xzf <the file> --strip-components 1 -C <the folder>`).
 
 ## 3. Put together the new kit, and the old one
 
-- **The private toolkit, or a folder with 1 tool:** the download is the kit. Nothing to assemble.
-- **A folder with more than 1 public tool** is built the way `ATTACHING.md` describes, so assemble it the same way:
+- **The whole toolkit, or a folder with 1 tool:** the download is the kit. Nothing to assemble.
+- **A folder with more than 1 tool** is built the way `ATTACHING.md` describes, so assemble it the same way:
   1. **Shared parts** (`apps/shared/`, `apps/server/`, `apps/home/`, `ATTACHING.md`, the shared skills, `setup/scripts/`, `setup/connections/README.md`, `docs/`): from whichever download has the highest number in `apps/shared/VERSION`.
   2. **The root files and setup steps** (`CLAUDE.md`, `START-HERE.md`, `README.md`, `LICENSE`, `toolkit.json`, `setup/0*.md`): from the first tool in `apps/installed.json`.
   3. **Each tool's own parts**, from that tool: its `apps/<tool>/` folder, the skills and setup steps named in its `toolkit.json`, and its connection guides.
@@ -135,7 +136,7 @@ If anything fails, put the backed-up files back, start the helper again so their
 
 ## 7. Finish
 
-1. Replace each `setup/as-installed/<repository>.tar.gz` with the one you just downloaded (or packed, for the private toolkit), so next time compares against this version. A download that had none gets one now.
+1. Replace each `setup/as-installed/<repository>.tar.gz` with the one you just downloaded, so next time compares against this version. A download that had none gets one now.
 2. Add a line to `setup/progress.md`: `Updated on <date> to shared version <N>`, then each merged file and anything left alone, in a few words.
 3. Delete the temporary folder from step 2. It is outside their workspace and holds only downloads.
 4. Tell them in 2 or 3 lines what is new and that everything of theirs is as it was. A new permission takes effect when Claude is next started in this folder: say so if you added one.
