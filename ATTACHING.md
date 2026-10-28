@@ -17,7 +17,7 @@ Every tool is free. Each one is a way into a conversation with Get AI Powers. So
 - The shared sidebar always shows all 7 tools, from `apps/shared/catalogue.json`.
 - Tools listed in `apps/installed.json` open as normal.
 - Every other tool shows with a small padlock, readable but not openable. Clicking it opens a calm panel: the tool's name, what it does in 2 plain sentences, "Get AI Powers sets this up with you on a free call", and a **Book a free call** button.
-- The button opens the booking page in a new tab. The link lives in one place, `apps/shared/catalogue.json`: https://calendly.com/d/d2bq-8jx-r39/claudit-audit with `utm_source` set to the tool they're using, `utm_medium=toolkit-app` and `utm_campaign` set to the locked tool they clicked, so we can see which tool brought each call in.
+- The button opens the booking page in a new tab. The link lives in one place, `apps/shared/catalogue.json`: https://calendly.com/joey-getaipowers/claude-chat with `utm_source` set to the tool they're using, `utm_medium=toolkit-app` and `utm_campaign` set to the locked tool they clicked, so we can see which tool brought each call in.
 - No pop-ups, no countdowns, no nagging. The locked tools sit quietly in the menu until someone clicks one.
 - `catalogue.json` has a `showMoreTools` setting. A paying client's customised version can switch the locked tools off.
 - If the person asks their Claude for a locked tool, Claude explains what it does, says Get AI Powers sets it up with them on a free call, and gives the booking link. If they say they're on that call, or Get AI Powers has told them to go ahead, Claude attaches it as below.
