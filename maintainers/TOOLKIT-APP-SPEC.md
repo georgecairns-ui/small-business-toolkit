@@ -8,7 +8,7 @@ A button can't sign anyone in to Xero or Gmail: sign-in happens on each app's ow
 
 ## Pages (menu.json)
 
-1. **Connections** (`#connections`, icon `link` or nearest available): every app the toolkit can connect to, grouped (Email and calendar, Calls, Sales and customers, Money, Ads, Files and notes, Team and bookings). Each card: name, one plain line on what connecting it does, "Used by" chips naming the tools that use it, a status pill (Connected, Not connected, Needs attention, Not used), and one button: **Connect** (not connected), **Check it** (connected), **Fix it** (needs attention). Top of the page: "6 of 24 connected" and a **Connect something else** button. Filter: All, Connected, Not connected.
+1. **Connections** (`#connections`, icon `link` or nearest available): every app the toolkit can connect to, grouped (Email and calendar, Calls, Sales and customers, Money, Ads, Files and notes, Team and bookings). Each card: name, one plain line on what connecting it does, "Used by" chips naming the tools that use it, a status pill (Connected, Needs attention, Export only, Can't connect, Not connected, Not used), and one button: **Connect** (not connected), **Check it** (connected), **Fix it** (needs attention), **Look again** (export only or can't connect). Top of the page: "N of M connected", where M counts only the connected and needs-attention rows in `apps/home/data/connections.json` (or "Nothing connected yet" when there are none), and a **Connect something else** button. Last, an **Other connections** group: rows in the file for apps with no card (LinkedIn, an iCloud email row, anything added through Connect something else), not-used rows left out, each with its name, status, note and **Fix it**, **Look again** or **Check it**. Filter: All, Connected, Not connected.
 2. **Set up** (`#setup`, icon `checkSquare` or similar): the 7 tools, each with its status (Set up, Part done, Not yet, Skipped for now), the date, and **Set up now** / **Carry on** / **Run it again**. A line at the top: how many of 7 are set up.
 3. **Build and customise** (`#build`, icon `sparkle`): action cards, each opening a small dialog with an optional "Describe it in a sentence" box, then Open in Claude / Copy the prompt:
    - Build me a new page (a new screen in this app for something they track)
@@ -23,7 +23,7 @@ A button can't sign anyone in to Xero or Gmail: sign-in happens on each app's ow
 ## Home boxes (home-boxes.js, `defaultOn: true`, because this kit is always installed fresh)
 
 - **Next steps** (size 2): up to 4 items, in this order: tools not set up yet, key apps not connected (email, calendar, and any app another tool needs), then new ideas. Each with its button. When everything is done: "Everything's set up. Claude adds ideas here as it spots them."
-- **Connections** (size 1): "6 of 24 connected", the ones needing attention first, link to the page.
+- **Connections** (size 1): the same "N of M connected" count as the page (or "Nothing connected yet"), then the ones needing attention, including Other connections, link to the page.
 
 ## Data file: `apps/toolkit/data/toolkit.json`
 

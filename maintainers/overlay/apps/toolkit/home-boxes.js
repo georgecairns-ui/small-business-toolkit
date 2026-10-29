@@ -113,6 +113,8 @@
         validate: window.TaskListOS.connections.validate,
         // As in apps/shared/js/connections-box.js: a missing file stays silent, a broken one says so in the box
         onStatus: function (s, detail) {
+          // Read cleanly again: any old message goes
+          if (s === "ready" && M.connectionsProblem()) { M.setConnectionsProblem(""); ctx.refresh(); return; }
           if (s !== "error") return;
           const kind = detail && detail.error && detail.error.kind;
           M.setConnectionsProblem(kind === "missing" ? "" : kind === "bad-file" ? "Your connections file has a small mistake in it. Ask Claude to check it." : "Your connections couldn't be read just now. Reload the page to try again.");

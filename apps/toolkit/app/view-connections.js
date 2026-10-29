@@ -4,7 +4,7 @@
   Grouped (Email and calendar, Calls, and so on). Each card: the name, one line on what connecting it does,
   which tools use it, its status and one button: Connect, Check it, Fix it or Look again. Rows in connections.json
   for apps with no card here (LinkedIn, an iCloud email row, anything added through Connect something else) show
-  last, under Other connections, with Fix it or Check it. Every button opens Claude
+  last, under Other connections, with Fix it, Look again or Check it. Not-used rows are left out. Every button opens Claude
   with the job typed in, because signing in to an app happens on that app's own screen, inside Claude.
   The filter (All, Connected, Not connected) is kept until the page is closed.
 */
@@ -38,15 +38,16 @@
   // A note is a warning only when something needs fixing; otherwise it reads like the meta line
   function note(status, text) { return '<p class="' + (status === "needs-attention" ? "tk-card__note" : "tk-card__meta") + '">' + esc(text) + "</p>"; }
 
-  // A row with no card of its own: its name, status, note and Fix it or Check it
+  // A row with no card of its own: its name, status, note and Fix it, Look again or Check it
   function otherCard(x) {
-    const fix = x.status === "needs-attention";
+    const fix = x.status === "needs-attention", again = x.status === "export-only" || x.status === "no-connector";
+    const btn = fix ? { label: "Fix it", prompt: M.prompt.fixOther(x.name) } : again ? { label: "Look again", prompt: M.prompt.lookAgainOther(x.name) } : { label: "Check it", prompt: M.prompt.checkOther(x.name) };
     const how = [x.how, x.checked ? "checked " + C.shortDate(x.checked) : ""].filter(Boolean).join(", ");
     return '<article class="card tk-card tk-card--' + esc(x.status) + '">' +
       '<div class="tk-card__top"><h4 class="tk-card__name">' + esc(x.name) + "</h4>" + C.statusChip(M.CONN, x.status) + "</div>" +
       (x.note ? note(x.status, x.note) : "") +
       (how ? '<p class="tk-card__meta">' + esc(how.charAt(0).toUpperCase() + how.slice(1)) + "</p>" : "") +
-      '<div class="tk-card__actions">' + C.claudeActions(fix ? M.prompt.fixOther(x.name) : M.prompt.checkOther(x.name), { label: fix ? "Fix it" : "Check it", small: true, primary: fix }) + "</div></article>";
+      '<div class="tk-card__actions">' + C.claudeActions(btn.prompt, { label: btn.label, small: true, primary: fix }) + "</div></article>";
   }
   function group(title, cards) {
     return cards.length ? '<section class="tk-group" aria-label="' + esc(title) + '"><h3 class="tk-group__title">' + esc(title) + '</h3><div class="tk-grid">' + cards.join("") + "</div></section>" : "";

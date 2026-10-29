@@ -62,8 +62,9 @@
   function setConnectionsProblem(text) { sharedProblem = text || ""; }
   function connectionsProblem() { return sharedProblem; }
   // Rows in connections.json for apps that aren't cards on the page (LinkedIn, Instagram, an iCloud email row,
-  // anything added through Connect something else), in the shared order: needing attention first
-  function extras(d) { return CONNS.list({ connections: shared }).filter(function (x) { return !appById(x.id); }); }
+  // anything added through Connect something else), in the shared order: needing attention first. Not-used rows are
+  // left out, as in the shared Home box
+  function extras(d) { return CONNS.list({ connections: shared }).filter(function (x) { return !appById(x.id) && x.status !== "not-used"; }); }
   // A no-connector row for their email provider (step 2 keys it by the provider, for example icloud-mail or icloud,
   // and says why in its note). It answers "connect your email": there is nothing more to connect. Kept simple on purpose:
   // the key names a mail provider, or the note mentions email.
@@ -113,6 +114,7 @@
     // A row with no card (Other connections): no guide of its own, so connect-a-tool
     checkOther: function (name) { return "Check my " + name + " connection still works and tell me what you can see. Follow .claude/skills/connect-a-tool, then update " + CONN_FILE + "."; },
     fixOther: function (name) { return CONNS.fixPrompt(name); },
+    lookAgainOther: function (name) { return "Check whether there's a Claude connector for " + name + " now. Follow .claude/skills/connect-a-tool, then update " + CONN_FILE + "."; },
     connectElse: function () { return "I'd like to connect another app to my toolkit. Ask me which one, then use .claude/skills/connect-a-tool."; },
     // Several apps would do (Gmail or Microsoft 365): Claude asks which one they use
     connectOneOf: function (label, apps) {
