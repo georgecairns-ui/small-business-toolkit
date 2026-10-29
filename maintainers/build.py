@@ -67,7 +67,7 @@ DIFFER_ALLOW = {
     "setup/progress.md": "the overlay ships the blank toolkit progress file",
     "skills-to-upload/README.md": "per-tool folder note; the base's covers the toolkit",
     "setup/01-quick-questions.md": "the base's own setup step; the toolkit runs setup/toolkit-01..04 instead",
-    "setup/02-connect-email-and-calendar.md": "each email tool fills its own data from the 30-day read; the base's copy, with the overlay's 2.4 feeding every tool once, stands for the toolkit",
+    "setup/02-connect-email-and-calendar.md": "each email tool fills its own data from the 30-day read; the base's copy, with the overlay's 2.4 feeding every tool once, stands for the toolkit. Pipeline OS's copy also has 2.7 (asking whether Claude may send emails the person approved), which the kit's merged setup doesn't ask: pre-existing since shared v12, flagged to George",
     "setup/03-connect-call-recordings.md": "each tool words what a call gives it and numbers its own steps; the base's copy stands for the toolkit",
     "setup/04-connect-other-apps.md": "the base's own setup step; the overlay adjusts its wording",
     "setup/05-get-to-know-the-business.md": "the base's shared business step; every tool reuses it",

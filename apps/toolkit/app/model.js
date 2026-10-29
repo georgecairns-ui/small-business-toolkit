@@ -20,7 +20,8 @@
   const FILE = "apps/toolkit/data/toolkit.json";
   const CONN_FILE = "apps/home/data/connections.json";
 
-  const CONN = window.TaskListOS.connections.STATUS;
+  const CONNS = window.TaskListOS.connections;
+  const CONN = CONNS.STATUS;
   const TOOL = {
     "set-up": { label: "Set up", chip: "chip--success", button: "Run it again" },
     "part-done": { label: "Part done", chip: "chip--info", button: "Carry on" },
@@ -56,24 +57,40 @@
   // Connections come from the shared file, apps/home/data/connections.json (shared v13), not from toolkit.json.
   // An app with no entry counts as Not connected
   let shared = {};
-  function setConnections(obj) { shared = obj && typeof obj === "object" ? obj : {}; }
+  let sharedProblem = "";   // why connections.json couldn't be read, shown on the Connections page and the Home box
+  function setConnections(obj) { shared = obj && typeof obj === "object" ? obj : {}; sharedProblem = ""; }
+  function setConnectionsProblem(text) { sharedProblem = text || ""; }
+  function connectionsProblem() { return sharedProblem; }
+  // Rows in connections.json for apps that aren't cards on the page (LinkedIn, Instagram, an iCloud email row,
+  // anything added through Connect something else), in the shared order: needing attention first
+  function extras(d) { return CONNS.list({ connections: shared }).filter(function (x) { return !appById(x.id); }); }
+  // A no-connector row for their email provider (step 2 keys it by the provider, for example icloud-mail or icloud,
+  // and says why in its note). It answers "connect your email": there is nothing more to connect. Kept simple on purpose:
+  // the key names a mail provider, or the note mentions email.
+  function emailHasNoConnector() {
+    return extras().some(function (x) {
+      return x.status === "no-connector" && (/mail|icloud|outlook|hotmail|yahoo/i.test(x.id) || /e-?mail/i.test(x.note));
+    });
+  }
   function conn(d, id) { return shared[id] || { status: "not-connected", how: "", note: "", checked: "" }; }
   function connStatus(d, id) { return conn(d, id).status; }
   function tool(d, id) { return d.tools[id] || { status: "not-yet", date: "", note: "" }; }
   function toolStatus(d, id) { return tool(d, id).status; }
 
+  // connected and attention come from the shared count, the same as every tool's Home box: every row in the file,
+  // including the Other connections
   function counts(d) {
-    let connected = 0, attention = 0;
-    L.APPS.forEach(function (a) {
-      const s = connStatus(d, a.id);
-      if (s === "connected") connected++;
-      if (s === "needs-attention") attention++;
-    });
+    const s = CONNS.counts({ connections: shared });
+    const connected = s.connected, attention = s.attention;
     let setUp = 0;
     L.TOOLS.forEach(function (t) { if (toolStatus(d, t.id) === "set-up") setUp++; });
     return { connected: connected, attention: attention, apps: L.APPS.length, setUp: setUp, tools: L.TOOLS.length };
   }
-  function connectedLine(d) { const c = counts(d); return c.connected + " of " + c.apps + " connected"; }
+  // The shared count: only apps Claude reads live or that need fixing, so export-only and the rest never show as a gap
+  function connectedLine(d) {
+    const s = CONNS.counts({ connections: shared });
+    return s.total ? s.connected + " of " + s.total + " connected" : "Nothing connected yet";
+  }
   function setUpLine(d) { const c = counts(d); return c.setUp + " of " + c.tools + " tools set up"; }
 
   function newIdeas(d) { return d.ideas.filter(function (i) { return i.status === "new"; }); }
@@ -91,6 +108,11 @@
     connect: function (app) { return "Connect " + app.name + " for me. Follow " + guideFile(app) + " and .claude/skills/connect-a-tool, then update " + CONN_FILE + "."; },
     check: function (app) { return "Check my " + app.name + " connection still works and tell me what you can see. Update " + CONN_FILE + "."; },
     fix: function (app) { return "My " + app.name + " connection needs attention. Follow " + guideFile(app) + " to fix it, then update " + CONN_FILE + "."; },
+    // Export only, or no Claude connector when they last looked: one may have arrived since
+    lookAgain: function (app) { return "Check whether there's a Claude connector for " + app.name + " now. Follow " + guideFile(app) + " and .claude/skills/connect-a-tool, then update " + CONN_FILE + "."; },
+    // A row with no card (Other connections): no guide of its own, so connect-a-tool
+    checkOther: function (name) { return "Check my " + name + " connection still works and tell me what you can see. Follow .claude/skills/connect-a-tool, then update " + CONN_FILE + "."; },
+    fixOther: function (name) { return CONNS.fixPrompt(name); },
     connectElse: function () { return "I'd like to connect another app to my toolkit. Ask me which one, then use .claude/skills/connect-a-tool."; },
     // Several apps would do (Gmail or Microsoft 365): Claude asks which one they use
     connectOneOf: function (label, apps) {
@@ -112,6 +134,7 @@
     const s = connStatus(d, app.id);
     if (s === "connected") return { label: "Check it", prompt: prompt.check(app) };
     if (s === "needs-attention") return { label: "Fix it", prompt: prompt.fix(app) };
+    if (s === "export-only" || s === "no-connector") return { label: "Look again", prompt: prompt.lookAgain(app) };
     return { label: "Connect", prompt: prompt.connect(app) };
   }
   function toolButton(d, t) { return { label: TOOL[toolStatus(d, t.id)].button, prompt: prompt.setUp(t) }; }
@@ -136,6 +159,8 @@
       if (statuses.indexOf("connected") !== -1 || statuses.indexOf("needs-attention") !== -1) return;
       // Read from an export, or there's no Claude connector for it: nothing more to connect (shared v13)
       if (statuses.indexOf("export-only") !== -1 || statuses.indexOf("no-connector") !== -1) return;
+      // Their email provider has no Claude connector (a row of its own, such as icloud-mail): nothing more to ask for
+      if (need.anyOf.indexOf("gmail-and-google-calendar") !== -1 && emailHasNoConnector()) return;
       const open = apps.filter(function (a, i) { return statuses[i] !== "not-used"; });
       if (!open.length) return;
       const usedBy = andList(toolNames(need.tool ? [need.tool] : union(open)));
@@ -165,7 +190,7 @@
 
   window.TK.model = {
     FILE: FILE, CONN: CONN, TOOL: TOOL, validate: validate, appById: appById, toolById: toolById,
-    setConnections: setConnections, conn: conn, connStatus: connStatus, tool: tool, toolStatus: toolStatus, counts: counts, connectedLine: connectedLine, setUpLine: setUpLine,
+    setConnections: setConnections, setConnectionsProblem: setConnectionsProblem, connectionsProblem: connectionsProblem, extras: extras, conn: conn, connStatus: connStatus, tool: tool, toolStatus: toolStatus, counts: counts, connectedLine: connectedLine, setUpLine: setUpLine,
     newIdeas: newIdeas, builds: builds, toolNames: toolNames, andList: andList, prompt: prompt, connButton: connButton, toolButton: toolButton,
     nextSteps: nextSteps, connectionsByUrgency: connectionsByUrgency, claudeLink: claudeLink
   };

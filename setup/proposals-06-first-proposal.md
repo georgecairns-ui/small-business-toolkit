@@ -18,4 +18,4 @@ Goal: a real proposal, for a real client, in their brand, before setup ends. Thi
 
 Ask what they'd change. Make the changes they ask for with `.claude/skills/change-a-proposal`, and if a change is about how they always want proposals (not just this one), update their proposal skill too (`build-my-proposal-skill`) and say so.
 
-Tick step 10 in `setup/progress.md`. Step 11 sets up the check-ins.
+Tick Proposal Writing OS in `setup/progress.md`. The toolkit's step 8 makes one check-in for every tool.

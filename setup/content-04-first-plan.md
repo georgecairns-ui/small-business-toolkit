@@ -32,4 +32,4 @@ Ask them to open one post and say whether it sounds like them. If not, press **A
 
 Pick the first post due and help them post it, so they've done the whole loop once. If it needs a photo, say what to take.
 
-Tick this step in `setup/progress.md`. Next, step 6: follow `setup/09-check-and-hand-over.md`.
+Tick this step in `setup/progress.md`. Next: the next tool in `START-HERE.md`'s Part 2.

@@ -47,7 +47,7 @@ It all runs as one app on their computer at **http://localhost:4747**: Home (a d
    The guide mode changes the pace and how much you explain. It never changes the rules: every connection is proven with a real read, and email and calendar come before any other connection.
 3. Read `setup/progress.md`. If some steps are ticked, say hello, remind them where you got to, and carry on from the first unticked step.
 4. Read `CLAUDE.md` in this folder: the standing rules.
-5. If setup is already complete, don't run it again. Ask what they'd like to do. If they ask to set up one tool, run just that tool's part below.
+5. If setup is already complete, don't run it again. Ask what they'd like to do. If they ask to set up one tool, run just that tool's part below. If steps 1 and 2 in `setup/progress.md` aren't ticked, run Part 1 from its first unticked step first, and say so in one line.
 
 ## How the setup runs
 
@@ -87,7 +87,7 @@ Run the tools they chose in step 1, in the order they chose. Task List OS and Pi
 - `setup/proposals-01-your-brand.md`: only what step 5 didn't cover: the logo version for dark backgrounds, the proposal cover style and the sign-off.
 - `setup/proposals-02-what-you-sell.md`: packages and prices, VAT, payment terms, how they deliver. Draft it from `context/sales.md` and their website first.
 - `setup/proposals-03-your-templates.md`, `setup/proposals-04-your-client-folders.md`, `setup/proposals-05-your-proposal-skill.md`.
-- `setup/proposals-06-first-proposal.md`: a real proposal for their most ready client. Its check-in step (`setup/08-make-it-automatic.md`) isn't run here: step 8 covers every tool's check-in at once.
+- `setup/proposals-06-first-proposal.md`: a real proposal for their most ready client. Its check-in step isn't run here: step 8 covers every tool's check-in at once.
 
 **Content Machine OS** (20 min)
 - `setup/content-01-your-business.md`: draft everything from `context/` and step 6, and ask only for their themes and voice.

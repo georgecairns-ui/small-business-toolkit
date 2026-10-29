@@ -2,5 +2,9 @@
   [
     "Step 5 already read the last 30 days of their email",
     "Step 2 (`setup/02-connect-email-and-calendar.md`) already read the last 30 days of their email"
+  ],
+  [
+    "If step 5 found no email",
+    "If step 2 found no email"
   ]
 ]

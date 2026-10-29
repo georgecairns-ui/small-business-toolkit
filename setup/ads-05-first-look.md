@@ -33,4 +33,4 @@ If yes, follow `.claude/skills/build-a-campaign` with what they say it's for. Th
 
 If no, that's fine. Tell them they can say "make me a campaign" any time.
 
-Tick this step in `setup/progress.md`. Next, step 7: follow `setup/09-check-and-hand-over.md`.
+Tick this step in `setup/progress.md`. Next: the next tool in `START-HERE.md`'s Part 2.

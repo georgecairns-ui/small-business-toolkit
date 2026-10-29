@@ -70,15 +70,21 @@
     }
   });
 
-  // Which apps Claude can reach: the shared file every tool reads (shared v13). Missing just means nothing is connected yet.
+  // Which apps Claude can reach: the shared file every tool reads (shared v13). As in apps/shared/js/connections-box.js:
+  // a missing file just means nothing is connected yet, so it stays silent; a broken one says so on the Connections page.
   window.TaskListOS.createStore({
     moduleId: "connections",
     fileName: "connections.json",
     dataPaths: ["data", "", "apps/home/data"],
     api: window.TaskListOS.connections.API,
     validate: window.TaskListOS.connections.validate,
-    onStatus: function () {},
-    onData: function (d) { M.setConnections(d.connections); if (data) render(); }
+    onStatus: function (s, detail) {
+      if (s !== "error") return;
+      const kind = detail && detail.error && detail.error.kind;
+      M.setConnectionsProblem(kind === "missing" ? "" : kind === "bad-file" ? "Your connections file has a small mistake in it. Ask Claude to check it." : "Your connections couldn't be read just now. Reload the page to try again.");
+      if (data && !typing()) render();
+    },
+    onData: function (d) { M.setConnections(d.connections); if (data && !typing()) render(); }
   }).start();
 
   function friendlyError(err) {

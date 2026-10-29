@@ -145,10 +145,12 @@ for p in OVERLAY.rglob("*"):
 # Shared version 13, the same rules as each tool's make-release.sh: setup never gives up on a connection,
 # never asks what's on screen, and never uses keys or GitHub sign-in. The give-up phrases count only in the
 # files that connect apps (elsewhere "move on" or "skip it" is harmless): the tools' own connection steps,
-# plus the kit's setup/toolkit-02-connect-the-rest.md and setup/toolkit-03-make-it-automatic.md.
+# plus the kit's setup/toolkit-01-quick-questions.md, setup/toolkit-02-connect-the-rest.md and
+# setup/toolkit-03-make-it-automatic.md.
 # setup/connections/xero-drafts.md is the one optional extra that uses a key, so it is left out.
 CONNECT_STEPS = {"setup/proposals-04-your-client-folders.md", "setup/content-02-your-platforms.md",
-                 "setup/money-01-your-accounts.md", "setup/money-02-your-bank.md", "setup/ads-02-where-your-ads-are.md"}
+                 "setup/money-01-your-accounts.md", "setup/money-02-your-bank.md", "setup/ads-02-where-your-ads-are.md",
+                 "setup/toolkit-01-quick-questions.md"}
 GIVE_UP = (
     (r"and (move|carry) on\b(?! (from|setting up))", "lets Claude give up on a step"),
     (r"\bthen move on\b", "lets Claude give up on a step"),
@@ -162,6 +164,12 @@ NO_KEYS = (
     (r"save-key", "asks for a key"),
     (r"\bgh (auth|api|repo)\b", "needs a GitHub sign-in while the tools are public"),
 )
+# The tools' rule, word for word: nothing that ships reads a file from raw.githubusercontent.com
+for p, rel in kit_files():
+    if "node_modules" in rel.parts or p.suffix in (".png", ".jpg", ".woff2", ".zip", ".gz", ".ico"):
+        continue
+    if "raw.githubusercontent.com" in p.read_text(errors="ignore"):
+        bad("%s uses raw.githubusercontent.com: read files from the downloaded copy instead" % rel)
 for p, rel in kit_files():
     r = rel.as_posix()
     v13_scope = r in ("START-HERE.md", "README.md") or r.startswith(("setup/", ".claude/skills/connect-a-tool/", ".claude/skills/get-updates/"))
