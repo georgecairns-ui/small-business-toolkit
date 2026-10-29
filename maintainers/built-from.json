@@ -18,7 +18,7 @@
     },
     "content": {
       "repository": "georgecairns-ui/content-machine-os",
-      "commit": "df71b3e4409e6b2303fe6e8d847c797523d64c3c"
+      "commit": "787a7e162405d361b84f506f6bd43c97e2ca35f3"
     },
     "money": {
       "repository": "georgecairns-ui/money-view-os",

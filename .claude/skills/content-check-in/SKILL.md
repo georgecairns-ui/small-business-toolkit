@@ -26,7 +26,7 @@ Read To do the way the app does and say it in plain words. You report; you don't
 4. Say it in a few short lines, most urgent first, naming the real posts and platforms. Lead with what to post today, then what's overdue.
 5. **Task list (only if Task List OS is attached).** Add a suggested task for each post due today ("Post to Instagram: <title>") and each open need not already there, following the hand-off in `apps/content/ATTACH-CLAUDE.md`. Check `source.id` and the title first so you never add one twice. Never edit or remove anything already in the task list.
 6. Don't change the content plan itself. If you spot a problem (a post with no words and a date this week), say so and offer to run `write-posts`.
-7. **Connections.** For each app that is `connected` or `needs-attention` in `apps/home/data/connections.json`, do one small read through its connection (the same kind of read that proved it in setup, such as the name of their page). If it works, set its `checked` to today, and if its status was `needs-attention`, set it back to `connected` (the read just worked). If a read failed, set it to `needs-attention` with what went wrong in `note`, keep the old `checked`, and say so in one line of your summary ("Couldn't read your LinkedIn page this time: it may need signing in again. There's a Fix it button on Home."). Do this in a scheduled run too. If the file isn't there, or no app in it is `connected` or `needs-attention`, there is nothing to do here.
+7. **Connections.** Only check the rows for Content Machine's own platforms: the ones its setup step 3 (`setup/content-02-your-platforms.md`) connects, which are the platforms in `content.json` `platforms` that are `on` and any tool they send their email newsletter with. `apps/home/data/connections.json` is shared with every other app attached in this folder, so it can also hold rows for other apps (for example Meta Ads and Google Ads from Ads OS). Skip every row that isn't one of those platforms and leave it exactly as it is: don't read it, don't change its `checked`, `status` or `note`. Never call a Meta Ads or Google Ads tool from this check-in. Ads OS reads ad accounts only when the person asks, and it never pre-approves an ad-account tool, so a scheduled run would stop at a permission prompt. For each of Content Machine's own platforms that is `connected` or `needs-attention`, do one small read through its connection (the same kind of read that proved it in setup, such as the name of their page). If it works, set its `checked` to today, and if its status was `needs-attention`, set it back to `connected` (the read just worked). If a read failed, set it to `needs-attention` with what went wrong in `note`, keep the old `checked`, and say so in one line of your summary ("Couldn't read your LinkedIn page this time: it may need signing in again. There's a Fix it button on Home."). Do this in a scheduled run too. If the file isn't there, or none of Content Machine's own platforms in it is `connected` or `needs-attention`, there is nothing to do here.
 
 ## What to say back
 
@@ -39,8 +39,9 @@ If this is a scheduled run, say nothing unless a connection read failed; that is
 
 ## Rules
 
-- Read only, apart from the dates and statuses in step 7. Never mark a post posted, a need done or a post approved: that's theirs.
+- Read only, apart from the dates and statuses of Content Machine's own platforms in step 7. Never mark a post posted, a need done or a post approved: that's theirs.
 - Never post, publish, schedule, message, comment, follow or like anything through a connection.
+- Never call a Meta Ads or Google Ads tool, or read any other app's connection, from this check-in.
 - If a connection fails, carry on with the others and record the failure under step 7.
 - Never invent a post or a due date.
 - If the plan is empty, say so and offer "plan my content".
