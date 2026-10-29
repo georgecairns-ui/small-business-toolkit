@@ -17,8 +17,14 @@ Goal: prove every tool you set up works, both ways, then leave them with one cle
 
 Fix anything that fails, then check again.
 
+**Connections** (`apps/home/data/connections.json`, checked for real, not from memory)
+- [ ] Email is `connected` with a checked date from this setup, or `no-connector`, said plainly.
+- [ ] Calendar is checked the same way, separately: `connected` with a checked date from this setup, or `no-connector`, said plainly. (When they come from different providers, each has its own row.)
+- [ ] Their call recorder, every app on the step 4 list and every platform from Content Machine OS's platforms step is `connected`, `export-only`, `no-connector`, `needs-attention` or `not-used`. Other apps they named may stay `not-connected` with the note "Chose not to connect yet".
+- [ ] Every connected app is in `context/tools.md` with what you may and may not do.
+- [ ] The one check-in task exists (`list_scheduled_tasks` shows exactly one for this folder) and its first run finished without stopping, or they said no to it. `.claude/settings.local.json`, if it's there, holds only the read tools step 8 added with their yes, and no Meta Ads or Google Ads tool.
+
 **The Toolkit page** (`apps/toolkit/data/toolkit.json`)
-- [ ] Every app in `context/tools.md` is in `connections` with the right status and today's date.
 - [ ] Every tool has a status. Anything they chose to leave for later says `not-yet`.
 - [ ] Up to 3 ideas, from `.claude/skills/whats-next`, each with a ready prompt.
 - [ ] `builds` lists the skills you built in step 7 and anything else you made for them.
@@ -36,11 +42,11 @@ Fix anything that fails, then check again.
 ## 9.3 Hand over
 
 1. In `setup/progress.md`, change "Setup status" to `complete on <date>` and tick step 9. In `CLAUDE.md`, change `Setup: not done yet` to `Setup: complete on <date>`.
-2. Tell them what you did, as one short list with real numbers across every tool. For example: "Connected Gmail, Google Calendar, Fathom, Pipedrive and Xero. Sorted 143 emails and drafted 9 replies. Wrote up 4 calls. Put 23 deals on your pipeline. Wrote a proposal for Greenway. Your money view shows £8,400 owed to you. Built you 4 skills."
+2. Tell them what you did, as one short list with real numbers across every tool. For example: "Connected Gmail, Google Calendar, Fathom, Pipedrive and Xero. Sorted 143 emails and drafted 9 replies. Wrote up 4 calls. Put 23 deals on your pipeline. Wrote a proposal for Greenway. Your money view shows £8,400 owed to you. Built you 4 skills." Add, in one line each: how many emails from the last 30 days you read, how many need a reply, which apps are connected, and which are export-only.
 3. Their skills, in one line: they're in the **skills-to-upload** folder, and adding them to Claude (Customize, then Skills) means they work in every conversation, including on their phone.
 4. Then, briefly:
    - Their link, **http://localhost:4747**, and whether it starts with their computer.
    - What's connected, and that you read and draft; each tool's exceptions (sending an approved email, a draft invoice, a paused campaign) only ever happen when they press the button and say yes.
-   - Whether you're checking in automatically, and when.
+   - Whether you're checking in automatically, and at what times. If Ads OS is set up: their ad figures come in when they say "update my ads" or press **Refresh figures**, never on a schedule.
    - **The Toolkit section** in the sidebar: Connections shows every app and connects new ones with one button; Set up has a **Set up now** button for each tool they left for later; Build and customise is where they ask for a new page, a new skill or a change, and where your ideas for what to do next appear. Every button opens Claude with the job already typed in.
    - The phrases that do most of the work: "sort my day", "check everything", "what's my pipeline?", "write a proposal for...", "how's cash looking?", "plan my content", "how did the ads do?". In Claude Code each skill also works as a command, for example `/sort-my-day`.

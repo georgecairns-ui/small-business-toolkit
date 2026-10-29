@@ -1,12 +1,14 @@
 /*
   TOOLKIT ON HOME: the boxes this tool adds to the Home dashboard
   ---------------------------------------------------------------
-  Loaded by apps/home/home.js after app/apps-list.js and app/model.js (listed under "home" in the tool's
-  menu file). It reads the same data file as the app itself, through the same shared store.
+  Loaded by apps/home/home.js after ../shared/js/connections.js, app/apps-list.js and app/model.js (listed under
+  "home" in the tool's menu file). It reads the same data files as the app itself, through the same shared store:
+  data/toolkit.json, and apps/home/data/connections.json for which apps are connected (shared version 13).
 
   Both boxes start switched on (defaultOn), because this kit is always installed fresh with the Toolkit in it.
   - Next steps: up to 4 things, in order: tools not set up yet, key apps not connected, then Claude's new ideas.
-  - Connections: how many are connected, the ones needing attention first.
+  - Connections: how many are connected (the shared count every tool's Home box uses), then the ones needing
+    attention, including rows with no card on the Connections page (LinkedIn, anything added through Connect something else).
   Every button opens Claude with the job typed in (or copies it), exactly as in the app. Nothing on Home
   changes the file.
 */
@@ -20,6 +22,7 @@
   let data = null;
   let folder = null;
   let problem = "";   // why the file couldn't be read, shown in place of the boxes
+  let shared = {};    // the connections in apps/home/data/connections.json
 
   function empty(text) { return '<p class="hbox__empty">' + esc(text) + "</p>"; }
   function sub(text) { return '<p class="hbox__more">' + esc(text) + "</p>"; }
@@ -51,12 +54,17 @@
 
   function connectionsBox() {
     if (problem) return empty(problem);
-    const n = M.counts(data);
-    const attention = M.connectionsByUrgency(data).filter(function (x) { return x.status === "needs-attention"; });
-    const stat = '<p class="hstat"><span class="hstat__num">' + n.connected + " of " + n.apps + '</span><span class="hstat__label">connected</span></p>';
-    if (!attention.length) return stat + sub(n.connected ? "None need attention." : "Connect your email and calendar first. Open the page to see them all.");
+    if (M.connectionsProblem()) return empty(M.connectionsProblem());
+    const s = window.TaskListOS.connections.counts({ connections: shared });
+    const stat = s.total ? '<p class="hstat"><span class="hstat__num">' + s.connected + " of " + s.total + '</span><span class="hstat__label">connected</span></p>' :
+      '<p class="hstat"><span class="hstat__label">Nothing connected yet</span></p>';
+    const attention = M.connectionsByUrgency(data).filter(function (x) { return x.status === "needs-attention"; })
+      .map(function (x) { return { name: x.app.name, prompt: M.prompt.fix(x.app) }; })
+      .concat(M.extras(data).filter(function (x) { return x.status === "needs-attention"; })
+        .map(function (x) { return { name: x.name, prompt: window.TaskListOS.connections.fixPrompt(x.name) }; }));
+    if (!attention.length) return stat + sub(s.connected ? "None need attention." : "Connect your email and calendar first. Open the page to see them all.");
     return stat + '<ul class="hlist" role="list">' + attention.slice(0, 3).map(function (x) {
-      return row(x.app.name, "Needs attention", "Fix it", M.prompt.fix(x.app));
+      return row(x.name, "Needs attention", "Fix it", x.prompt);
     }).join("") + "</ul>" + (attention.length > 3 ? sub("and " + (attention.length - 3) + " more on the Connections page") : "") + note();
   }
 
@@ -96,6 +104,24 @@
         onData: function (d) { data = d; problem = ""; def.ready = true; ctx.refresh(); }
       });
       store.start();
+      // Which apps Claude can reach: the shared file every tool reads (shared v13). Missing just means nothing is connected yet.
+      window.TaskListOS.createStore({
+        moduleId: "connections",
+        fileName: "connections.json",
+        dataPaths: ["data", "", "apps/home/data"],
+        api: window.TaskListOS.connections.API,
+        validate: window.TaskListOS.connections.validate,
+        // As in apps/shared/js/connections-box.js: a missing file stays silent, a broken one says so in the box
+        onStatus: function (s, detail) {
+          // Read cleanly again: any old message goes
+          if (s === "ready" && M.connectionsProblem()) { M.setConnectionsProblem(""); ctx.refresh(); return; }
+          if (s !== "error") return;
+          const kind = detail && detail.error && detail.error.kind;
+          M.setConnectionsProblem(kind === "missing" ? "" : kind === "bad-file" ? "Your connections file has a small mistake in it. Ask Claude to check it." : "Your connections couldn't be read just now. Reload the page to try again.");
+          ctx.refresh();
+        },
+        onData: function (d) { shared = d.connections; M.setConnections(d.connections); ctx.refresh(); }
+      }).start();
     },
     action: function (name, el) {
       if (name !== "copy") return;

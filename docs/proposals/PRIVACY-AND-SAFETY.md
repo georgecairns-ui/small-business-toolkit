@@ -32,7 +32,7 @@ Save as PDF opens your computer's print window: choose "Save as PDF" and save it
 
 ## What about passwords and keys?
 
-Claude never asks for your passwords. When you connect an app, you sign in on that app's own screen. If an app needs a key (a long code for a direct connection), Claude gives you one line to paste into the Terminal. It asks for the key and stores it in your computer's secure keychain (on Windows, your user settings). The key never goes into the chat or into this folder.
+Claude never asks for your passwords, and setup uses no keys. Apps connect through Claude's Connectors: you sign in on each app's own page, never in the chat or in this folder. If an app has no Claude connector, Claude reads a CSV or PDF export of it instead: you drop the export in the files folder and Claude reads it whenever you ask.
 
 ## Can I see what's connected and switch it off?
 
@@ -44,7 +44,7 @@ Your proposals app runs from a small program in your Small Business Toolkit fold
 
 ## Does it run when I'm not there?
 
-Only if you turn on check-ins during setup. Then the Claude app checks your client folders, emails and calls every hour during your working day, while your computer is on and the app is open. It uses a little of your Claude allowance each time. You can pause it in the Claude app.
+Only if you choose check-ins during setup; you can skip them. Then the Claude app checks your client folders, emails and calls a few times a day, at the times you agreed, while your computer is on and the app is open. It uses a little of your Claude allowance each time, and it only reads your apps; it never sends or changes anything in them. You can pause it in the Claude app.
 
 ## Who sees my information?
 

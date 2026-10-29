@@ -1,11 +1,11 @@
 ---
 name: pipeline-check-in
-description: The regular check-in that keeps Pipeline OS up to date on its own - reads new sales calls from the call recorder (Fathom, Fireflies, Otter, Granola, tl;dv, Read AI, Zoom, Microsoft Teams, Google Meet) and updates each deal, works out which meetings in the calendar are sales meetings, spots new enquiries and replies from prospects in email, preps the person for tomorrow's sales calls, and drafts chases for deals gone quiet. Use for scheduled runs ("Run /pipeline-check-in"), after Task List OS's check-in when both are attached, or when the person says "update my pipeline", "check in", "anything new on my deals?".
+description: The regular check-in that keeps Pipeline OS up to date on its own - reads new sales calls from the call recorder (Fathom, Fireflies, Otter, Granola, tl;dv, Read AI, Zoom, Microsoft Teams, Google Meet) and updates each deal, works out which meetings in the calendar are sales meetings, spots new enquiries and replies from prospects in email, preps the person for tomorrow's sales calls, and drafts chases for deals gone quiet. Use for a scheduled check-in ("Run /pipeline-check-in"), after Task List OS's check-in when both are attached, or when the person says "update my pipeline", "check in", "anything new on my deals?".
 ---
 
 # Pipeline check-in
 
-Runs every hour if setup scheduled it, or whenever the person asks. It adds, updates and makes the everyday calls itself; it never removes anything, never closes a deal, and never sends anything except emails the person approved.
+Runs a few times a day, at the times the person agreed in setup step 9, or whenever they ask. It adds, updates and makes the everyday calls itself; it never removes anything, never closes a deal, and never sends anything except emails the person approved.
 
 ## What you need
 
@@ -34,9 +34,10 @@ Runs every hour if setup scheduled it, or whenever the person asks. It adds, upd
 8. **Call prep.** For each sales call tomorrow (or later today, if not done yet), follow `.claude/skills/prep-for-a-sales-call` (it uses the research), unless there's already a `prep` suggestion for it.
 9. **Chases.** Follow `.claude/skills/who-to-chase` for deals gone quiet.
 10. **Task list.** If Task List OS is attached, add call prep, chases and next steps due in the next 7 days as suggested tasks there (`source: { "tool": "pipeline", "id": "<deal id>" }`), unless already there.
-11. Update `checkIn`: `lastRunAt` now, `nextRunAt` (now plus the schedule interval, or null for a one-off), and add this run's `emailsRead`, `callsRead` and `dealsUpdated` if `lastRunAt` was today (start from zero on a new day).
+11. Update `checkIn`: `lastRunAt` now, `nextRunAt` (the next agreed check-in time, which is in `context/tools.md`, or null if there is no scheduled check-in), and add this run's `emailsRead`, `callsRead` and `dealsUpdated` if `lastRunAt` was today (start from zero on a new day).
 12. Save safely: read right before writing, write the whole file, read it back and check it parses.
 13. Make sure the app is running so the person sees it: `bash setup/scripts/start-toolkit.sh` (Mac or Linux) or `powershell -ExecutionPolicy Bypass -File setup\scripts\start-toolkit.ps1` (Windows). It does nothing if it's already running.
+14. **Connections.** For each app you read from in this check-in, set its `checked` in `apps/home/data/connections.json` to today, and if its status was `needs-attention`, set it back to `connected` (the read just worked). If a read failed, set it to `needs-attention` with what went wrong in `note`, keep the old `checked`, and say so in one line of your summary ("Couldn't read Fathom this time: it may need signing in again. There's a Fix it button on Home.").
 
 ## New deals: your call
 
@@ -49,11 +50,11 @@ Decide yourself, using `settings.fitCriteria` and `context/sales.md` (what they 
 ## What to say
 
 If the person asked: 2 or 3 lines. "Updated 3 deals. Your call with Hollins went well: the deal check is at 69% and a reply is ready. 1 new enquiry from Bramble & Co is waiting in Review, and I've drafted a chase for Marlow Dental."
-On a scheduled run, say nothing unless something is urgent (a hot new enquiry, a sales call in the next 2 hours with prep waiting); then one line.
+On a scheduled run, say nothing unless something is urgent (a hot new enquiry, a sales call in the next 2 hours with prep waiting) or a connection read failed; each of those is worth one line.
 
 ## Rules
 
 - Never send anything except emails with `sendStatus: "queued"` (step 1), never reply, book, accept or delete anything, never send LinkedIn messages, and never send a bot or note-taker to a meeting.
 - Never close a deal (won or lost) yourself. Suggest it.
 - Never re-add a deal or suggestion the person skipped (check skipped suggestions, deals marked "Not a deal", and `context/people.md`).
-- If a connection fails, carry on with the others and note it in `setup/progress.md`.
+- If a connection fails, carry on with the others and record the failure under step 14.

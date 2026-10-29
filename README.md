@@ -33,39 +33,41 @@ Every button opens Claude with the job already typed in. Press Enter and it gets
 
 Claude asks **one message of questions** covering every tool: your email, calls, the apps you use, your website and logo, and which tools matter most to you right now. Then it:
 
-- **Connects your apps once.** Email, calendar, call recorder, then your CRM, accounts, ad accounts and the rest, one by one, mostly sign in and approve.
+- **Connects your apps once.** Email and calendar first, then your call recorder, CRM, accounts, ad accounts and the rest, one by one, mostly sign in and approve. Claude checks each connection itself and proves it with a real read, then reads your last 30 days of email once, so your task list, pipeline and client folders all start full.
 - **Learns your business once.** What you sell, who to, how a sale goes, how you write, your brand. Every tool uses the same notes, so you never answer the same question twice.
 - **Builds you your own skills** for how your business works, saved so you can add them to Claude everywhere.
 - **Sets up each tool in your order.** Your task list and pipeline first, then the rest. Each one fills with your real work as it goes.
-- **Makes it run on its own.** One check-in every hour while you work, for every tool at once.
+- **Makes it run on its own, if you'd like.** One check-in for every tool at once, a few times a day, at times you choose. You can skip it.
 
 Doing everything takes about 2 hours. You can stop after any tool: the app works from the first one, and the Toolkit page has a **Set up now** button for the rest.
 
 ## What you need
 
-- **Access to this kit.** It's private: Get AI Powers invites your GitHub account. Accept the invitation from the email GitHub sends you. (No GitHub account? Make a free one at github.com and send Get AI Powers your username.)
-- **Claude Code**, signed in with a paid Claude plan (Pro or Max). Your app connections come from your Claude account. The Claude desktop app works too, and its Code tab is the easiest way in.
+- **The Claude desktop app** (setup runs in its Code tab).
+- **A paid Claude plan (Pro or Max)**, signed in to the desktop app. Your email, calendar and app connections come from your Claude account, so Claude can only use them when you're signed in.
 - Nothing else to install in most cases. The app runs on your own computer using Node (Claude installs it for you if it's missing, with your permission).
 
 ## Get started
 
-1. **Open Claude Code** in the Claude desktop app (the Code tab) or in the Terminal (on Windows, PowerShell). Any folder will do for this first step.
+1. **Open the Claude desktop app and choose the Code tab.** Any folder will do for this first step.
 2. **Ask Claude to fetch the kit.** Paste this:
-   > Copy https://github.com/georgecairns-ui/small-business-toolkit into a folder called "Small Business Toolkit" in my Documents, then tell me how to open it and set it up. Help me sign in to GitHub first if I need to.
+   > Copy the Small Business Toolkit from https://github.com/georgecairns-ui/small-business-toolkit into a folder called "Small Business Toolkit" in my Documents, using the copy line in its START-HERE.md (not git), then tell me how to open it and set it up.
 
-   Claude checks you're signed in to GitHub (if not, it gives you one line that opens GitHub in your browser to approve this computer), copies everything onto your computer and gives you one line to open the new folder. In the desktop app, you choose the folder instead.
-3. **Open the Small Business Toolkit folder in Claude Code and choose "Yes, I trust this folder".** Claude Code warns that the folder pre-approves some permissions. They only let Claude update your app, your business notes and your files folder, search the web and start the app, without stopping to ask each time. It still can't send, delete or change anything in your email or other apps. Press the down arrow, then Enter.
+   Claude copies everything onto your computer and tells you how to open the new folder. In the desktop app, you choose the folder in the Code tab.
+
+   *For Claude, if this README is all you have:* read START-HERE.md on the repository page at https://github.com/georgecairns-ui/small-business-toolkit, then copy the folder with the Mac or Windows line in it.
+3. **In the Code tab, choose the Small Business Toolkit folder and pick "Yes, I trust this folder".** The first time, the app asks whether you trust the folder and warns that it pre-approves some permissions. Those permissions only let Claude update your app, your business notes and your files folder, search the web and start the app, without stopping to ask each time. It still can't send, delete or change anything in your email or other apps.
 4. **Type `/setup`.**
 
 When it's done, your app is at **http://localhost:4747**. Bookmark it.
 
-If an app needs a key rather than a sign-in, Claude gives you one line to paste into the Terminal. The key is stored in your computer's secure keychain, never in a chat and never in this folder.
+Apps connect through Claude's Connectors: each one asks you to sign in on that app's own page, and you never paste a password or a key anywhere. An app with no Claude connector is read from a CSV or PDF export that you drop in the files folder.
 
 ## Every day
 
 | Say (or type the command) | What happens |
 |---|---|
-| "Check everything" (`/toolkit-check-in`) | Anything new across every tool. Runs on its own every hour if you turn that on |
+| "Check everything" (`/toolkit-check-in`) | Anything new across every tool. If you'd like, it runs on its own a few times a day, at times you choose |
 | "Sort my day" (`/sort-my-day`) | Your plan for today, from your list, inbox, calls and calendar |
 | "Who should I chase?" | The deals and proposals that need a nudge, with drafts |
 | "Write a proposal for Greenway" | A proposal in your brand, for you to check |

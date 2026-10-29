@@ -2,7 +2,7 @@
 
 Goal: `context/ads.md` says who the ads are for, where they are, and what has been tried before. Every campaign Claude drafts starts here.
 
-Ask one question, wait for the answer, save it, then ask the next. Skip anything `context/business.md` already answers: say you've got it and move on.
+Ask one question, wait for the answer, save it, then ask the next. Skip anything `context/business.md` already answers: say you've got it and ask the next question.
 
 ## 1. Ask
 

@@ -34,7 +34,7 @@ The routines live as skills in `.claude/skills/`: `pipeline-check-in` (the regul
   "people":      [ { ...person... } ],
   "calls":       [ { ...a sales call, written up... } ],
   "suggestions": [ { ...something waiting for the person to decide... } ],
-  "checkIn":     { "lastRunAt": "2026-10-08T10:30:00.000Z", "nextRunAt": "2026-10-08T11:30:00.000Z", "emailsRead": 34, "callsRead": 1, "dealsUpdated": 3 },
+  "checkIn":     { "lastRunAt": "2026-10-08T07:00:00.000Z", "nextRunAt": "2026-10-08T12:00:00.000Z", "emailsRead": 34, "callsRead": 1, "dealsUpdated": 3 },
   "activity":    [ { "at": "...", "type": "deal-moved", "dealId": "d-x7k2m9", "from": "talking", "to": "proposal" } ]
 }
 ```

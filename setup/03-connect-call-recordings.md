@@ -17,9 +17,9 @@ If they said in step 1 that they don't record calls, say one sentence ("If you e
 | Zoom | `setup/connections/zoom.md` |
 | Microsoft Teams | `setup/connections/microsoft-365.md` |
 | Google Meet | `setup/connections/google-drive.md` |
-| Something else | Ask whether it emails a summary after each call. If it does, you'll read those through their email (step 2). Otherwise ask them to save transcripts into `files/08-projects/calls/` as they happen. |
+| Something else | Find the route with `.claude/skills/connect-a-tool` (search Claude's connector directory for it). If there is no connector, say the no-connector sentence from that skill and record `export-only`; if the recorder emails a summary after each call, you'll read those through their email (step 2), otherwise ask them to save transcripts into `files/08-projects/calls/` as they happen. |
 
-Most recorders have a Claude connector: the person signs in, approves, done. Only use an API key if the guide says the connector isn't available on their plan.
+Follow the recorder's guide and `.claude/skills/connect-a-tool` (check, switch on or point to Connect, prove, record). Most recorders have a Claude connector: the person signs in, approves, done.
 
 ## 3.2 Check it works
 
@@ -27,6 +27,8 @@ Read the list of their 3 most recent calls (titles and dates only) and tell them
 
 > I can see your calls. The latest was "Discovery call with Ellis Joinery" yesterday. In the first run I'll write up the last 2 weeks of calls and pull out the actions.
 
+If the read fails, go back to the loop. If it still won't connect, record it as `needs-attention` and carry straight on to step 4.
+
 ## 3.3 Record it
 
-Add the row to `context/tools.md` with "Read transcripts and summaries" and "Never send a bot to a meeting, share a recording or invite anyone". Tick step 3 in `setup/progress.md`.
+Record it only after that read worked: `apps/home/data/connections.json` (format in `setup/connections/README.md`, "Recording a connection") with `"status": "connected"` and today's date in `checked`, and the row in `context/tools.md` with "Read transcripts and summaries" and "Never send a bot to a meeting, share a recording or invite anyone". Tick step 3 in `setup/progress.md`.

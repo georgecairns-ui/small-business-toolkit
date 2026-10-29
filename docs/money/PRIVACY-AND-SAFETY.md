@@ -30,7 +30,11 @@ Reading your accounts software and its bank feed is read only. The Xero connecti
 
 ## What about passwords and keys?
 
-Claude never asks for a password, and no key should ever go into this folder or into the chat. If you set up the optional Xero drafts connection, its 2 codes are saved with a small script that puts them in your computer's secure store: the Keychain on a Mac, or the equivalent on Windows. Claude then uses them without ever showing them.
+Claude never asks for a password, and no key should ever go into this folder or into the chat. Your accounts software connects through Claude's Connectors: you sign in on its own page, never in the chat or in this folder, and setup never uses a key. If your accounts software has no Claude connector, Money View can't build your money view from it yet; Claude can still read a CSV or PDF export you drop in the files folder, whenever you ask. The one exception is the optional Xero drafts connection, set up only if you ask for it. If you set up the optional Xero drafts connection, its 2 codes are saved with a small script that puts them in your computer's secure store: the Keychain on a Mac, or the equivalent on Windows. Claude then uses them without ever showing them.
+
+## Does it run when I'm not there?
+
+Only if you choose the regular refresh during setup; you can skip it. Then the Claude app brings your numbers up to date on the days and at the times you agreed, while your computer is on and the app is open, and checks your accounts connection still works. It uses a little of your Claude allowance each time. It only reads your accounts software; it never sends, pays, moves or changes anything. You can pause it in the Claude app.
 
 ## Who does the sums?
 

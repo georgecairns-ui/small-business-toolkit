@@ -1,3 +1,5 @@
+**Optional extra.** Only when the person asks for Claude to put invoices into Xero. Never offered in setup.
+
 # Connect Xero so Claude can put invoices in as drafts (optional)
 
 One line: lets Money View put an invoice into Xero as a **draft**, so the person checks it and sends it from Xero. **This is optional.** Money View works without it: it opens Xero's new invoice page and they raise the invoice there.

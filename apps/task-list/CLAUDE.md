@@ -37,7 +37,7 @@ Everything lives in this one file. The app checks it every few seconds and saves
   "dump":   [ { ...brain dump line... } ],
   "replies":  [ { ...email that needs an answer, with a draft... } ],
   "meetings": [ { ...a call, written up... } ],
-  "triage":   { "lastRunAt": "2026-10-06T10:30:00.000Z", "nextRunAt": "2026-10-06T11:30:00.000Z", "emailsScanned": 47, "needReply": 6, "newTasks": 4, "noAction": 37, "callsProcessed": 2 },
+  "triage":   { "lastRunAt": "2026-10-06T07:00:00.000Z", "nextRunAt": "2026-10-06T12:00:00.000Z", "emailsScanned": 47, "needReply": 6, "newTasks": 4, "noAction": 37, "callsProcessed": 2 },
   "activity": [ { "at": "2026-10-06T09:15:00.000Z", "type": "task-done", "taskId": "t-k3j9x2", "minutes": 6 } ]
 }
 ```
@@ -177,7 +177,7 @@ From `process-calls` (or `meeting-follow-up` for pasted notes). Shown on the Cal
 
 ### Triage: when you last checked
 
-`triage` powers the line at the top of Today and the Inbox ("Claude checked at 10:30: 47 emails sorted, 6 need a reply..."). `check-in` updates it every run. Counts are for today; start them from zero on a new day. `nextRunAt` is when the next scheduled check-in is due, or `null`.
+`triage` powers the line at the top of Today and the Inbox ("Claude checked at 7:00: 47 emails sorted, 6 need a reply..."). `check-in` updates it every run. Counts are for today; start them from zero on a new day. `nextRunAt` is when the next scheduled check-in is due (the agreed times are in `context/tools.md`; for example 12:00 after a 7:00 run), or `null`.
 
 ### Settings for the app's buttons
 

@@ -4,14 +4,16 @@ Goal: in one short exchange, learn everything the 7 tools need to know up front,
 
 ## 1.1 Check what you can reach (quietly, before asking anything)
 
-1. **This folder.** Read `setup/progress.md`, write a test line to its "Notes for next time" section, read it back and remove it. If you can't, stop and ask them to open this folder in Claude Code (`cd` into it and run `claude`), or give the Claude app access to it.
-2. **Your connections.** List the tools you have right now. In Claude Code, the person can type `/mcp` to see them. Note any for email, calendar, call recording, files, accounts, bank, customers and sales, ads, team chat and bookings. Connectors added to their Claude account appear automatically in Claude Code when it's signed in with a Claude subscription.
+1. **This folder.** Read `setup/progress.md`, write a test line to its "Notes for next time" section, read it back and remove it. If you can't, stop and ask them to open this folder in the Claude desktop app's Code tab, or give the Claude app access to it.
+2. **Their connections, checked for real.** Look up this session's connections (`session_connectors_status`). For each one that is for email, calendar, call recording, files, accounts, bank, customers and sales, payments, ads, team chat or bookings, note its name and status: on (`connected`), switched off for this session, needs signing in (`needs_auth`) or not working (`failed`). Steps 2, 3 and 4 act on this list. Never ask the person to describe their screen; you can see the status yourself.
 3. **Where the folder lives.** From its path: Downloads or Desktop (suggest moving it to Documents first, because the app remembers the location), a cloud-synced folder (fine, it's backed up), or a folder shared with other people (point out that anyone with access can read their tasks, deals and money figures).
 4. **Their computer.** Mac or Windows, from the path or by running a harmless command.
 
-## 1.2 Ask everything in one message
+## 1.2 Ask the questions
 
-Open with what you found in 1.1, so they see you've already looked: "You've already got Gmail, Google Calendar and Xero connected to Claude, so I'll use those." Then send the questions as one friendly, numbered message. Skip anything you already know and say so. Tell them short answers are fine and they can drop files straight in.
+Use the guide mode from `setup/progress.md`: for `beginner`, ask the questions 2 at a time instead of all at once.
+
+Open with what you found in 1.1, so they see you've already looked: "You've already got Gmail, Google Calendar and Xero connected to Claude, so I'll use those." Say what you actually found, for example "I can see Gmail, but it needs signing in again, so we'll do that first." Then send the questions as one friendly, numbered message (all at once, unless their guide mode says otherwise). Skip anything you already know and say so. Tell them short answers are fine and they can drop files straight in.
 
 > To set up your whole toolkit I need a few things, once. Short answers are fine, and you can drop files straight in here.
 >
@@ -27,7 +29,6 @@ Open with what you found in 1.1, so they see you've already looked: "You've alre
 > 10. Where do you keep things about each **client** today? And have you got a **proposal** you're proud of, or a template you always use? (Drop 1 to 3 in here if so.)
 > 11. Which days and hours do you usually work? Is it just you, or do you hand work to anyone? (First names are enough.)
 > 12. **Which of these matter most to you right now?** Your task list and pipeline go first because everything else feeds them. After that, put the rest in order, or tell me which can wait: proposals, content, money, ads, and a map of your skills and folders. Doing everything today takes about 2 hours; you can stop after any tool.
-> 13. Would you like me to **check everything automatically** every hour while you work: your inbox, calls and calendar, your deals, your money and your ads? (It uses some of your Claude allowance and needs the Claude app open on your computer.)
 
 If they skip a question, don't chase it now. The tool that needs it asks when its turn comes.
 
@@ -37,7 +38,7 @@ Each tool keeps a few of these answers in its own settings. Write them all now, 
 
 **Notes**
 - `setup/progress.md`, under a new heading `## Answers from step 1`: every answer, one short line each, in their words. Every later step reads this before asking anything.
-- `context/tools.md`: "Your setup" (computer, Claude version, workspace location, email provider, calendar provider, solo or team) and "Connected apps" (one row per app they named, with "How it's connected" left as "to do"). Their answer to 13 under "Notes".
+- `context/tools.md`: "Your setup" (computer, Claude version, workspace location, email provider, calendar provider, solo or team) and "Connected apps" (one row per app they named, with "How it's connected" left as "to do").
 - `context/business.md`: business name, website, what it does.
 - `context/people.md`: the people they hand work to, first names and roles.
 - `context/routines.md`: their working days and hours.
@@ -54,7 +55,9 @@ Each tool keeps a few of these answers in its own settings. Write them all now, 
 
 **The Toolkit page** (`apps/toolkit/data/toolkit.json`)
 - `tools`: every tool they chose for today as `not-yet` for now, and every tool they said can wait as `not-yet` with the note "Chose to wait". You'll change each to `set-up` as you finish it.
-- `connections`: every app they named, as `not-connected` with the note "To connect in setup". Anything you found already connected in 1.1 as `connected`, with `how` set to "Claude connector" and today's date in `checked`.
+
+**Connections** (`apps/home/data/connections.json`)
+- Create it if it isn't there, in the format in `setup/connections/README.md` ("Recording a connection"), with one row per app they named, each `"status": "not-connected"` and the note "To connect in setup". Key each row by its guide's file name in `setup/connections/` without `.md` (for an app with no guide, its name in lower case with hyphens). Email and calendar from the same provider share one row (`gmail-and-google-calendar` or `microsoft-365`); from different providers they get a row each, keyed as in step 2's 2.6. Social platforms get their rows in Content Machine OS's platforms step. Only ever set `connected` after a real read works: an app you saw switched on in 1.1 still starts as `not-connected` until its step proves it.
 
 Write their chosen order of tools into `setup/progress.md` under "Answers from step 1" as a numbered list, starting with Task List OS and Pipeline OS. Part 2 of setup follows it.
 

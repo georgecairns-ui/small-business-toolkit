@@ -5,13 +5,14 @@ THE HELPER: the little helper that runs this folder's tools on this computer (Py
 It calls itself by the folder's name: "name" in toolkit.json (for example "Ads OS").
 The same as server.js, for computers that have Python 3 but not Node. Claude uses whichever
 is available. It serves the app at http://localhost:4747 and lets it read and save
-the data files of the tools listed in apps/installed.json (for example apps/task-list/data/tasks.json).
+the data files of the tools listed in apps/installed.json (for example apps/task-list/data/tasks.json),
+and Home's own files in apps/home/data: layout.json, braindump.json and connections.json.
 For a tool marked "media": true there, it also keeps the photos and videos added to that tool's posts in
 the tool's own data/media folder (only a safe file name, the right kind of file, up to 200 MB, never over a
 file that is already there, no delete) and plays them back.
 
 Safety: only listens on this computer (127.0.0.1), only serves the apps folder, only ever saves
-the task file and attached tools' listed data files, keeps a backup (for example tasks.backup.json)
+the task file, attached tools' listed data files and Home's 3 files, keeps a backup (for example tasks.backup.json)
 before every save, refuses requests from other websites, refuses a save that was based on an older copy
 of the file (409) so a change made in between is never overwritten, and answers a badly formed request with
 an error instead of stopping.
@@ -59,6 +60,7 @@ NAME = read_name()
 # A tool's data file must live in its own data folder: apps/<tool>/data/<name>.json
 HOME_LAYOUT = os.path.join(APPS, "home", "data", "layout.json")
 BRAIN_DUMP = os.path.join(APPS, "home", "data", "braindump.json")  # the shared Brain dump, every tool's notes
+CONNECTIONS = os.path.join(APPS, "home", "data", "connections.json")  # which apps Claude can reach, shared by every tool (shared v13)
 DATA_FILE_RE = re.compile(r"^apps/[a-z0-9-]+/data/[a-z0-9-]+\.json$")
 DATA_URL_RE = re.compile(r"^/api/data/([a-z0-9-]+)/([a-z0-9-]+\.json)(/meta)?$")
 MAX_BODY = 10 * 1024 * 1024
@@ -192,7 +194,7 @@ def data_file_for(tool_id, file_name):
     """The file behind /api/data/<tool>/<file>, or None if that tool isn't installed or the file isn't one of its own."""
     # Home's own file: which boxes show, in what order and how wide
     if tool_id == "home":
-        return HOME_LAYOUT if file_name == "layout.json" else BRAIN_DUMP if file_name == "braindump.json" else None
+        return {"layout.json": HOME_LAYOUT, "braindump.json": BRAIN_DUMP, "connections.json": CONNECTIONS}.get(file_name)
     for tool in installed_tools():
         if not isinstance(tool, dict) or tool.get("id") != tool_id or not isinstance(tool.get("dataFiles"), list):
             continue

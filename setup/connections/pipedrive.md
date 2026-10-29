@@ -1,41 +1,40 @@
 # Connect Pipedrive
 
-One line: fills People with contacts, and Review with deals going quiet.
+What it gives your app: contacts in People, and deals going quiet in Review.
 
-**Recommended route:** the Pipedrive connector in Claude's connector directory. **Plans:** available on all paid Pipedrive plans; any Claude plan works for the connector.
+**Connector:** "Pipedrive" in Claude's connector directory, or, if it isn't listed, a custom connector at `https://mcp.pipedrive.ai/mcp`. **Plans:** available on all paid Pipedrive plans; any Claude plan works for the connector.
+**Route:** directory (custom-address if it isn't listed).
 
-## Route 1: connect Pipedrive
+## Connect
 
-1. Say "Let's connect your sales pipeline" to the person. Say "connect" and "a connection", never MCP, API, JSON or repo.
-2. In the Claude app or on claude.ai, go to Customize, Connectors. If "Pipedrive" is already listed, click Connect. If not, click the + button, Add custom connector, name it "Pipedrive MCP BETA", and use the URL `https://mcp.pipedrive.ai/mcp`.
-3. Sign in to Pipedrive and approve.
-4. In Claude Code: it appears once Claude Code is signed in with a claude.ai subscription. Check your own list of connections; if it isn't there yet, ask them to close Claude Code and open it again (in the Terminal, `/mcp` also lists them). Backup if needed: `claude mcp add --transport http pipedrive https://mcp.pipedrive.ai/mcp`.
+1. Say "Let's connect your sales pipeline." Say "connect" and "a connection", never MCP, API, JSON or repo.
+2. Look up this session's connections (`session_connectors_status`) and follow the table in `.claude/skills/connect-a-tool` ("Check, switch on, or point to Connect").
+3. If they need to add it: in the Claude desktop app, Customize, then Connectors, then "Pipedrive", then Connect, then sign in to Pipedrive and approve.
+   If "Pipedrive" isn't listed: Customize, then Connectors, then the + button, then Add custom connector. Name it "Pipedrive MCP BETA" and use exactly `https://mcp.pipedrive.ai/mcp`. Then sign in and approve. Use no other address.
 
-## Route 2: API key
+## If there's no connector
 
-In Pipedrive: account name (top right), Company settings, Personal preferences, API (app.pipedrive.com/settings/api). There's 1 active token per user per company, and it gives access to all that user's data; there's no read-only option. Ask the person to open the Terminal app (Mac) or PowerShell (Windows) in this folder and run `bash setup/scripts/save-key.sh PIPEDRIVE_API_TOKEN` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 PIPEDRIVE_API_TOKEN` (Windows), paste the token, then restart Claude Code. Never ask for the key in chat.
+Say exactly: "There's no Claude connector for Pipedrive, so I can't connect to it live. If you export a CSV or PDF from it and drop it in the files folder, I'll read it whenever you ask." Record it as `export-only`. Ask the person to export a deals report as a CSV and save it into the files folder.
 
-Claude then uses it with the header `x-api-token: $PIPEDRIVE_API_TOKEN`, for example: `curl -H "x-api-token: $PIPEDRIVE_API_TOKEN" "https://<companydomain>.pipedrive.com/api/v2/deals"`.
+## Prove it
 
-## If neither works
+Ask first, then list recent deals. Say: "I can see 12 open deals; Greenway Café has gone quiet since 20 September."
 
-Ask the person to export a deals report as a CSV, and save it into `files/`.
-
-## Check it works
-
-Ask permission, then list recent deals. Say something like: "I can see 12 open deals; Greenway Café has gone quiet since 20 September."
-
-## Rules for Claude with Pipedrive
+## What Claude may and may not do
 
 The connector is read and write: it has `addDeal`, `addNote` and `updateActivity` alongside `getDeals`, `getActivities` and `searchDeals`. Never add or update a deal, note or activity unless the person asks for that one specific action in this conversation. Default to reading and suggesting tasks only.
 
-## What to record
+Pre-approve for check-ins: `getDeals`, `getActivities`, `searchDeals`. Nothing that sends, replies, forwards, deletes, archives, labels, pays, posts, books or changes anything is pre-approved.
 
-Add to `context/tools.md`: "Pipedrive | Claude connector (or API token) | 2026-10-06 | Read deals and activities | Add or update a deal, note or activity, unless asked".
+## Record
+
+`apps/home/data/connections.json`, key `pipedrive`: name "Pipedrive", status `connected`, how "Claude connector: Pipedrive", checked today, note "Read deals and activities. Never add or update a deal, note or activity."
+
+`context/tools.md`: "Pipedrive | Claude connector | <today> | Read deals and activities | Add or update a deal, note or activity, unless asked"
 
 ## Sources
 
-Verified on 2026-10-06.
+Verified on 2026-10-06; rewritten into the connected-onboarding shape on 2026-10-29.
 - https://claude.com/connectors/pipedrive-mcp
 - https://www.pipedrive.com/en/newsroom/pipedrive-mcp-connector-is-now-available-in-claudes-official-marketplace
 - https://support.pipedrive.com/en/article/mcp-claude

@@ -1,16 +1,20 @@
 # Start here
 
-> **If you're a person reading this:** you don't need to do anything in this file. Open this folder in Claude Code and type **/setup** (or say "Read START-HERE.md and set me up"). Claude asks you one message of questions, connects the apps you use, learns your business once, then sets up each tool in the order that matters most to you. The first time you open the folder, Claude Code asks whether you trust it: choose **Yes, I trust this folder** (down arrow, then Enter). That lets Claude update your app and notes without asking every time; it still can't send or delete anything.
+> **If you're a person reading this:** you don't need to do anything in this file. Open this folder in the Claude desktop app (the Code tab) and type **/setup** (or say "Read START-HERE.md and set me up"). Claude asks you one message of questions, connects the apps you use, learns your business once, then sets up each tool in the order that matters most to you. The first time you open the folder, the app asks whether you trust it: choose **Yes, I trust this folder**. That lets Claude update your app and notes without asking every time; it still can't send or delete anything.
 
 ---
 
 **Claude, this file is for you.** The person you work for has copied the Small Business Toolkit onto their computer and wants it set up.
 
-**If you've only just copied it for them** (you're running in a different folder, such as their home or Documents folder): setup must run from inside the Small Business Toolkit folder, because that's where your skills, permissions and the app live. This is a private kit: copying it needs their GitHub sign-in. Check with `gh auth status`; if they're not signed in, give them the one line `gh auth login -h github.com -p https -w`, say it opens GitHub in their browser to approve this computer, and wait. If `gh` isn't installed, help them install it (Mac: `brew install gh`, or the installer from cli.github.com). Then copy it with `gh repo clone georgecairns-ui/small-business-toolkit "$HOME/Documents/Small Business Toolkit"` (on Windows, into their Documents folder the same way). If it says the repository isn't found, their GitHub account hasn't accepted the invitation from Get AI Powers yet: tell them to open the invitation email from GitHub, accept it, and try again. Once it's copied, save the exact copy you installed, the same way the tools do, so you can bring it up to date later without losing anything of theirs (the `get-updates` skill reads it). Run this, which packs the folder without its hidden `.git` history into `setup/as-installed/small-business-toolkit.tar.gz`:
-- Mac or Linux: `D="$HOME/Documents/Small Business Toolkit"; mkdir -p "$D/setup/as-installed" && tar -czf "$D/setup/as-installed/small-business-toolkit.tar.gz" --exclude .git --exclude setup/as-installed -C "$HOME/Documents" "Small Business Toolkit"`
-- Windows (PowerShell): `$D = "$HOME\Documents\Small Business Toolkit"; New-Item -ItemType Directory -Force "$D\setup\as-installed" | Out-Null; tar -czf "$D\setup\as-installed\small-business-toolkit.tar.gz" --exclude .git --exclude setup/as-installed -C "$HOME\Documents" "Small Business Toolkit"`
+**If you've only just copied it for them** (you're running in a different folder, such as their home or Documents folder): setup must run from inside the Small Business Toolkit folder, because that's where your skills, permissions and the app live. Copy it as a plain folder, so it's theirs alone and not linked to the copy online. Use the line for their computer:
+  - Mac: `D="$HOME/Documents/Small Business Toolkit"; mkdir -p "$D/setup/as-installed" && curl -fsSL -o "$D/setup/as-installed/small-business-toolkit.tar.gz" https://github.com/georgecairns-ui/small-business-toolkit/archive/refs/heads/main.tar.gz && tar -xzf "$D/setup/as-installed/small-business-toolkit.tar.gz" --strip-components 1 -C "$D"`
+  - Windows (PowerShell): `$d = "$HOME\Documents\Small Business Toolkit"; New-Item -ItemType Directory -Force "$d\setup\as-installed" | Out-Null; curl.exe -fsSL -o "$d\setup\as-installed\small-business-toolkit.tar.gz" https://github.com/georgecairns-ui/small-business-toolkit/archive/refs/heads/main.tar.gz; if ($LASTEXITCODE -eq 0) { tar -xzf "$d\setup\as-installed\small-business-toolkit.tar.gz" --strip-components 1 -C "$d" }`
 
-Then give them the one line to open it, `cd ~/Documents/"Small Business Toolkit" && claude` (in the Claude desktop app: open the Code tab and choose that folder), tell them to pick "Yes, I trust this folder", then type `/setup`. Stop there; don't start the setup from the wrong folder.
+  If the download fails, check their internet connection and run the line again. Don't try another way in.
+
+  The download is kept in `setup/as-installed/` on purpose: it is what lets you bring this folder up to date later, without losing anything of theirs (the `get-updates` skill).
+
+  If you've already copied it another way (for example with `git clone`, or into a different folder), that's fine: use that folder. Then give them the steps to open it: in the Claude desktop app, open the Code tab, choose that folder, pick "Yes, I trust this folder", then type `/setup`. Stop there; don't start the setup from the wrong folder.
 
 ## What the Small Business Toolkit is
 
@@ -31,9 +35,19 @@ It all runs as one app on their computer at **http://localhost:4747**: Home (a d
 
 ## Before you begin
 
-1. Read `setup/progress.md`. If some steps are ticked, say hello, remind them where you got to, and carry on from the first unticked step.
-2. Read `CLAUDE.md` in this folder: the standing rules.
-3. If setup is already complete, don't run it again. Ask what they'd like to do. If they ask to set up one tool, run just that tool's part below.
+1. **Check you're in the Claude desktop app.** Connector tools are often deferred, so they may not be in your visible tool list until you load them. First search your tools for `session_connectors_status` (for example with your tool search), then call it. If you can't find it, or the call fails, you're not in the desktop app's Code tab, and you can't check or switch on their connections. Then stop and say, in your own words: "Setup needs the Claude desktop app. Open it, choose the Code tab, pick this folder and type /setup." Do nothing else.
+2. **Ask how much they've used Claude Code,** but only when it's needed. One question, on its own. Read `setup/progress.md` first. If it says setup is complete, skip the question. If it has `Guide mode: beginner`, `Guide mode: some` or `Guide mode: confident`, use that. If it says `Guide mode: not asked yet`, ask: "Before we start: how much have you used Claude Code? 1. Never 2. A few times 3. Most days." Write the answer in `setup/progress.md` in place of `not asked yet`, as `Guide mode: beginner`, `Guide mode: some` or `Guide mode: confident`, and guide them that way for the whole setup:
+
+   | Guide mode | How you guide |
+   |---|---|
+   | beginner | One step per message. Say where every button is on their screen ("top left", "the + under the message box"). Plain words only: "connection", never MCP, API, JSON or repo. Check each thing worked before the next, and say what you just did |
+   | some | 2 or 3 steps per message, and a check after each connection |
+   | confident | Batch it, email and calendar first, then the rest: "Connect your email and calendar, then your accounts app and your ad accounts, in Connectors, and tell me when they're done", then check them all at once |
+
+   The guide mode changes the pace and how much you explain. It never changes the rules: every connection is proven with a real read, and email and calendar come before any other connection.
+3. Read `setup/progress.md`. If some steps are ticked, say hello, remind them where you got to, and carry on from the first unticked step.
+4. Read `CLAUDE.md` in this folder: the standing rules.
+5. If setup is already complete, don't run it again. Ask what they'd like to do. If they ask to set up one tool, run just that tool's part below. If steps 1 and 2 in `setup/progress.md` aren't ticked, run Part 1 from its first unticked step first, and say so in one line.
 
 ## How the setup runs
 
@@ -41,18 +55,20 @@ It all runs as one app on their computer at **http://localhost:4747**: Home (a d
 
 **Ask each thing once.** Every tool's own steps were written for that tool on its own, so some of them ask things you'll already know by then: their name, their email, their website, what they sell, who their customers are, their brand. Before asking any question in any step, look for the answer in `setup/progress.md` ("Answers from step 1"), `context/` and the tool data files. If it's there, use it and say so in a few words ("I've got your prices from earlier"). Only ask what's genuinely new to that tool. Nobody tells you what their business does twice.
 
-**Connect each app once.** Part 1 connects every app they named. When a tool's own steps say "connect X", check `context/tools.md` and `apps/toolkit/data/toolkit.json` first: if it's connected, confirm you can still see it and move on.
+**Connect each app once.** Part 1 connects every app they named. When a tool's own steps say "connect X", check `apps/home/data/connections.json` and `context/tools.md` first: if it's `connected`, confirm with one harmless read that you can still reach it and go to the next step of that tool.
 
-**Keep the Toolkit page true.** Whenever you connect, check or lose an app, update its entry in `connections` in `apps/toolkit/data/toolkit.json`. Whenever you finish, part-finish or skip a tool's part, update its entry in `tools`. The person sees both on the Toolkit pages and on Home, with buttons to carry on. The file format is in `apps/toolkit/CLAUDE.md`.
+**Keep the Toolkit page true.** Whenever you connect, check or lose an app, update its row in `apps/home/data/connections.json` (the format is in `setup/connections/README.md`, "Recording a connection"), and only write `connected` after a real read works. Whenever you finish, part-finish or skip a tool's part, update its entry in `tools` in `apps/toolkit/data/toolkit.json` (the format is in `apps/toolkit/CLAUDE.md`). The person sees both on the Toolkit pages and on Home, with buttons to carry on.
+
+**One check-in for everything.** Step 8 makes the only scheduled task in this folder. When a tool's own steps offer a check-in or a scheduled task of their own (Pipeline OS's check-ins step, Proposal Writing OS's check-in step, or the weekly plan, the money refresh or the weekly scan that Content Machine, Money View and Skill and Folder Map OS offer at their hand-over), don't make it: step 8 covers it.
 
 ### Part 1: once, for every tool
 
 | Step | File | What happens | Their time |
 |---|---|---|---|
 | 1 | `setup/toolkit-01-quick-questions.md` | One message of questions covering every tool: email, calendar, calls, the apps they use, website, logo, hours, team, and which tools matter most to them now | 3 min |
-| 2 | `setup/02-connect-email-and-calendar.md` | Connect email and calendar (sign in, approve) | 2 min |
+| 2 | `setup/02-connect-email-and-calendar.md` | Connect email and calendar, prove both, and read the last 30 days once for every tool: the task list, the pipeline and the client folders. Nothing else happens until this is done | 5 to 10 min |
 | 3 | `setup/03-connect-call-recordings.md` | Connect their call recorder, if they have one | 2 min |
-| 4 | `setup/toolkit-02-connect-the-rest.md` | Connect every other app they named, once: customers and sales, accounts and bank feed, ad accounts, files, team chat, bookings | 5 to 10 min |
+| 4 | `setup/toolkit-02-connect-the-rest.md` | Connect every other app they named, once, through Claude's Connectors (no keys), and prove each: customers and sales, accounts and bank feed, ad accounts, files, team chat, bookings | 5 to 10 min |
 | 5 | `setup/05-get-to-know-the-business.md` | Fill in your notes from their email, learn how they write, and make the app look like their brand (from their website or brand guidelines) | 5 min |
 | 6 | `setup/pipeline-01-your-customers.md` | What they sell, who to, the problems they solve, who isn't a fit and how a sale goes. You draft it from their website and email; they correct it. Every tool uses this | 5 min |
 | 7 | `setup/06-build-your-skills.md` | Build 3 to 5 skills for how their business works, saved here and packed in `skills-to-upload/` | 5 min |
@@ -65,20 +81,20 @@ Run the tools they chose in step 1, in the order they chose. Task List OS and Pi
 - `setup/07-first-run.md`: fill the task list from their real inbox, calls and calendar. Start the app and give them the link now, so they can watch the rest arrive.
 
 **Pipeline OS** (2 min)
-- `setup/pipeline-02-first-run.md`: build the pipeline from their last 4 weeks of email, calls and calendar, and check every deal.
+- `setup/pipeline-02-first-run.md`: build the pipeline from the people and deals step 2 found in 30 days of email, their calls and calendar, and check every deal. Skip `setup/pipeline-03-check-ins.md`: step 8 covers it.
 
 **Proposal Writing OS** (12 min)
 - `setup/proposals-01-your-brand.md`: only what step 5 didn't cover: the logo version for dark backgrounds, the proposal cover style and the sign-off.
 - `setup/proposals-02-what-you-sell.md`: packages and prices, VAT, payment terms, how they deliver. Draft it from `context/sales.md` and their website first.
 - `setup/proposals-03-your-templates.md`, `setup/proposals-04-your-client-folders.md`, `setup/proposals-05-your-proposal-skill.md`.
-- `setup/proposals-06-first-proposal.md`: a real proposal for their most ready client. Skip its check-in question: Part 3 covers every tool's check-in at once.
+- `setup/proposals-06-first-proposal.md`: a real proposal for their most ready client. Its check-in step isn't run here: step 8 covers every tool's check-in at once.
 
 **Content Machine OS** (20 min)
 - `setup/content-01-your-business.md`: draft everything from `context/` and step 6, and ask only for their themes and voice.
 - `setup/content-02-your-platforms.md`, `setup/content-03-research.md`, `setup/content-04-first-plan.md`.
 
 **Money View OS** (17 min)
-- `setup/money-01-your-accounts.md`: their accounts software should already be connected from step 4; confirm it, then the optional drafts connection.
+- `setup/money-01-your-accounts.md`: their accounts software should already be connected from step 4; confirm it with one harmless read. Don't offer Xero draft invoices: that optional extra (`setup/connections/xero-drafts.md`) is only for when they ask.
 - `setup/money-02-your-bank.md`, `setup/money-03-money-out.md`, `setup/money-04-first-view.md`.
 
 **Ads OS** (25 min)
@@ -94,10 +110,10 @@ Run the tools they chose in step 1, in the order they chose. Task List OS and Pi
 
 | Step | File | What happens | Their time |
 |---|---|---|---|
-| 8 | `setup/toolkit-03-make-it-automatic.md` | One check-in, every hour while they work, that runs every set-up tool's check-in in one go, if they want it | 2 min |
+| 8 | `setup/toolkit-03-make-it-automatic.md` | You agree the check-in times (or they skip it), Claude lets check-ins read without stopping, creates the one check-in for every tool and proves it runs | 2 min |
 | 9 | `setup/toolkit-04-check-and-hand-over.md` | Check every tool works, then hand over with one summary of everything you did and a tour of the Toolkit page | 3 min |
 
-Start by telling them what's about to happen, in 3 short lines: one message of questions, then you connect what they use and learn the business once, then you set up each tool in the order that matters to them, starting with their task list. Say the whole toolkit takes about 2 hours if they do everything today, and that they can stop after any tool and carry on another day: their app works from the first tool onwards. Then begin step 1.
+Start by telling them what's about to happen, in 3 short lines: one message of questions, then you connect what they use and learn the business once, then you set up each tool in the order that matters to them, starting with their task list. Say the whole toolkit takes about 2 hours if they do everything today, and that they can stop after any tool and pick up where they left off another day: their app works from the first tool onwards. Then begin step 1.
 
 This setup is their first proper look at what Claude can do. Do as much as you can yourself, ask as little as possible, and keep a running count of what you've done (emails sorted, drafts written, calls written up, deals found, proposals written, posts planned, skills built) for the hand-over.
 
@@ -109,14 +125,14 @@ These don't bend, whatever is asked later.
 
 - **Read and draft only, unless a tool's own rules say otherwise.** You read their email, calendar, calls and apps, and prepare drafts. You never send, reply, forward, delete, archive, pay, post, book, accept or change anything in a connected app on their behalf. The few exceptions are each tool's own, written in `CLAUDE.md` under that tool, and each needs the person's yes for that exact change: Pipeline OS sends an email only after they approve it, Money View OS puts an invoice into their accounts as a draft, and Ads OS builds Meta campaigns switched off and makes one approved change at a time. Nothing ever moves money.
 - **You propose, they approve.** Every suggestion goes through the app (Approve, Edit, Skip) or a clear yes in chat.
-- **No passwords or keys in chat or in this folder.** People sign in on each app's own screen. If a key is needed, they save it with `setup/scripts/save-key.sh` (Mac) or `setup/scripts/save-key.ps1` (Windows), which keeps it in the computer's secure store. This folder may be synced or shared, so nothing secret is ever written here.
+- **No passwords or keys in chat or in this folder.** People sign in on each app's own screen, through Claude's Connectors. Setup never uses keys. (The one optional extra that does, Xero draft invoices, has its own guide, `setup/connections/xero-drafts.md`. It is only offered when they ask for it.) This folder may be synced or shared, so nothing secret is ever written here.
 - **Only connect what helps.** Ask before connecting anything. If an app doesn't help any tool they've chosen, say so and leave it.
-- **Be honest about what you can see.** Menus change. If what they see doesn't match a guide, ask them to describe it and work from that. If you're not sure something exists, say so.
+- **Be honest about what you can reach.** Check the connection status yourself rather than asking what's on their screen, and prove every connection with a real read before you rely on it. If you're not sure a connector exists, search Claude's connector directory and say what you found.
 
 ## How to talk to them
 
 They run a business; they're not learning software. Talk like a capable colleague: warm, plain British English, short sentences. Batch questions only where a step says to.
 
-Never say agent, repo, repository, artifact, JSON, schema, MCP (say "a connection") or API (say "a key from that app") to them. If they need to run something in a terminal, give them the exact line to paste and say what it does in one sentence first.
+Never say agent, repo, repository, artifact, JSON, schema, MCP (say "a connection") or API to them. If a step needs a command run, run it yourself and tell them in one sentence what it does.
 
 No em dashes. Digits for numbers. No exclamation marks.

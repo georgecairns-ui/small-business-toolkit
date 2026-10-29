@@ -18,7 +18,7 @@ When Claude writes a caption it can look at your photos (not watch videos) to de
 
 ## Does Claude post for me?
 
-No. Claude never posts, publishes, schedules, comments, follows, likes or messages anyone, on any platform, for any reason, and it never logs in to one. It writes the words and suggests a picture or video. You copy each post and post it yourself with the Copy and Open buttons, then tell it "I've posted it".
+No. Claude never posts, publishes, schedules, comments, follows, likes or messages anyone, on any platform, for any reason, and it never logs in to one, except the read-only connections you set up in step 3 of setup, which only read your own account when you ask. It writes the words and suggests a picture or video. You copy each post and post it yourself with the Copy and Open buttons, then tell it "I've posted it".
 
 **Automatic** on a post means Claude finishes it without waiting for you to approve it. It does not mean Claude posts it. **Ask me first** means it waits for your Approve. Either way, you are the only one who posts.
 
@@ -26,7 +26,7 @@ No. Claude never posts, publishes, schedules, comments, follows, likes or messag
 
 Public web pages, found with a web search: what people search for and ask (search suggestions and "people also ask" questions), public forums and communities (such as Reddit and Mumsnet), local news, and your competitors' public websites and public profiles.
 
-It never logs in to anything, never uses your personal accounts, never joins a group and never follows, likes, messages or comments on anyone. If a platform won't show a page without signing in, Claude says so and leaves it out rather than guessing. It records where each finding came from, in plain words, so you can check it.
+The research never logs in to anything, never uses your personal accounts or your connections, never joins a group and never follows, likes, messages or comments on anyone. If a platform won't show a page without signing in, Claude says so and leaves it out rather than guessing. It records where each finding came from, in plain words, so you can check it.
 
 Nothing leaves your computer except what Claude searches for and the public pages it opens, which go through your own Claude account in the usual way.
 
@@ -44,11 +44,15 @@ It's a small file about your audience and your industry, saved in `.claude/skill
 
 ## What about passwords and keys?
 
-Content Machine OS doesn't need a sign-in to anything. It never asks for a password or a key, and none should ever go into this folder or into the chat.
+Content Machine OS doesn't need a sign-in to work. It never asks for a password or a key, and none should ever go into this folder or into the chat. If a platform you post on has a Claude connector, setup can connect it through Claude's Connectors: you sign in on the platform's own page, never in the chat or in this folder, and Claude only reads it, never posts. If a platform has no Claude connector, Claude reads a CSV or PDF export of it instead: you drop the export in the files folder and Claude reads it whenever you ask.
 
 ## Does it send anything anywhere?
 
 No. It doesn't send emails, messages or posts. Your plan is saved in files on your computer. There's nothing for Get AI Powers to see.
+
+## Does it run when I'm not there?
+
+Only if you choose the weekly plan during setup; you can skip it. Then the Claude app plans your next weeks once a week, on the day and at the time you agreed, while your computer is on and the app is open, and reads any platform you connected to check the connection still works. It uses a little of your Claude allowance each time. It only plans and writes; it never posts or changes anything on your platforms. You can pause it in the Claude app.
 
 ## What is the helper?
 

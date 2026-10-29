@@ -37,6 +37,7 @@ If one still says "Status: not filled in yet", work with what you have and offer
 1. **You propose, they approve.** Suggestions go through the task list app (Approve, Edit, Skip) or a clear yes in chat. Never approve your own suggestions.
 2. **Read and draft only in connected apps.** Never send, reply, forward, delete, archive, pay, post, book, accept or change anything in their email, calendar or other apps on their behalf. Prepare drafts; they press send. The only exception is a specific action they ask for in this conversation, and even then confirm the exact thing first.
 3. **Nothing secret in this folder.** No passwords, keys or codes in any file here, and never ask for them in chat. See `.claude/skills/connect-a-tool`.
+   `apps/home/data/connections.json` says which apps you can reach. Only write `connected` after a real read works; check-ins keep it up to date.
 4. **Never delete their files or tasks** unless they ask for that specific thing. Old things go to `files/99-archive`.
 5. **Keep private things private.** Don't copy the contents of private emails or documents into notes here. A short summary and a pointer to the source is enough.
 
@@ -49,7 +50,7 @@ If one still says "Status: not filled in yet", work with what you have and offer
 | `apps/task-list/` | The Task List OS app, 1 of the 7 tools: Tasks (Today, This week or All, as a Board, List or Calendar), Inbox, Review and Calls, plus Preferences (the cog). `CLAUDE.md` in there explains its data. Their tasks are in `apps/task-list/data/tasks.json` |
 | `apps/shared/` | The app's look: `theme.css` holds every colour and font. Also the toolkit menu: `catalogue.json` lists all 7 tools and the booking link |
 | `apps/installed.json` | The tools in this folder (all 7, plus the Toolkit). The menu and the helper both read it |
-| `apps/toolkit/` | The Toolkit section: connections, setup status, ideas and what you've built for them, in `apps/toolkit/data/toolkit.json` |
+| `apps/toolkit/` | The Toolkit section: setup status, ideas and what you've built for them, in `apps/toolkit/data/toolkit.json`. Its Connections page reads `apps/home/data/connections.json` |
 | `context/` | Your notes about the business (see above) |
 | `files/` | Their documents, in numbered folders. `files/README.md` maps anything that lives elsewhere, such as Google Drive |
 | `.claude/skills/` | Saved know-how for common jobs. They load automatically in Claude Code and work as commands (`/sort-my-day`). `.claude/skills/README.md` lists them. Includes the skills you built for this business during setup |
@@ -110,7 +111,7 @@ When you learn something lasting (a new client, a team change, a new price, a pr
 
 All 7 tools are already in this folder, so the menu has no locked tools. The last section of the sidebar, **Toolkit** (`apps/toolkit/`), is how the person grows the toolkit without knowing what to ask for. Its data, and when you update each part, are in `apps/toolkit/CLAUDE.md`. In short:
 
-- **Connections:** every app the toolkit can use, its status and a Connect button. Whenever you connect, check or lose an app, update `connections` in `apps/toolkit/data/toolkit.json`.
+- **Connections:** every app the toolkit can use, its status and a Connect button. It reads `apps/home/data/connections.json`, the file every tool shares: whenever you connect, check or lose an app, update its row there (format in `setup/connections/README.md`, "Recording a connection"), and only write `connected` after a real read works.
 - **Set up:** each tool's setup status, with Set up now for any left for later. Update `tools` whenever you finish or part-finish a tool's setup. To set up one tool, run its part of `START-HERE.md`.
 - **Build and customise:** buttons that open Claude with a job typed in (a new page, a skill, a change, a routine) and your ideas for what to do next (`ideas`, from `.claude/skills/whats-next`). Record anything you build for them in `builds`.
 

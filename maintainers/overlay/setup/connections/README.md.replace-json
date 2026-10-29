@@ -2,5 +2,9 @@
   [
     "| App | What it gives your app | Recommended route | File |",
     "| App | What it gives your toolkit | Recommended route | File |"
+  ],
+  [
+    "| Calendly | Upcoming bookings in Calendar and People | Claude connector | `calendly.md` |",
+    "| Calendly | Upcoming bookings in Calendar and People | Claude connector | `calendly.md` |\n| Sage | Nothing for Money View yet; an export can be read in chat when asked | None: no connector in Claude's directory on 29 October 2026 | `sage.md` |\n| Bank feeds | Business bank transactions for Money View, through the accounts app's own bank feed | Switched on inside the accounts app | `bank-feeds.md` |\n| Meta Ads | Ad figures for Ads OS, new campaigns built switched off, and changes you approve in the app (Ads OS only) | Meta's own connection; a downloaded report where there's no connector | `meta-ads.md` |\n| Google Ads | Ad figures for Ads OS (read only) | Google's own connection; a downloaded report where there's no connector | `google-ads.md` |\n| Xero, to put invoices in as drafts (optional, only when the person asks; never offered in setup) | Money View can create a draft invoice for the person to check and send from Xero | Xero's own open source connection, its own guide (not the 6 sections above) | `xero-drafts.md` |"
   ]
 ]

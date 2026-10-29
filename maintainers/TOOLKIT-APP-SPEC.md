@@ -8,7 +8,7 @@ A button can't sign anyone in to Xero or Gmail: sign-in happens on each app's ow
 
 ## Pages (menu.json)
 
-1. **Connections** (`#connections`, icon `link` or nearest available): every app the toolkit can connect to, grouped (Email and calendar, Calls, Sales and customers, Money, Ads, Files and notes, Team and bookings). Each card: name, one plain line on what connecting it does, "Used by" chips naming the tools that use it, a status pill (Connected, Not connected, Needs attention, Not used), and one button: **Connect** (not connected), **Check it** (connected), **Fix it** (needs attention). Top of the page: "6 of 24 connected" and a **Connect something else** button. Filter: All, Connected, Not connected.
+1. **Connections** (`#connections`, icon `link` or nearest available): every app the toolkit can connect to, grouped (Email and calendar, Calls, Sales and customers, Money, Ads, Files and notes, Team and bookings). Each card: name, one plain line on what connecting it does, "Used by" chips naming the tools that use it, a status pill (Connected, Needs attention, Export only, Can't connect, Not connected, Not used), and one button: **Connect** (not connected), **Check it** (connected), **Fix it** (needs attention), **Look again** (export only or can't connect). Top of the page: "N of M connected", where M counts only the connected and needs-attention rows in `apps/home/data/connections.json` (or "Nothing connected yet" when there are none), and a **Connect something else** button. Last, an **Other connections** group: rows in the file for apps with no card (LinkedIn, an iCloud email row, anything added through Connect something else), not-used rows left out, each with its name, status, note and **Fix it**, **Look again** or **Check it**. Filter: All, Connected, Not connected.
 2. **Set up** (`#setup`, icon `checkSquare` or similar): the 7 tools, each with its status (Set up, Part done, Not yet, Skipped for now), the date, and **Set up now** / **Carry on** / **Run it again**. A line at the top: how many of 7 are set up.
 3. **Build and customise** (`#build`, icon `sparkle`): action cards, each opening a small dialog with an optional "Describe it in a sentence" box, then Open in Claude / Copy the prompt:
    - Build me a new page (a new screen in this app for something they track)
@@ -23,7 +23,7 @@ A button can't sign anyone in to Xero or Gmail: sign-in happens on each app's ow
 ## Home boxes (home-boxes.js, `defaultOn: true`, because this kit is always installed fresh)
 
 - **Next steps** (size 2): up to 4 items, in this order: tools not set up yet, key apps not connected (email, calendar, and any app another tool needs), then new ideas. Each with its button. When everything is done: "Everything's set up. Claude adds ideas here as it spots them."
-- **Connections** (size 1): "6 of 24 connected", the ones needing attention first, link to the page.
+- **Connections** (size 1): the same "N of M connected" count as the page (or "Nothing connected yet"), then the ones needing attention, including Other connections, link to the page.
 
 ## Data file: `apps/toolkit/data/toolkit.json`
 
@@ -32,7 +32,6 @@ Shipped blank exactly as:
 ```json
 {
   "version": 1,
-  "connections": {},
   "tools": {},
   "ideas": [],
   "builds": []
@@ -41,7 +40,7 @@ Shipped blank exactly as:
 
 Claude fills it; the app only ever changes an idea's status.
 
-- `connections`: keyed by app id (the ids in `app/apps-list.js`): `{ "status": "connected" | "not-connected" | "needs-attention" | "not-used", "how": "Claude connector" | "key saved" | "", "note": "", "checked": "YYYY-MM-DD" }`. An app with no entry counts as Not connected.
+- `connections`: **moved in shared version 13.** Which apps are connected now lives in `apps/home/data/connections.json`, the file every tool shares (format in `setup/connections/README.md`, "Recording a connection"), keyed by the same app ids. The Connections page and the Home box read it; `toolkit.json` ships without a `connections` part.
 - `tools`: keyed by tool id (`task-list`, `pipeline`, `skill-map`, `proposals`, `content`, `money`, `ads`): `{ "status": "set-up" | "part-done" | "not-yet" | "skipped", "date": "YYYY-MM-DD", "note": "" }`.
 - `ideas`: `{ "id": "i-xxxxxx", "title": "", "why": "", "prompt": "", "status": "new" | "done" | "dismissed", "added": "YYYY-MM-DD" }`.
 - `builds`: `{ "id": "b-xxxxxx", "title": "", "what": "", "date": "YYYY-MM-DD" }`.
@@ -50,9 +49,9 @@ Claude fills it; the app only ever changes an idea's status.
 
 One entry per guide in `setup/connections/` (not README.md): `{ id, name, group, guide: "setup/connections/<file>.md", usedBy: [tool ids], what: "one plain line" }`. `xero-drafts` and `bank-feeds` are Money View extras: list them under Money. The prompts:
 
-- Connect: `Connect <name> for me. Follow setup/connections/<file>.md and .claude/skills/connect-a-tool, then update apps/toolkit/data/toolkit.json.`
-- Check it: `Check my <name> connection still works and tell me what you can see. Update apps/toolkit/data/toolkit.json.`
-- Fix it: `My <name> connection needs attention. Follow setup/connections/<file>.md to fix it, then update apps/toolkit/data/toolkit.json.`
+- Connect: `Connect <name> for me. Follow setup/connections/<file>.md and .claude/skills/connect-a-tool, then update apps/home/data/connections.json.`
+- Check it: `Check my <name> connection still works and tell me what you can see. Update apps/home/data/connections.json.`
+- Fix it: `My <name> connection needs attention. Follow setup/connections/<file>.md to fix it, then update apps/home/data/connections.json.`
 - Connect something else: `I'd like to connect another app to my toolkit. Ask me which one, then use .claude/skills/connect-a-tool.`
 - Set up a tool: `Set up <Tool name> for me. Follow the "<Tool name>" part of START-HERE.md, and skip anything my notes in context/ already answer.`
 - Build cards: `<the card's job>. <their sentence, if any> Follow .claude/skills/build-on-my-toolkit.`

@@ -184,7 +184,7 @@
   function setupCard() {
     return '<section class="panel setup-card"><div class="setup-card__art"><img src="' + ART.welcome + '" alt="" width="72" height="72"></div>' +
       '<div class="setup-card__body"><h2>Let\u2019s set up your task list</h2>' +
-      '<p class="muted">It\u2019s empty for now. Claude fills it with your real work in about 20 minutes, and you approve everything.</p>' +
+      '<p class="muted">It\u2019s empty for now. Claude fills it with your real work in 30 to 40 minutes, and you approve everything.</p>' +
       '<ol class="setup-card__steps">' +
       "<li>Open Claude Code in your <strong>Task List OS</strong> folder (in the Claude desktop app, the Code tab).</li>" +
       "<li>Type " + say("/setup") + " and answer Claude\u2019s questions. It connects your email, calendar and calls first.</li>" +

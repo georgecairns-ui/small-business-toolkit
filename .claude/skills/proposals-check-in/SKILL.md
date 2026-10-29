@@ -1,11 +1,11 @@
 ---
 name: proposals-check-in
-description: The regular Proposal Writing OS check-in - finds new client folders and files, saves new client emails and calls into each client's folder, writes proposals that are waiting, and writes follow-ups for sent proposals gone quiet. Use when they say "check my proposals", "check in", "anything new?", on every scheduled run, and as part of another tool's check-in when Proposal Writing OS is attached.
+description: The regular Proposal Writing OS check-in - finds new client folders and files, saves new client emails and calls into each client's folder, writes proposals that are waiting, and writes follow-ups for sent proposals gone quiet. Use when they say "check my proposals", "check in", "anything new?", for a scheduled check-in, and as part of another tool's check-in when Proposal Writing OS is attached.
 ---
 
 # Proposals check-in
 
-A short, regular sweep, so the person's only job is to drop things in client folders and check what you write. Be quick: do what's needed, change nothing else.
+A short, regular sweep, so the person's only job is to drop things in client folders and check what you write. It runs a few times a day, at the times the person agreed in setup step 11, or whenever they ask. Be quick: do what's needed, change nothing else.
 
 ## Steps
 
@@ -20,10 +20,12 @@ A short, regular sweep, so the person's only job is to drop things in client fol
 5. **A reply to a sent proposal**: if a client has replied, tell the person in one line what they said. A clear yes or no: suggest marking it won or lost (never mark it yourself; with Task List OS attached, add a suggested task).
 6. **Gone quiet**: follow `.claude/skills/follow-up-a-proposal` for sent proposals older than `chaseAfterDays` with no reply.
 7. Update `checkIn.lastRunAt` and save safely (read right before writing, write the whole file, read it back and check it parses).
-8. If someone is watching, a 1 to 3 line summary: "2 new files for Hollins, a proposal written for Ellis Joinery (ready to check), and a follow-up ready for Marlow Dental." If nothing changed, say so in one line.
+8. **Connections.** For each app you read from in this check-in, set its `checked` in `apps/home/data/connections.json` to today, and if its status was `needs-attention`, set it back to `connected` (the read just worked). If a read failed, set it to `needs-attention` with what went wrong in `note`, keep the old `checked`, and say so in one line of your summary ("Couldn't read Fathom this time: it may need signing in again. There's a Fix it button on Home."). Do this in a scheduled run too.
+9. If someone is watching, a 1 to 3 line summary: "2 new files for Hollins, a proposal written for Ellis Joinery (ready to check), and a follow-up ready for Marlow Dental." If nothing changed, say so in one line. If this is a scheduled run, say nothing unless a connection read failed; that is worth one line.
 
 ## Rules
 
 - Summaries and short quotes only, never whole emails or transcripts.
 - Never send, reply, delete or archive anything in their email or call recorder.
 - Never mark a proposal sent, won or lost by yourself.
+- If a connection fails, carry on with the others and record the failure under step 8.

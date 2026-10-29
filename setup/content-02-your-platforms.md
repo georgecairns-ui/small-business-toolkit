@@ -20,8 +20,24 @@ In `apps/content/data/content.json`, `platforms.<key>` for each platform they ch
 
 Also add a `recommended: true` entry with `on: false` and a `why` for up to 2 platforms you'd suggest but they didn't pick, so the Platforms page can show them. You'll refine these after the research.
 
-## 3. Tell them what you'd recommend
+## 3. Connect each platform that has a connector
 
-In 3 or 4 plain lines: which you'd start with and why, and that the research in the next step will check whether their customers and competitors are really on those platforms. They can change any of this later on the Platforms page.
+For each platform they picked (for an email newsletter, the tool they send it with), find out whether Claude can connect to it, and connect it if it can. A connection only reads: it lets you read their own account when they ask (for example their recent posts and how they did). Connections never post, and a connection never changes rule 1: you never post, publish, schedule, message, comment, follow or like anything, whatever the connection allows. The research reads public web pages either way and never uses a connection.
+
+Follow `.claude/skills/connect-a-tool` for each one. These platforms have no guide in `setup/connections/`, so search Claude's connector directory with the platform's name: only a connector from the platform's maker or listed in Claude's directory counts. Never guess.
+
+Check every platform first, before you say anything about any of them, then report once. Connect and prove the ones that have a connector, one at a time. For the ones with no connector, say the sentence once for all of them, listing them: "There's no Claude connector for Instagram, TikTok and Facebook, so I can't connect to them live. If you export a CSV or PDF from any of them and drop it in the files folder, I'll read it whenever you ask." If only one has no connector, use the sentence exactly as written for that app: "There's no Claude connector for [app], so I can't connect to it live. If you export a CSV or PDF from it and drop it in the files folder, I'll read it whenever you ask." This replaces `connect-a-tool`'s one message per app for this step.
+
+- **No account on it yet:** don't look for a connector. Record it as `not-connected` with the note "No account yet", and tell them it can be connected once they have one.
+- **There's a connector:** check it yourself (`session_connectors_status`), switch it on or point them to Connect, as `connect-a-tool` says. Never ask them what's on their screen. Then prove it with one harmless read of their own account (for example the name of their page and the date of their last post) and say what you found in one line. Only then record it as `connected`, with today's date in `checked`.
+- **The connector can only post:** if its only tools would post, schedule or change something and none only read, don't switch it on. Record it as `export-only` with the note "Connector can only post", and say in your one report that its connection could only post, so you'll read an export instead.
+- **There's no connector:** it's in the one no-connector sentence above. Record each one as `export-only`.
+- **It still won't connect after the loop:** record it as `needs-attention`, with what went wrong in `note`. The Connections box on Home shows a **Fix it** button for it, so setup doesn't stall on it: go to section 4.
+
+Record each platform in `apps/home/data/connections.json` (create it if it isn't there; the format is in `setup/connections/README.md`, "Recording a connection"), keyed by the platform's name in lower case with hyphens (`instagram`, `google-business-profile`), and in `context/tools.md`: how it's connected, today's date, that you may only read, and that you must never post, schedule, message or change anything there.
+
+## 4. Tell them what you'd recommend
+
+In 3 or 4 plain lines: which you'd start with and why, which platforms you connected and which can be read from an export, and that the research in the next step will check whether their customers and competitors are really on those platforms. They can change any of this later on the Platforms page.
 
 Tick this step in `setup/progress.md`.

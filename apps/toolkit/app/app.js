@@ -2,7 +2,8 @@
   TOOLKIT: the app
   ----------------
   Ties everything together:
-  1. Connects to data/toolkit.json through the shared store.
+  1. Connects to data/toolkit.json through the shared store, and reads apps/home/data/connections.json (the
+     shared file every tool reads since shared version 13) for which apps are connected.
   2. Shows a short card until the app is running, then the app.
   3. Draws the 3 pages: Connections, Set up, and Build and customise, each with its own address
      (#connections, #setup, #build) in the sidebar and on the rail. Every move is a history entry, so Back
@@ -68,6 +69,25 @@
       render();
     }
   });
+
+  // Which apps Claude can reach: the shared file every tool reads (shared v13). As in apps/shared/js/connections-box.js:
+  // a missing file just means nothing is connected yet, so it stays silent; a broken one says so on the Connections page.
+  window.TaskListOS.createStore({
+    moduleId: "connections",
+    fileName: "connections.json",
+    dataPaths: ["data", "", "apps/home/data"],
+    api: window.TaskListOS.connections.API,
+    validate: window.TaskListOS.connections.validate,
+    onStatus: function (s, detail) {
+      // Read cleanly again: any old message goes
+      if (s === "ready" && M.connectionsProblem()) { M.setConnectionsProblem(""); if (data && !typing()) render(); return; }
+      if (s !== "error") return;
+      const kind = detail && detail.error && detail.error.kind;
+      M.setConnectionsProblem(kind === "missing" ? "" : kind === "bad-file" ? "Your connections file has a small mistake in it. Ask Claude to check it." : "Your connections couldn't be read just now. Reload the page to try again.");
+      if (data && !typing()) render();
+    },
+    onData: function (d) { M.setConnections(d.connections); if (data && !typing()) render(); }
+  }).start();
 
   function friendlyError(err) {
     const kind = err && err.kind;

@@ -2,7 +2,7 @@
 
 Goal: Claude has the claude-ads skills to plan and draft campaigns with. It is a free set of ad-planning skills by AgriciDaniel (MIT licence), and Ads OS installs a tested copy of it into this folder. Nothing is installed anywhere else on the computer.
 
-If it fails, or they'd rather skip it, Ads OS still works: Claude uses `.claude/skills/build-a-campaign/references/campaign-basics.md` instead. Say so in one line and carry on.
+If it fails, or they'd rather skip it, Ads OS still works: Claude uses `.claude/skills/build-a-campaign/references/campaign-basics.md` instead. Say so in one line; setup goes on without the extra skill.
 
 ## 1. Tell them what's about to happen
 
@@ -21,9 +21,9 @@ Tell them what was installed as "34 skills and 25 helpers" (the tested version),
 
 ## 3. If it stops
 
-- **"could not fetch" or "could not download":** the internet is down or GitHub is blocked. Ask them to check the connection and try once more.
-- **"it is not the tested version":** stop. Install nothing. Tell them in plain words that the copy didn't match what was tested, and carry on without it. Tell George.
-- **Anything else:** read what it printed, say in plain words what it says, and carry on without it.
+- **"could not fetch" or "could not download":** the internet is down or GitHub is blocked. Ask them to check their internet connection, then run it again. If it still fails, tell them in plain words what it said; setup goes on without the extra skill.
+- **"it is not the tested version":** stop. Install nothing. Tell them in plain words that the copy didn't match what was tested; setup goes on without the extra skill. Tell George.
+- **Anything else:** read what it printed and tell them in plain words what it said; setup goes on without the extra skill.
 
 If they don't have `git`, the script downloads a zip instead. If a computer prompt asks to install command line developer tools, that is fine.
 

@@ -1,41 +1,42 @@
 # Connect HubSpot
 
-One line: fills People with contacts, and Review with deals going quiet or tickets needing a reply.
+What it gives your app: contacts in People, and deals going quiet or tickets needing a reply in Review.
 
-**Recommended route:** the HubSpot connector in Claude's connector directory. **Plans:** needs a paid Claude plan (Pro, Max, Team or Enterprise); Super Admins and users with App Marketplace Access can connect directly, others need Super Admin approval.
+**Connector:** "HubSpot" in Claude's connector directory, or, if it isn't listed, a custom connector at `https://mcp.hubspot.com`. **Plans:** needs a paid Claude plan (Pro, Max, Team or Enterprise); Super Admins and users with App Marketplace Access can connect directly, others need Super Admin approval.
+**Route:** directory (custom-address if it isn't listed).
 
-## Route 1: connect HubSpot
+## Connect
 
-1. Say "Let's connect your customer records" to the person. Say "connect" and "a connection", never MCP, API, JSON or repo.
-2. In the Claude app or on claude.ai, go to Connectors, Browse, find "HubSpot", click Connect, authenticate, and choose permissions.
-3. In Claude Code: it appears once Claude Code is signed in with a claude.ai subscription. Check your own list of connections; if it isn't there yet, ask them to close Claude Code and open it again (in the Terminal, `/mcp` also lists them). Backup if needed: `claude mcp add --transport http hubspot --scope user https://mcp.hubspot.com`, then `/mcp` to sign in.
+1. Say "Let's connect your customer records." Say "connect" and "a connection", never MCP, API, JSON or repo.
+2. Look up this session's connections (`session_connectors_status`) and follow the table in `.claude/skills/connect-a-tool` ("Check, switch on, or point to Connect").
+3. If they need to add it: in the Claude desktop app, Customize, then Connectors, then Browse, then "HubSpot", then Connect, then authenticate and choose permissions.
+   If "HubSpot" isn't listed: Customize, then Connectors, then the + button, then Add custom connector. Name it "HubSpot" and use exactly `https://mcp.hubspot.com`. Then sign in and approve. Use no other address.
 4. HubSpot recommends setting the connector to always ask before updates; choose that option if offered.
+5. If they aren't a Super Admin and don't have App Marketplace Access, offer to draft a short message they can send their Super Admin. Claude never sends this itself.
 
-## Route 2: API key
+## If there's no connector
 
-If the connector isn't available, a legacy private app can give read-only access. In HubSpot: Development, Legacy apps, Create legacy app, Private, tick only read scopes (exact scope names not verified, check HubSpot's developer docs), then the Auth tab, Show token, Copy. Ask the person to open the Terminal app (Mac) or PowerShell (Windows) in this folder and run `bash setup/scripts/save-key.sh HUBSPOT_ACCESS_TOKEN` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 HUBSPOT_ACCESS_TOKEN` (Windows), paste the token, then restart Claude Code. Never ask for the key in chat.
+Say exactly: "There's no Claude connector for HubSpot, so I can't connect to it live. If you export a CSV or PDF from it and drop it in the files folder, I'll read it whenever you ask." Record it as `export-only`. Ask the person to export a contacts or deals report as a CSV and save it into the files folder.
 
-Claude then uses it with the header `Authorization: Bearer $HUBSPOT_ACCESS_TOKEN`, for example: `curl -H "Authorization: Bearer $HUBSPOT_ACCESS_TOKEN" "https://api.hubapi.com/crm/v3/objects/contacts"`.
+## Prove it
 
-## If neither works
+Ask first, then list recent contacts or deals. Say: "I can see 12 open deals; Greenway Café has gone quiet since 20 September."
 
-Ask the person to export a contacts or deals report as a CSV, and save it into `files/`.
-
-## Check it works
-
-Ask permission, then list recent contacts or deals. Say something like: "I can see 12 open deals; Greenway Café has gone quiet since 20 September."
-
-## Rules for Claude with HubSpot
+## What Claude may and may not do
 
 The connector is read and write: it can create and update contacts, deals and tickets. Never create or update anything unless the person asks for that one specific action in this conversation. Default to reading and suggesting tasks only.
 
-## What to record
+Pre-approve for check-ins: only names that start with `get_`, `list_`, `search_`, `read_`, `find_`, `fetch_` or `query_`, or end with `_search` or `_get`, and no others; never any name containing create, update, delete, send, mark, archive, add, remove, set, move, post, reply, label, trash or write, whatever else it matches. The exact read tool names could not be confirmed for HubSpot (it isn't in Claude's own tool list on 2026-10-29), so apply this rule to whatever the connector shows on the day.
 
-Add to `context/tools.md`: "HubSpot | Claude connector (or API key) | 2026-10-06 | Read contacts, deals and tickets | Create or update a contact, deal or ticket, unless asked".
+## Record
+
+`apps/home/data/connections.json`, key `hubspot`: name "HubSpot", status `connected`, how "Claude connector: HubSpot", checked today, note "Read contacts, deals and tickets. Never create or update anything."
+
+`context/tools.md`: "HubSpot | Claude connector | <today> | Read contacts, deals and tickets | Create or update a contact, deal or ticket, unless asked"
 
 ## Sources
 
-Verified on 2026-10-06.
+Verified on 2026-10-06; rewritten into the connected-onboarding shape on 2026-10-29.
 - https://claude.com/connectors/hubspot
 - https://knowledge.hubspot.com/integrations/set-up-and-use-the-hubspot-connector-for-claude
 - https://developers.hubspot.com/docs/build-with-ai/remote-mcp-server

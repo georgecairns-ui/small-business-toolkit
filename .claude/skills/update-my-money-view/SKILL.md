@@ -5,7 +5,7 @@ description: Brings Money View OS up to date from the person's accounts app. Rea
 
 # Update my money view
 
-You bring the person's money view up to date from their accounts app. You read; you never move money, send, approve, pay or delete anything, anywhere. The app works out every total, forecast and tax figure. You only write the records it works from.
+You bring the person's money view up to date from their accounts app, whenever they ask and as a regular refresh if they agreed one in setup. You read; you never move money, send, approve, pay or delete anything, anywhere. The app works out every total, forecast and tax figure. You only write the records it works from.
 
 ## What you need
 
@@ -13,6 +13,7 @@ You bring the person's money view up to date from their accounts app. You read; 
 - `context/money.md`, `context/business.md` and `context/tools.md`: how they invoice, which bank, VAT, what the accountant says.
 - Today's date, from the computer. Never guess it.
 - `sources` in the data file: `sources.accounts.mode` (`none`, `read` or `drafts`) and `sources.bank.mode` (`none` or `accounts-feed`) say what is set up.
+- `apps/home/data/connections.json`, if it's there: the accounts connection you proved in setup.
 - Optional, if attached (`apps/installed.json`): Task List OS (`task-list`). See `apps/money/ATTACH-CLAUDE.md`.
 
 If the accounts mode is `none`, say Money View needs an accounts app connected first and offer `/setup`. If the bank mode is `none`, say so and offer `setup/money-02-your-bank.md`. Don't invent anything.
@@ -24,8 +25,8 @@ If the accounts mode is `none`, say Money View needs an accounts app connected f
    - Invoices: unpaid ones and those paid in the last 90 days.
    - The business bank accounts it holds, their balances, and the bank feed's transactions (the last 60 days, or since the last import).
    - Bills to pay, if the connection shows them.
-   Money View works only through a live connection. If you can't read the accounts app (the connection is down, or it isn't Xero or QuickBooks), say so in one line and stop: don't ask for or read an export, and never guess what the connection would have said.
-3. **Is the bank feed working?** If `sources.bank.mode` is `accounts-feed` and you see no recent bank transactions, say so plainly and point to `setup/connections/bank-feeds.md`: the feed may have stopped and need reconnecting in the accounts app.
+   Money View works only through a live connection. If you can't read the accounts app (the connection is down, or it isn't Xero or QuickBooks), record it under step 15, say so in one line and stop: don't ask for or read an export to refresh the money view, and never guess what the connection would have said.
+3. **Is the bank feed working?** If `sources.bank.mode` is `accounts-feed` and you see no recent bank transactions, say so plainly and point to `setup/connections/bank-feeds.md`: the feed may have stopped and need reconnecting in the accounts app. Also add an open flag (a new `id`, `kind: "other"`, `status: "open"`, `at` now) whose `text` says the bank feed looks stopped and may need reconnecting in the accounts app, unless an open flag saying so is already there, so an unattended run leaves a visible note.
 4. **Bank accounts and pots.** Treat each bank account the accounts app shows as an account here. The tax pot is one of them, or it isn't fed in at all (then the sum of `potMoves` is used).
 5. **Accounts.** For each bank account, card and pot you can see, update the matching entry in `accounts` (match on `name`) or add one: `balance`, `asAt` (the date the figure is from, never today unless it is), `source: "accounts"`. Leave entries with `source: "you"` alone unless the new figure is newer, then update the balance and say so. Never write a sort code, an account number or a card number anywhere.
 6. **Transactions.** Add each new bank line to `transactions`, newest first: `date`, `text` (the description, as the bank gives it), `amount` (a positive number), `dir` (`in` or `out`), `accountId`, `source: "accounts"`, `category` (`tax` for a payment to HMRC, keeping the word VAT in `text` for a VAT payment as the bank gives it; `transfer` for a move between the person's own accounts; otherwise empty). A line is a duplicate when another has the same date, amount and text: skip it. Keep the list to 3000, dropping the oldest.
@@ -37,6 +38,7 @@ If the accounts mode is `none`, say Money View needs an accounts app connected f
 12. If a job asked for this (the app's Refresh numbers button), there may be an invoice with `request.kind: "check"`. Refresh that one first, then clear its `request` (set it to `null`).
 13. **Task list (only if attached).** Follow the hand-off in `apps/money/ATTACH-CLAUDE.md`. Don't add one that's already there.
 14. Save safely: read the file right before writing, write the whole file back, read it back and check it parses.
+15. **Connections.** If `apps/home/data/connections.json` has a row for the accounts app that is `connected` or `needs-attention`, the read in step 2 is its check. If it worked, set its `checked` to today, and if its status was `needs-attention`, set it back to `connected` (the read just worked). If the read failed, set it to `needs-attention` with what went wrong in `note`, keep the old `checked`, and say so in one line ("Couldn't read Xero this time: it may need signing in again. There's a Fix it button on Home."). Do this in a scheduled run too. If the file isn't there, or has no such row, there is nothing to do here.
 
 ## What to say back
 
@@ -53,4 +55,4 @@ Tell them to look at the Overview for the figures: you never say a forecast, a t
 - Never store a bank login, a sort code, an account number or a card number, in the data file or anywhere else in this folder. If a file or a connection shows one, leave it out.
 - Never invent an invoice, a payment, a customer or an amount. If you can't read something, say so.
 - Never delete a record. Never change something the person typed (an invoice they wrote, an outgoing they confirmed, a setting).
-- Only write to `apps/money/data/money.json` and `context/`. Keep every id, date and shape as `apps/money/CLAUDE.md` says.
+- Only write to `apps/money/data/money.json`, `context/` and, for step 15, `apps/home/data/connections.json`. Keep every id, date and shape as `apps/money/CLAUDE.md` says.

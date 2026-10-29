@@ -1,49 +1,62 @@
 ---
 name: connect-a-tool
-description: Walks the person through connecting any app (email, calendar, accounting software, and so on) so Claude can read it and help with it. Use during setup, or any time later when the person says "connect my Xero", "can you see my calendar" or "hook up my email".
+description: Connects any app (email, calendar, accounts, customer records, call recorder and so on) so Claude can read it and help with it, checking the connection for itself and proving it with a real read. Use during setup, or any time the person says "connect my Xero", "can you see my calendar", "hook up my email", or when a connection needs attention.
 ---
 
 # Connect a tool
 
 ## When to use
 
-Setup, or whenever the person wants to connect a new app, for example "connect my Xero", "can you see my calendar" or "hook up my email".
+Setup, or whenever the person wants to connect an app or fix one, for example "connect my Xero", "can you see my calendar", "hook up my email", or a **Fix it** button.
 
 ## What you need
 
-- `context/tools.md`, to record the result and check what is already connected.
-- Whatever settings screen is open in front of the person; you will need them to tell you what they see.
+- The connector status tool in the Claude desktop app (`session_connectors_status`). Connector tools are often not loaded until you search for them, so before deciding you're not in the desktop app, search your tools for `session_connectors_status` and call it. Only if it can't be found or the call fails, say "Connecting apps needs the Claude desktop app. Open it, choose the Code tab, pick this folder and ask me again." and stop.
+- The other tools named here (`set_session_connector_enabled`, `reconnect_session_connector`, `search_mcp_registry`, `suggest_connectors`) may need searching for first in the same way.
+- `apps/home/data/connections.json` and `context/tools.md`, to check what's already connected and to record the result.
+- The guide mode in `setup/progress.md` (beginner, some or confident), for how much to explain.
 
-## Start with the app's own guide
+## 1. Find the route, never guess
 
-If `setup/connections/<app>.md` exists for this app, follow it exactly; it has the verified steps, the connector's exact name, plan requirements and which of the connector's tools are off limits. `setup/connections/README.md` lists them. Use the general approach below only for apps without a guide.
+1. If `setup/connections/<app>.md` exists, follow it exactly. `setup/connections/README.md` lists them.
+2. If there's no guide, search Claude's connector directory (`search_mcp_registry` with the app's name, or `suggest_connectors`). A connector published by the app's maker or listed in Claude's directory counts. Anything else doesn't.
+3. Nothing found: go to 4.
 
-## Order of preference
+## 2. Check, switch on, or point to Connect
 
-1. **A connector from Claude's own connector directory.** Check Settings, then Connectors, for the app. Menus change over time, so describe what to look for (an icon or name for the app) and ask the person what they actually see on their screen, rather than assuming the exact wording.
-2. **The app maker's own official server**, set up in the Claude desktop app or Claude Code. Only use one published by the app itself or a well-known publisher. If you are not sure who published it, say so and let the person decide whether to trust it; explain the risk of using an unknown one plainly (it could see or do more than intended).
-3. **The app's own programming interface with a key**, only if neither of the above exists and the person agrees to it. Ask for read-only or the smallest level of access first. The person pastes the key into the system's own secure storage (the keychain, an environment variable, or the tool's own settings screen) themselves. Never into this chat, and never into any file in this folder, because this folder may be shared or synced.
-4. **A plain export**, a CSV or PDF saved into `files/`, as the fallback when nothing above is possible.
+Look up this session's connections (`session_connectors_status`) and act on what you find:
 
-## Steps
+| What you find | What you do |
+|---|---|
+| It's there and on | Go to 3 |
+| It's there but switched off for this session | Switch it on (`set_session_connector_enabled`). They'll be asked to approve. It works from your next message: end this one by saying what you switched on and that you'll check it next |
+| It isn't there | Give them the path from the guide: in the Claude desktop app, Customize, then Connectors, then the app's name, then Connect, then sign in on the app's own page and approve. For a custom-address connector, only the address in our guide. Ask them to say when it's done, then look again |
+| It needs signing in (`needs_auth`) | Tell them to open Connectors (or type `/mcp` here), choose it and sign in. Then look again |
+| It's not working (`failed`) | Reconnect it (`reconnect_session_connector`). It's ready from your next message: say so, then look again |
 
-1. Ask which app they want connected.
-2. Check `context/tools.md` to see if it is already connected another way.
-3. Work through the order of preference above, checking with the person at each step rather than assuming.
-4. Once connected, test it with one harmless read (for example, "show me the last 3 emails" or "what's my next calendar event") before relying on it for anything.
-5. Record it in `context/tools.md`: the app, how it is connected, today's date, what Claude may do by default (read and draft only, unless the person says otherwise), and anything it must never do.
+Keep going round until it's on. Describe where things are in their guide mode, and never ask them what's on their screen: you can see the status yourself.
+
+## 3. Prove it, then record it
+
+Do one harmless read from the guide (for example "show me the last 3 emails" or "what's my next calendar event") and say what you found in one line, without quoting anything private. Only then record it:
+- `apps/home/data/connections.json` (format in `setup/connections/README.md`, "Recording a connection"): `"status": "connected"`, today's date in `checked`.
+- `context/tools.md`: the app, how it's connected, today's date, what you may do (read and draft only, unless they say otherwise), and what you must never do.
+
+If the read fails, go back to 2.
+
+After a **Fix it** that reconnected or re-added an app, check that `.claude/settings.local.json` still lists that app's read tools under their current names (the names include an id that may change). If it doesn't, redo the pre-approval step of this folder's check-in setup for that app, using the rule in its guide.
+
+## 4. No connector
+
+Say exactly this, with the app's name: "There's no Claude connector for <app>, so I can't connect to it live. If you export a CSV or PDF from it and drop it in the files folder, I'll read it whenever you ask." Record it as `export-only` (or `no-connector` if they don't want to export), with the reason in `note`.
+
+## 5. If it still won't connect
+
+Outside the email and calendar step of setup (email and calendar, which don't move on until proven or there's no connector), an app that still won't connect after the loop is recorded as `needs-attention`, with what went wrong in `note`. The Connections box shows a **Fix it** button, which brings you back here.
 
 ## Rules
 
-- Never ask the person to paste a password, key or token into the chat.
+- Never ask the person to paste a password, key or token into the chat, or anywhere in this folder.
+- Never add a connector address that isn't in our guide, and never set up a server outside Claude's Connectors screen.
 - Default access is read and draft only. Anything that sends, pays, deletes or posts needs the person's say-so each time, even once connected.
-- If you are not sure whether a connector exists for an app, say so and check, rather than guessing.
-- Do not install or trust an unofficial server without telling the person plainly who published it and what that means.
-
-## What to say to the person
-
-"Let's connect your email. Can you open Settings in Claude and tell me what you see under Connectors? If there's a Gmail or Outlook option there, that's the easiest route. If not, I'll check whether Google or Microsoft publish their own official setup for this instead."
-
-## If something is missing
-
-If no connector or official server exists for the app, say so and move to the API key option or the CSV fallback, explaining the trade-off (a CSV means you only see what they export, when they export it, rather than live).
+- Xero draft invoices (`setup/connections/xero-drafts.md`) is an optional extra that comes with Money View OS and the Small Business Toolkit: only when the person asks for Claude to put invoices into Xero. Never offer it in setup. If that file isn't in this folder, tell them it comes with Money View OS.

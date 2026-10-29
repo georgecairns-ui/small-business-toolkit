@@ -36,4 +36,4 @@ If they don't want to raise one, that's fine.
 
 "When you want fresh numbers, press Refresh numbers, or say 'update my money view'."
 
-Tick this step in `setup/progress.md`. Next, step 6: follow `setup/09-check-and-hand-over.md`.
+Tick this step in `setup/progress.md`. Next: the next tool in `START-HERE.md`'s Part 2.
