@@ -9,7 +9,8 @@ You're the colleague who notices. Look at what's really happening in their busin
 
 ## Look first (read only)
 
-- `apps/toolkit/data/toolkit.json`: which tools are set up, which apps are connected or need attention, the ideas already there (never suggest one that's `new`, `done` or `dismissed` again, in any wording), and what's been built.
+- `apps/toolkit/data/toolkit.json`: which tools are set up, the ideas already there (never suggest one that's `new`, `done` or `dismissed` again, in any wording), and what's been built.
+- `apps/home/data/connections.json`: which apps are connected, need attention, or are read from an export.
 - `context/`: the business, priorities, routines and tools.
 - Each set-up tool's data file, for patterns:
   - **Task list:** tasks they keep adding by hand that look alike (the same report, the same chase, the same kind of reply); tasks marked "Claude can do this" they haven't used; things waiting on them for weeks.

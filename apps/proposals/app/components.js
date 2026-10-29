@@ -84,7 +84,7 @@
   function setupCard() {
     return '<section class="panel setup-card"><div class="setup-card__art"><img src="' + ART.welcome + '" alt="" width="72" height="72"></div>' +
       '<div class="setup-card__body"><h2>Let’s set up your proposals</h2>' +
-      '<p class="muted">It’s empty for now. Claude learns your brand, your packages and how you write in about 20 minutes, then writes your first proposal from a real client.</p>' +
+      '<p class="muted">It’s empty for now. Claude learns your brand, your packages and how you write in 30 to 40 minutes, then writes your first proposal from a real client.</p>' +
       '<ol class="setup-card__steps">' +
       "<li>Open Claude Code in your <strong>Proposal Writing OS</strong> folder (in the Claude desktop app, the Code tab).</li>" +
       "<li>Type " + say("/setup") + " and answer Claude’s questions. It asks for your website, logo and colours, your packages and prices, and any proposal you’d like it to copy.</li>" +

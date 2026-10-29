@@ -15,7 +15,7 @@ Ask once, in one message:
 
 Plainly, in 2 sentences:
 
-> I'm going to look at what people search for and ask about what you do, what's in season, and what your competitors post. I only read public pages: I never log in anywhere, follow anyone or message anyone. It takes a few minutes.
+> I'm going to look at what people search for and ask about what you do, what's in season, and what your competitors post. I only read public pages, never your connections: I never log in anywhere for this, follow anyone or message anyone. It takes a few minutes.
 
 ## 3. Run the research
 

@@ -4,7 +4,7 @@ For George, Joey and anyone changing this kit for everyone. If you're a client u
 
 ## What this repository is
 
-The 7 tools of the small business toolkit, already attached to each other, plus a Toolkit section of the app and one merged setup. It's **private**: Get AI Powers invites each client's GitHub account. The 7 tools stay public, each in its own repository, as free lead magnets.
+The 7 tools of the small business toolkit, already attached to each other, plus a Toolkit section of the app and one merged setup. It's **public for now**, like the 7 tools (each in its own repository, as free lead magnets): anyone installs it with the plain download line in `START-HERE.md`, with no GitHub account (shared version 13). The day it goes private again, put back the GitHub sign-in route kept in Task List OS's `maintainers/PRIVATE-INSTALL.md` (adapted to `small-business-toolkit`), remove `gh` from the shared version 13 rule in `check.py`, and invite clients as under "Clients" below.
 
 **The kit is built, not written by hand.** Everything at the root of this repository is made by `maintainers/build.py` from:
 
@@ -23,7 +23,7 @@ So: **a change to a tool goes in that tool's repository**, gets merged there, th
 1. Fetches each tool and takes `origin/main` (`git archive`), into a temporary folder.
 2. Runs each tool's own `maintainers/make-release.sh`. If any tool fails its own check, the build stops.
 3. Checks the shared parts are identical wherever a tool ships them: `apps/server`, `apps/shared`, `apps/home`, `ATTACHING.md`, the shared `setup/scripts/` scripts (`start-app`, `autostart-*`, `save-key`), the shared skills `open-the-app` and `get-updates`, and the shared connection guides. A tool that doesn't ship one of these (Money View has no call-recording guides) is skipped for it, not failed. If a part differs, bring the tools level first. The full list is `SHARED` in `build.py`.
-4. Attaches the 6 other tools: app folders, skills, setup steps, connection guides, notes templates and files folders, `apps/installed.json`, the permissions `ATTACHING.md` step 7 allows (it prints anything it left out), and each tool's `ATTACH-CLAUDE.md` in `CLAUDE.md` (only the text after its `---` line, not the maintainer preamble). The first copy of a file wins when both have one. A tool's own differing `docs/` page is kept under `docs/<tool>/`. Any other file that two tools ship differently **stops the build**, so a tool that has drifted gets caught, unless the file is in `DIFFER_ALLOW` in `build.py` (each entry has a one-line reason, for example Money View's own `connect-a-tool` wording or the shared context files the base holds blank). Then it **removes the way in that belongs to one tool**, worked out from the tools' own files: each tool's `Open <name>.html`, the shared `start-app.*` scripts and the `open-the-app` skill.
+4. Attaches the 6 other tools: app folders, skills, setup steps, connection guides, notes templates and files folders, `apps/installed.json`, the permissions `ATTACHING.md` step 7 allows (it prints anything it left out), and each tool's `ATTACH-CLAUDE.md` in `CLAUDE.md` (only the text after its `---` line, not the maintainer preamble). The first copy of a file wins when both have one. A tool's own differing `docs/` page is kept under `docs/<tool>/`. Any other file that two tools ship differently **stops the build**, so a tool that has drifted gets caught, unless the file is in `DIFFER_ALLOW` in `build.py` (each entry has a one-line reason, for example Money View's own `match-my-brand` wording, Proposal Writing OS's own check-in step, or the shared context files the base holds blank). Then it **removes the way in that belongs to one tool**, worked out from the tools' own files: each tool's `Open <name>.html`, the shared `start-app.*` scripts and the `open-the-app` skill.
 5. Applies the overlay (which adds the toolkit's own `Open Small Business Toolkit.html`, `setup/scripts/start-toolkit.sh` and `.ps1` and the `open-my-toolkit` skill), then points every remaining mention of a removed name at the toolkit's (`open-the-app` and `start-app`, plus the older `open-task-list`, `start-task-list`, `start-money-view` and each `Open <name>.html`, become `open-my-toolkit`, `start-toolkit` and `Open Small Business Toolkit.html`, and the permissions list is de-duplicated). It then writes `.claude/skills/README.md` fresh from the kit's own skill folders, sets `toolkit.json`'s `sharedVersion` and `attachingVersion` from the real files (`apps/shared/VERSION` and `ATTACHING.md`), makes the notes templates say "during setup" instead of a tool's own step numbers, and makes every "your Pipeline OS folder" (and so on) say "your Small Business Toolkit folder".
 6. Replaces everything at the root except `maintainers/`, `.git` and `dist/`, and writes `maintainers/built-from.json` with the commit of each tool it used.
 
@@ -35,6 +35,12 @@ The product is the **Small Business Toolkit** (repository `small-business-toolki
 
 From shared version 11 the helper (`apps/server/server.js` and `server.py`) reads its name from `toolkit.json`, so it prints "Small Business Toolkit is running at ..." in the kit and each tool's own name standalone. The old `server.js.replace-json` and `server.py.replace-json` overlays, and the `autostart-*.replace-json` overlays, are gone: the scripts take the name from `toolkit.json` too.
 
+## Shared version 13: connections and the one check-in
+
+- **Connections live in `apps/home/data/connections.json`,** the file every tool shares. The Toolkit's Connections page and its Home box read it (`apps/toolkit/app/model.js` `setConnections`, loaded by `app/app.js` and `home-boxes.js` through the shared `apps/shared/js/connections.js`). `apps/toolkit/data/toolkit.json` no longer has a `connections` part, and `check.py` checks it ships without one.
+- **The kit's merged setup keeps every v13 guarantee:** the desktop-app check and guide mode in `START-HERE.md`; email and calendar as the hard gate in step 2, with the overlay's 2.4 (`setup/02-connect-email-and-calendar.md.replace-json`) reading the last 30 days once for the task list, the pipeline and the client folders; every other app through `connect-a-tool` in `setup/toolkit-02-connect-the-rest.md`; and one scheduled check-in in `setup/toolkit-03-make-it-automatic.md` that covers every tool's own check-in or refresh. No Meta Ads or Google Ads tool is ever pre-approved, so Ads OS isn't part of a scheduled run.
+- **`check.py` runs the tools' shared version 13 phrase rule on the built kit:** no giving up on a connection in the files that connect apps (including `setup/toolkit-02-connect-the-rest.md` and `setup/toolkit-03-make-it-automatic.md`), and no keys, `claude mcp add` or GitHub sign-in in `START-HERE.md`, `README.md`, `setup/`, `connect-a-tool` or `get-updates` (`setup/connections/xero-drafts.md` is the one exception).
+
 ## Releasing
 
 1. `git fetch` in each tool's repository is done by the build. Make sure any tool change you want is merged on GitHub first.
@@ -44,8 +50,8 @@ From shared version 11 the helper (`apps/server/server.js` and `server.py`) read
 
 ## Clients
 
-- Invite a client: GitHub, this repository, Settings, Collaborators, Add people, their GitHub username, **Read** access. They accept from GitHub's email.
-- Take access away: the same page, Remove.
+- While the kit is public there's nothing to invite: a client installs it with the download line in `START-HERE.md` (or the prompt in `README.md`).
+- Once it's private again: GitHub, this repository, Settings, Collaborators, Add people, their GitHub username, **Read** access. They accept from GitHub's email. To take access away: the same page, Remove.
 - A client's copy never updates by itself. To give them a new version, on a call: "Fetch the latest Small Business Toolkit and update my copy, keeping my data, notes and settings": their Claude follows the same rules as attaching (`ATTACHING.md` steps 3 and 4: never overwrite `context/`, `files/`, `setup/progress.md`, any data file or their `theme.css`).
 
 ## Things to check

@@ -26,19 +26,12 @@ Make **one** temporary folder outside their workspace, once, and fetch every too
 - Mac: `T="$(mktemp -d)" || exit 1; echo "$T"`
 - Windows (PowerShell): `$T = Join-Path $env:TEMP ("update-" + (Get-Random)); New-Item -ItemType Directory -Force $T | Out-Null; $T`
 
-**Their GitHub sign-in.** Every tool is private: Get AI Powers gives access by inviting the person's GitHub account, and every download uses their own sign-in. Check it first with `gh auth status`. If they are not signed in, give them the one line `gh auth login -h github.com -p https -w`, say it opens GitHub in their browser to approve this computer, and wait. If `gh` is not installed, help them install it (Mac: `brew install gh`, or the installer from cli.github.com; Windows: `winget install --id GitHub.cli -e`, then open a new PowerShell window).
-
 **The downloads.** For each tool in `apps/installed.json`, find its `repository` in the catalogue (for the whole toolkit, `small-business-toolkit`, once), and run, with `<T>` the path you noted:
 
-- Mac: `T="<T>"; mkdir -p "$T/new/<repository>" && curl -fsSL -H "Authorization: Bearer $(gh auth token)" -o "$T/new/<repository>.tar.gz" https://api.github.com/repos/georgecairns-ui/<repository>/tarball/main && tar -xzf "$T/new/<repository>.tar.gz" --strip-components 1 -C "$T/new/<repository>"`
-- Windows (PowerShell): `$T = "<T>"; New-Item -ItemType Directory -Force "$T\new\<repository>" | Out-Null; curl.exe -fsSL -H "Authorization: Bearer $(gh auth token)" -o "$T\new\<repository>.tar.gz" https://api.github.com/repos/georgecairns-ui/<repository>/tarball/main; if ($LASTEXITCODE -eq 0) { tar -xzf "$T\new\<repository>.tar.gz" --strip-components 1 -C "$T\new\<repository>" }`
+- Mac: `T="<T>"; mkdir -p "$T/new/<repository>" && curl -fsSL -o "$T/new/<repository>.tar.gz" https://github.com/georgecairns-ui/<repository>/archive/refs/heads/main.tar.gz && tar -xzf "$T/new/<repository>.tar.gz" --strip-components 1 -C "$T/new/<repository>"`
+- Windows (PowerShell): `$T = "<T>"; New-Item -ItemType Directory -Force "$T\new\<repository>" | Out-Null; curl.exe -fsSL -o "$T\new\<repository>.tar.gz" https://github.com/georgecairns-ui/<repository>/archive/refs/heads/main.tar.gz; if ($LASTEXITCODE -eq 0) { tar -xzf "$T\new\<repository>.tar.gz" --strip-components 1 -C "$T\new\<repository>" }`
 
-`-f` makes curl stop with an error on a failed download instead of saving the error page as if it were the kit. If a download fails, say so in 1 sentence and stop:
-
-- `error: 404`: their GitHub account cannot see that tool. Either they have not accepted the invitation from Get AI Powers yet, or they are signed in to a different GitHub account (`gh auth status` names it). Ask them to accept the invitation from the email GitHub sent them (it is also at github.com/notifications), then try again. If they never had an invitation, tell them to ask Get AI Powers.
-- `error: 401`: the sign-in has expired. Ask them to sign in again with `gh auth login -h github.com -p https -w`.
-
-Do not try another way in.
+`-f` makes curl stop with an error on a failed download instead of saving the error page as if it were the kit. If a download fails, say so plainly, change nothing, and try again later.
 
 **The old copies.** Unpack each `setup/as-installed/*.tar.gz` the same way into `$T/old/<repository>` (`mkdir -p` it, then `tar -xzf <the file> --strip-components 1 -C <the folder>`).
 
@@ -110,13 +103,13 @@ Tell them in 1 short message:
 - That you will save a copy of every file you change first, in `files/99-archive/`.
 - If there is no saved download: "I don't have a copy of what you installed, so I can't tell your changes from ours. This first update keeps every file you've changed and does little. I'll save a copy now, so the next one does the whole job."
 - That Claude Code will ask them to approve changes to the app's own files, because only their notes, records and files are pre-approved: "Say yes to each one, it is me updating the app."
-- That you will stop the app for a few minutes, and that the hourly check-in must not run meanwhile: ask them not to start one, and to pause it in the Claude desktop app's scheduled tasks if one is set up. Say you will tell them when it is safe again.
+- That you will stop the app for a few minutes, and that the scheduled check-in must not run meanwhile: ask them not to start one, and to pause it in the Claude desktop app's scheduled tasks if one is set up. Say you will tell them when it is safe again.
 
 Then ask: "Shall I update it?" Do nothing until they say yes.
 
 ## 6. Stop the helper, back up, then apply
 
-**First, stop the helper**, so nothing writes to their data while you work, and say again that the hourly check-in must not run until you finish.
+**First, stop the helper**, so nothing writes to their data while you work, and say again that the scheduled check-in must not run until you finish.
 
 - If the app is set to start with the computer, switch that off for now, or it restarts at once: `bash setup/scripts/autostart-mac.sh remove` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\autostart-windows.ps1 -Remove` (Windows). Note that you did, to put it back in 4 below.
 - Then make sure it is stopped: `pkill -f "apps/server/server\.(js|py)"` (Mac), or in PowerShell `Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like "*apps\server\server.*" } | ForEach-Object { Stop-Process -Id $_.ProcessId }`.
@@ -130,7 +123,7 @@ Then:
    - every data file you touched still opens (`python3 -m json.tool <file>`, or `Get-Content <file> | ConvertFrom-Json` on Windows)
    - no em dash came in from a merge
    - their data is exactly what it was: take the fingerprint a third time into `$T/data-after.txt` and compare it with `data-start.txt` (`diff`, or `Compare-Object` on Windows). Any difference is a failure
-4. Start the helper again with the `open-my-toolkit` skill (`.claude/skills/open-my-toolkit`: run its start script, and put autostart back with its `install` if you switched it off), open the link it gives, and check every tool in the sidebar opens, in light and dark. If they have a brand, check it still shows. Then tell them the hourly check-in is safe again.
+4. Start the helper again with the `open-my-toolkit` skill (`.claude/skills/open-my-toolkit`: run its start script, and put autostart back with its `install` if you switched it off), open the link it gives, and check every tool in the sidebar opens, in light and dark. If they have a brand, check it still shows. Then tell them the scheduled check-in is safe again.
 
 If anything fails, put the backed-up files back, start the helper again so their app works, tell them what happened in 1 sentence, and stop.
 

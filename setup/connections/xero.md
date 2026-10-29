@@ -1,47 +1,43 @@
 # Connect Xero
 
-One line: lets Claude read invoices, bills, bank transactions, contacts and what customers owe from Xero, so Money View can show them, and so the task list gets unpaid invoices to chase and bills due.
+What it gives your app: unpaid invoices to chase and bills due in Review, and direct answers to money questions (cash position, profit and loss).
 
-**Recommended route:** the Xero connector in Claude's connector directory, read-only by design. **Plans:** needs an active Xero subscription; works with a free or paid Claude account.
+**Connector:** "Xero" in Claude's connector directory (built by Xero Limited, added in April 2026, marked Anthropic verified), read-only by design. **Plans:** needs an active Xero subscription; works with a free or paid Claude account.
+**Route:** directory.
 
-## Route 1: connect Xero
+## Connect
 
-1. Say "Let's connect your accounts" to the person. Say "connect" and "a connection", never MCP, API, JSON or repo.
-2. In the Claude app or on claude.ai, go to the connectors area (ask the person what they see), find "Xero", click Connect, sign in with the business Xero login, and choose the organisation.
-3. In Claude Code: it appears automatically once Claude Code is signed in with a claude.ai subscription. Check with `/mcp`.
+1. Say "Let's connect your accounts." Say "connect" and "a connection", never MCP, API, JSON or repo.
+2. Look up this session's connections (`session_connectors_status`) and follow the table in `.claude/skills/connect-a-tool` ("Check, switch on, or point to Connect").
+3. If they need to add it: in the Claude desktop app, Customize, then Connectors, then "Xero", then Connect, then sign in with the business Xero login and choose the organisation.
 
-## If Claude can't see Xero
+## If there's no connector
 
-Say so in one plain line and check the basics with them: they signed in with the business Xero login, they chose the right organisation, and their Xero subscription is active. Money View only works through this live connection, so until Claude can see Xero, leave Money View's accounts step (`setup/money-01-your-accounts.md`) unticked. Don't ask for exports and don't try another way in.
+Say exactly: "There's no Claude connector for Xero, so I can't connect to it live. If you export a CSV or PDF from it and drop it in the files folder, I'll read it whenever you ask." Record it as `export-only`. Ask the person to export an aged receivables or unpaid invoices report from Xero as a CSV or PDF and save it into the files folder. Claude then only sees what was exported, when it was exported, rather than live figures.
 
-A separate version exists that can create draft invoices (Xero's own open source connection). It is optional and needs a Xero custom connection: see `setup/connections/xero-drafts.md`. Don't set it up unless the person wants Money View to put invoices into Xero as drafts.
+## Prove it
 
-Xero's own wording: "Claude connects with read-only access" and it "can't edit invoices, post transactions, or change anything in your books."
+Ask first, then list unpaid invoices. Say: "I can see 4 unpaid invoices, the oldest from 12 September, owed by Greenway Café."
 
-## Check it works
+## What Claude may and may not do
 
-Ask permission, then list unpaid invoices. Say something like: "I can see 4 unpaid invoices, the oldest from 12 September, owed by Greenway Café."
+Read only, by Xero's own design: "Claude connects with read-only access" and it "can't edit invoices, post transactions, or change anything in your books." Tools include `get_invoices`, `show_invoices_summary`, `get_aged_receivables`, `get_aged_payables`, `get_bills`, `get_contacts`, `get_profit_and_loss`, `get_cash_position` and `get_bank_account_transactions`. There is nothing to restrict beyond this; the connector cannot write.
 
-The connector was added to the directory in April 2026, built by Xero Limited, and is marked Anthropic verified.
+A separate, developer-run version of the Xero connector exists (an open-source local server that can create invoices and post transactions). Never set it up or use it. Draft invoices in Xero are a separate optional extra (`setup/connections/xero-drafts.md`, which comes with Money View OS and the Small Business Toolkit), offered only when the person asks for them. If that file isn't in this folder, tell them it comes with Money View OS.
 
-## Rules for Claude with Xero
+Pre-approve for check-ins: `get_connected_organisations`, `get_organisation_info`, `get_organisation_financial_year`, `get_invoices`, `show_invoices_summary`, `get_aged_receivables`, `get_aged_payables`, `get_bills`, `get_contacts`, `get_profit_and_loss`, `get_cash_position`, `get_financial_position`, `get_bank_account_transactions`, `get_chart_of_accounts`, `get_top_customers_by_revenue`, `get_purchase_orders`, `get_repeating_invoices`, `get_repeating_bills`, `get_tracking_categories`, `get_1099_report_summary`. These are every tool the connector had in Claude's own tool list on 2026-10-29, and all of them read.
 
-Read only, by Xero's own design: "Claude connects with read-only access" and "can't edit invoices, post transactions, or change anything in your books." Tools include `get_invoices`, `show_invoices_summary`, `get_aged_receivables`, `get_aged_payables`, `get_bills`, `get_contacts`, `get_profit_and_loss`, `get_cash_position`, `get_bank_account_transactions`. There is nothing to restrict beyond this; the connector cannot write.
+## Record
 
-## What it can and can't do for Money View
+`apps/home/data/connections.json`, key `xero`: name "Xero", status `connected`, how "Claude connector: Xero", checked today, note "Read invoices, bills, contacts and reports. The connector is read-only."
 
-Can: read invoices, payments, bills, bank transactions and balances, contacts, cash position and what customers owe, so Money View shows what's owed and what's in the bank (Xero's bank feed is the bank route). Xero is fully supported through this connection. Can't: create an invoice. For drafts the person adds the optional connection in `xero-drafts.md`, or raises the invoice in Xero themselves from the link Money View gives.
-
-This connection is also how Claude checks that a customer is already a contact in Xero before the drafts connection creates an invoice for them (see `xero-drafts.md`).
-
-## What to record
-
-Add to `context/tools.md`: "Xero | Claude connector | 2026-10-06 | Read invoices, bills, contacts and reports | Nothing; the connector is read-only".
+`context/tools.md`: "Xero | Claude connector | <today> | Read invoices, bills, contacts and reports | Nothing; the connector is read-only"
 
 ## Sources
 
-Verified on 2026-10-06.
+Verified on 2026-10-06; rewritten into the connected-onboarding shape on 2026-10-29.
 - https://claude.com/connectors/xero
 - https://www.xero.com/uk/ai-in-accounting/claude/
 - https://www.xero.com/us/ai-in-accounting/claude/
 - https://github.com/xeroapi/xero-mcp-server
+- Tool names checked against Claude's own tool list on 2026-10-29.

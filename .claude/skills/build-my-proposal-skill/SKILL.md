@@ -1,6 +1,6 @@
 ---
 name: build-my-proposal-skill
-description: Builds (or rebuilds) the business's own proposal skill, named after the business, from everything setup learned: their brand, packages and prices, how they write, their template, how they deliver and onboard, and when to recommend each package. Saved in this folder and packed up to add to Claude, so their proposals come out right everywhere. Use at the end of setup (step 10), and whenever they say "rebuild my proposal skill", "we've changed our packages", "update how you write proposals", or after importing a template.
+description: Builds (or rebuilds) the business's own proposal skill, named after the business, from everything setup learned: their brand, packages and prices, how they write, their template, how they deliver and onboard, and when to recommend each package. Saved in this folder and packed up to add to Claude, so their proposals come out right everywhere. Use at the end of setup (step 9), and whenever they say "rebuild my proposal skill", "we've changed our packages", "update how you write proposals", or after importing a template.
 ---
 
 # Build my proposal skill

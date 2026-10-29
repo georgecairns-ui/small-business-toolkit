@@ -39,7 +39,11 @@ No. A campaign Claude builds is switched off. Nothing spends until you say yes: 
 
 ## What about passwords and tokens?
 
-Claude never asks for a password or a token, and none should ever go into this folder or into the chat. When you connect Meta or Google, you sign in on their own screen and the connection keeps the sign-in. This folder never sees it.
+Claude never asks for a password or a token, and none should ever go into this folder or into the chat. When you connect Meta or Google, you connect through Claude's Connectors: you sign in on their own screen and the connection keeps the sign-in. This folder never sees it, and setup never uses a key. If there's no Claude connector for your account, Claude reads your figures from a CSV or PDF report you download and drop in the files folder, whenever you ask.
+
+## Does it run when I'm not there?
+
+No. Ads OS has no scheduled run. Claude reads your ad accounts only when you ask, or when you press a button such as Refresh figures in the app, and Claude Code asks you before each call to Meta or Google. No ad account tool is pre-approved, not even one that only reads, so nothing reads your accounts while you're away.
 
 ## What about the details of people who fill in my lead forms?
 

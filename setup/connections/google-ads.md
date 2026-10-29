@@ -1,40 +1,36 @@
 # Connect Google Ads
 
-One line: lets Claude read your Google Ads figures. It cannot create or change anything.
+What it gives your app: lets Claude read your Google Ads figures. It cannot create or change anything.
 
-**Recommended route:** Google's own Google Ads connection, added in the Claude desktop app. **It reads only.** Claude can't create a campaign or change one through it, so for new Google campaigns Claude writes a file you import into Google Ads Editor, and it arrives switched off. Changes to a Google campaign are steps for you, with a link to Google Ads.
+**Connector:** Google's own Google Ads connection, if Google has published one in Claude's connector directory. **It reads only.** Claude can't create a campaign or change one through it, so for new Google campaigns Claude writes a file they import into Google Ads Editor, and it arrives switched off. Changes to a Google campaign are steps for them, with a link to Google Ads. **Plans:** any Claude plan may work, and on Team or Enterprise plans an owner may need to add it first (to check).
+**Route:** directory, only a connector published by Google itself. We have no Google address in this guide, so never add one by address, and never use another company's ads connector.
 
-Nothing here has been clicked through by the person who wrote this guide, so every click is marked **to check**, and so is the connection's name and address. Ask the person what they see on their screen at each step, and correct this file afterwards.
+Nothing here has been clicked through by the person who wrote this guide, so every click is marked **to check**, and so is the connection's name. Check the connection's status yourself at each step (below), and correct this file afterwards.
 
 Before you begin, say in plain words: "Claude can read your Google Ads figures. It can't change anything in your account, and Claude Code asks you before it reads anything."
 
-## Route 1: add it in the Claude desktop app
+## Connect
 
-1. Say "Let's connect your Google Ads". Say "connect" and "a connection", never MCP, API, JSON or repo.
-2. Open the Claude desktop app, then Settings, then **Connectors**. (To check.)
-3. Look for **Google Ads** in the list of connectors and press **Connect**. (To check: whether Google's own connection is listed there, and what it is called. If it isn't listed, ask George for the address of Google's own connection and add it with **Add custom connector**.)
-4. A Google window opens. Sign in with the Google account that manages your ads. (To check.)
-5. Choose the ad account if Google asks. If you manage several, pick the one for this business. (To check.)
-6. Allow reading your Google Ads data when the permission screen asks. (To check what it says. Allow nothing that says edit or manage if there's a choice.)
-7. Back in Claude, the connection should say Connected. In Claude Code it should appear once Claude Code is signed in with the same Claude account. Check with `/mcp`. (To check.)
+1. Say "Let's connect your Google Ads." Say "connect" and "a connection", never MCP, API, JSON or repo.
+2. Look up this session's connections (`session_connectors_status`) and follow the table in `.claude/skills/connect-a-tool` ("Check, switch on, or point to Connect"). If it isn't there, search Claude's connector directory (`search_mcp_registry` with "Google Ads") for a connector published by Google. If there isn't one, go to "If there's no connector".
+3. If they need to add it: in the Claude desktop app, Customize, then Connectors, then **Google Ads**, then **Connect**. (To check: whether Google's own connection is listed there, and what it is called.)
+4. A Google window opens. Sign in with the Google account that manages their ads. Choose the ad account if Google asks; if they manage several, pick the one for this business. (To check.)
+5. Allow reading their Google Ads data when the permission screen asks. (To check what it says. Allow nothing that says edit or manage if there's a choice.)
+6. Look up the connections again. When Google Ads is there and on, go to "Prove it".
 
-**Plans:** any Claude plan may work, and on Team or Enterprise plans an owner may need to add it first. (To check.)
+If it won't connect:
+- **They can't see their ad account after signing in:** the Google account they used doesn't have access to it. Ask whoever manages the account to add them, or sign in with theirs. (To check.)
+- **It still won't connect after the loop in `connect-a-tool`:** record it as `needs-attention`, with what went wrong in `note`. The Connections box on Home shows a **Fix it** button for it.
 
-## If you can't connect
+## If there's no connector
 
-- **Not listed, or Google says it isn't available for your account:** use Route 2. Tell George if it's missing: this guide needs updating.
-- **You can't see your ad account after signing in:** the Google account you used doesn't have access to it. Ask whoever manages the account to add you, or sign in with theirs. (To check.)
-- **Anything else:** tell Claude what the screen says.
+Say exactly: "There's no Claude connector for Google Ads, so I can't connect to it live. If you export a CSV or PDF from it and drop it in the files folder, I'll read it whenever you ask." Record it as `export-only`. Then follow `.claude/skills/update-my-ads/references/exports.md`, the Google Ads section, for the exact clicks to download a daily campaign report, and ask them to save it into `files/04-marketing/ads/exports/`. Claude will only see what they download and when.
 
-## Route 2: a report you download
+## Prove it
 
-Follow `.claude/skills/update-my-ads/references/exports.md`, the Google Ads section. Claude will only see what you download and when.
+Ask permission, then read only the account name and its spend over the last 7 days. Say something like: "I can see the account Marlow Dental, which spent £148 in the last 7 days." Check the name is right.
 
-## Check it works
-
-Ask permission, then read only the account name and the campaigns. Say something like: "I can see the account Marlow Dental and 3 campaigns, 1 running." Check the name is right.
-
-## Rules for Claude with Google Ads
+## What Claude may and may not do
 
 - **Read** with read tools: campaigns, their status and budgets, daily figures.
 - **Never** try to create, edit, pause or switch on anything, through this connection or any other route. Don't look for a way round: no other token, no other connection.
@@ -43,14 +39,23 @@ Ask permission, then read only the account name and the campaigns. Say something
 - Never ask for a password or a token in chat.
 - Rules for the connection are kept in one place: `.claude/skills/build-in-account/references/connections.md`.
 
-## What to record
+Pre-approve for check-ins: none. No Google Ads tool is pre-approved, not even a read tool, in `.claude/settings.json` or `.claude/settings.local.json`: Claude Code asks before each call.
 
-Add to `context/tools.md`: "Google Ads | Google's own connection (read only) | <today's date> | Read campaigns and figures | Create or change anything".
+Ads OS has no check-in setup and nothing here is pre-approved. After a Fix it, ignore the pre-approval check in connect-a-tool: there are no read tools to restore, so never add a Meta Ads or Google Ads tool to .claude/settings.json or .claude/settings.local.json, and never offer to.
 
-Then in `apps/ads/data/ads.json` set `platforms.google`: `on: true`, `how: "connected"`, `accountName`, `connectedAt`.
+## Record
+
+`apps/home/data/connections.json`, key `google-ads`: name "Google Ads", status `connected`, how "Google's own connection (read only)", checked today, note "Read campaigns and figures. Never create or change anything."
+
+`context/tools.md`: "Google Ads | Google's own connection (read only) | <today's date> | Read campaigns and figures | Create or change anything"
+
+Then in `apps/ads/data/ads.json` set `platforms.google`: `on: true`, `how: "connected"`, `accountName`, `connectedAt`. With no connector, `how: "export"` instead.
 
 ## Sources
 
-Not yet verified against Google's own pages. To check before relying on this guide:
+Not yet verified against Google's own pages; rewritten into the connected-onboarding shape on 2026-10-29. To check before relying on this guide:
 - Google's help page for its Google Ads connection for Claude (its name, address and what it can read).
 - The connection's own tool list, once connected.
+- Checked on 2026-10-29: Claude's connector directory lists no Google Ads connector published by Google (only other companies' ads connectors, which don't count). Until one appears, a Google Ads account goes the "If there's no connector" way. The old advice to ask George for an address is removed: a connector is added by address only when the address is the app maker's own and is written in this guide.
+
+For maintainers: if a person ever finds Google's own connector missing or different from this guide, this guide needs updating. Tell George.

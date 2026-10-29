@@ -225,7 +225,12 @@
               return scripts.reduce(function (c, src) { return c.then(function () { return loadScript(base + src); }); }, Promise.resolve());
             }).catch(function () { /* a tool without Home boxes, or one that failed to load: skip it quietly */ });
           });
-        }, Promise.resolve());
+        }, Promise.resolve()).then(function () {
+          // The shared Connections box (shared v13). The Small Business Toolkit shows its own, from the same file.
+          if (inFolder.some(function (t) { return t.id === "toolkit"; })) return;
+          return loadScript("../shared/js/connections.js").then(function () { return loadScript("../shared/js/connections-box.js"); })
+            .catch(function () { /* no Connections box: Home still works */ });
+        });
       })
       .then(function () { return getJson(LAYOUT_API).then(function (saved) { return saved.boxes; }, function () { return null; }); })
       .then(function (saved) {

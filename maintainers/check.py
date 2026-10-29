@@ -10,7 +10,8 @@ Exits 1 and says why if anything fails. It checks the kit at the repository root
   3. Every tool in apps/installed.json is there: its page, its menu, its data files, and its skills.
   4. Every setup step, skill and connection guide that START-HERE.md, the Toolkit app and the new skills
      point to exists.
-  5. The words: no em dashes in anything written for this kit, and no tool still says "your <Tool> OS folder".
+  5. The words: no em dashes in anything written for this kit, no tool still says "your <Tool> OS folder", and the
+     shared version 13 setup rules (no giving up on a connection, no keys, no GitHub sign-in).
   6. maintainers/built-from.json says every tool came from GitHub's main, not a local folder.
   7. It is the Small Business Toolkit, not Task List OS with extras: one opener, one start script pair and one
      open-the-app skill, all named for the toolkit, and none of the old names or "host" wording left anywhere.
@@ -56,7 +57,8 @@ for p, rel in kit_files():
         bad("%s should not ship" % rel)
 if (ROOT / "apps/home/data").exists():
     bad("apps/home/data should not ship (someone's Home layout)")
-BLANK_TOOLKIT = {"version": 1, "lastDailyRun": "", "connections": {}, "tools": {}, "ideas": [], "builds": []}
+# Connections live in apps/home/data/connections.json since shared version 13, not in the Toolkit's file
+BLANK_TOOLKIT = {"version": 1, "lastDailyRun": "", "tools": {}, "ideas": [], "builds": []}
 try:
     if json.loads((ROOT / "apps/toolkit/data/toolkit.json").read_text()) != BLANK_TOOLKIT:
         bad("apps/toolkit/data/toolkit.json is not the blank file")
@@ -117,8 +119,8 @@ written_here = [ROOT / "START-HERE.md"] + [ROOT / rel for rel in (p.relative_to(
 for f in written_here:
     for ref in pointers.findall(f.read_text()):
         ref = ref.rstrip(".")
-        if "<" in ref or "*" in ref or ref.startswith("setup/as-installed/"):
-            continue  # setup/as-installed/ is written when the person installs, not shipped
+        if "<" in ref or "*" in ref or ref.startswith(("setup/as-installed/", "apps/home/data/")):
+            continue  # setup/as-installed/ is written when the person installs, apps/home/data/ during setup: neither ships
         if not (ROOT / ref).exists():
             bad("%s points to %s, which is missing" % (f.relative_to(ROOT), ref))
 apps_list = ROOT / "apps/toolkit/app/apps-list.js"
@@ -140,6 +142,38 @@ for p, rel in kit_files():
 for p in OVERLAY.rglob("*"):
     if p.is_file() and p.suffix in (".md", ".js", ".html", ".css", ".json", ".append", ".replace-json") and "—" in p.read_text():
         bad("an em dash in maintainers/overlay/%s" % p.relative_to(OVERLAY))
+# Shared version 13, the same rules as each tool's make-release.sh: setup never gives up on a connection,
+# never asks what's on screen, and never uses keys or GitHub sign-in. The give-up phrases count only in the
+# files that connect apps (elsewhere "move on" or "skip it" is harmless): the tools' own connection steps,
+# plus the kit's setup/toolkit-02-connect-the-rest.md and setup/toolkit-03-make-it-automatic.md.
+# setup/connections/xero-drafts.md is the one optional extra that uses a key, so it is left out.
+CONNECT_STEPS = {"setup/proposals-04-your-client-folders.md", "setup/content-02-your-platforms.md",
+                 "setup/money-01-your-accounts.md", "setup/money-02-your-bank.md", "setup/ads-02-where-your-ads-are.md"}
+GIVE_UP = (
+    (r"and (move|carry) on\b(?! (from|setting up))", "lets Claude give up on a step"),
+    (r"\bthen move on\b", "lets Claude give up on a step"),
+    (r"\bskip it\b", "lets Claude give up on a step"),
+    (r"try once more", "lets Claude give up on a connection"),
+    (r"ask (the person |them )?what they (actually |can )?see", "asks the person what's on screen: Claude checks the connection status itself"),
+)
+NO_KEYS = (
+    (r"Route 2: API key", "offers an API key route"),
+    (r"claude mcp add", "adds a server outside Claude's Connectors screen"),
+    (r"save-key", "asks for a key"),
+    (r"\bgh (auth|api|repo)\b", "needs a GitHub sign-in while the tools are public"),
+)
+for p, rel in kit_files():
+    r = rel.as_posix()
+    v13_scope = r in ("START-HERE.md", "README.md") or r.startswith(("setup/", ".claude/skills/connect-a-tool/", ".claude/skills/get-updates/"))
+    if not v13_scope or p.suffix != ".md" or r == "setup/connections/xero-drafts.md":
+        continue
+    connect_scope = (re.fullmatch(r"setup/0[2-4][^/]*\.md", r) or re.fullmatch(r"setup/[^/]*(connect|check-ins|make-it-automatic)[^/]*\.md", r)
+                     or re.fullmatch(r"setup/connections/[^/]+\.md", r) or r.startswith(".claude/skills/connect-a-tool/") or r in CONNECT_STEPS)
+    text = p.read_text()
+    for pattern, why in (GIVE_UP if connect_scope else ()) + NO_KEYS:
+        if re.search(pattern, text, re.I):
+            bad("%s %s (shared version 13): matched %r" % (r, why, pattern))
+
 folder = re.compile(r"\b(?:your|their|the) (?:Task List|Pipeline|Proposal Writing|Content Machine|Money View|Ads|Skill and Folder Map) OS folder\b")
 for p, rel in kit_files():
     if p.suffix in (".md", ".js", ".html", ".sh", ".ps1") and folder.search(p.read_text()):

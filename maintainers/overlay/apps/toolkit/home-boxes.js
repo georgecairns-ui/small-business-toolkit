@@ -1,8 +1,9 @@
 /*
   TOOLKIT ON HOME: the boxes this tool adds to the Home dashboard
   ---------------------------------------------------------------
-  Loaded by apps/home/home.js after app/apps-list.js and app/model.js (listed under "home" in the tool's
-  menu file). It reads the same data file as the app itself, through the same shared store.
+  Loaded by apps/home/home.js after ../shared/js/connections.js, app/apps-list.js and app/model.js (listed under
+  "home" in the tool's menu file). It reads the same data files as the app itself, through the same shared store:
+  data/toolkit.json, and apps/home/data/connections.json for which apps are connected (shared version 13).
 
   Both boxes start switched on (defaultOn), because this kit is always installed fresh with the Toolkit in it.
   - Next steps: up to 4 things, in order: tools not set up yet, key apps not connected, then Claude's new ideas.
@@ -96,6 +97,16 @@
         onData: function (d) { data = d; problem = ""; def.ready = true; ctx.refresh(); }
       });
       store.start();
+      // Which apps Claude can reach: the shared file every tool reads (shared v13). Missing just means nothing is connected yet.
+      window.TaskListOS.createStore({
+        moduleId: "connections",
+        fileName: "connections.json",
+        dataPaths: ["data", "", "apps/home/data"],
+        api: window.TaskListOS.connections.API,
+        validate: window.TaskListOS.connections.validate,
+        onStatus: function () {},
+        onData: function (d) { M.setConnections(d.connections); ctx.refresh(); }
+      }).start();
     },
     action: function (name, el) {
       if (name !== "copy") return;

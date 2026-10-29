@@ -21,29 +21,19 @@ Go through their answers in `setup/progress.md` ("Answers from step 1") and put 
 
 `setup/connections/README.md` lists every guide. If their app isn't listed, follow `.claude/skills/connect-a-tool`.
 
-Social platforms (LinkedIn, Instagram and so on) are not connected: Content Machine OS researches the public web and they post themselves. Say so if they ask.
+Social platforms (LinkedIn, Instagram, Facebook, TikTok and so on) wait for Content Machine OS's own platforms step (`setup/content-02-your-platforms.md`), which connects the ones with a connector, for reading only, and says the no-connector sentence once for all the rest. Leave them out of this list.
 
 ## 4.2 Connect each one
 
-Follow its guide exactly, one app at a time. The order is always: a Claude connector (sign in, approve), then the app maker's own connection, then a key. An export is a last resort, and never for Money View.
+For each app on the list, follow its guide and `.claude/skills/connect-a-tool`: find the route (our guide, or a search of Claude's connector directory), check, switch on or point to Connect, then prove it with one harmless read ("I can see 4 unpaid invoices, the oldest from 12 September", "I can see 2 Meta campaigns, both running"). Use the guide mode from `setup/progress.md` for how much to explain at a time.
 
-**If a key is needed**, never ask for it in chat. Tell them where to find it (the guide says), then:
-
-> Open the Terminal app (on Windows, PowerShell) in your Small Business Toolkit folder and paste this line, then press Enter:
-> `bash setup/scripts/save-key.sh PIPEDRIVE_API_KEY` (Mac) or `powershell -ExecutionPolicy Bypass -File setup\scripts\save-key.ps1 PIPEDRIVE_API_KEY` (Windows)
-> It asks for your key. Paste it and press Enter (it won't show on screen). Then close and reopen Claude so it can see it.
-
-The script keeps the key in the computer's own secure store (Keychain on a Mac). Nothing is written into this folder. Afterwards, check it's visible without printing it: `[ -n "$PIPEDRIVE_API_KEY" ] && echo found` (Mac) or `if ($env:PIPEDRIVE_API_KEY) { "found" }` (Windows).
+An app with no connector gets this sentence, word for word with its name: "There's no Claude connector for [app], so I can't connect to it live. If you export a CSV or PDF from it and drop it in the files folder, I'll read it whenever you ask." Record it as `export-only`. For FreeAgent, Sage and QuickBooks outside the US, say plainly too that Money View can't use an export: it needs a live connection to the accounts app.
 
 Meta ads: connect for reading now. The tool's own step (`setup/ads-02-where-your-ads-are.md`) explains what building campaigns means and asks before anything more.
 
-## 4.3 Check and record
+## 4.3 Record
 
-For each app, one harmless read ("I can see 4 unpaid invoices, the oldest from 12 September", "I can see 2 Meta campaigns, both running"). Then:
-- `context/tools.md`: a row per app, with what you may and may not do.
-- `apps/toolkit/data/toolkit.json`, under `connections`: its status (`connected`, or `needs-attention` with a one-line note if it half works), `how` ("Claude connector" or "key saved"), and today's date in `checked`. An app they decided to leave: `not-used`.
-
-If something gets fiddly, note it in `setup/progress.md`, set it to `needs-attention` and move on: a partly connected setup that works beats a long afternoon, and the Toolkit's Connections page has a **Fix it** button for later. Tick step 4.
+Each app goes into `apps/home/data/connections.json` and `context/tools.md` (see `connect-a-tool`, part 3), with what you may and may not do. An app that still won't connect after the loop is `needs-attention`, with what went wrong in `note`: the Connections page and the Connections box on Home show a **Fix it** button for it, so setup doesn't stall on it. An app they decided to leave: `not-used`. Apps they named but chose to connect later stay `not-connected` with the note "Chose not to connect yet". Tick step 4.
 
 ## What to say
 

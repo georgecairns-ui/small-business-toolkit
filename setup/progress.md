@@ -4,6 +4,8 @@ Claude ticks each step when it's done and adds a short note, so setup can pick u
 
 Setup status: not started
 
+Guide mode: not asked yet
+
 ## Part 1: once, for every tool
 
 - [ ] 1. Quick questions (every tool at once)

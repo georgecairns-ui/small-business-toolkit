@@ -8,14 +8,16 @@
     2. Lets the app read and save your data files (for example apps/task-list/data/tasks.json), so there's
        no folder to pick and nothing to allow. Claude's changes appear within seconds.
        If other tools from the toolkit are attached, it saves their data files too, but only the
-       ones listed for each tool in apps/installed.json.
+       ones listed for each tool in apps/installed.json. It also saves Home's own files in apps/home/data:
+       layout.json, braindump.json and connections.json.
     3. For a tool marked "media": true in apps/installed.json, keeps the photos and videos a person
        adds to their posts in that tool's own data/media folder, and plays them back.
 
   Safety:
     - It only listens on this computer (127.0.0.1). Nothing on the internet or your network can reach it.
-    - It only serves the app (the apps folder) and only ever saves the task file and the data files
-      of attached tools listed in apps/installed.json. Nothing else can be written.
+    - It only serves the app (the apps folder) and only ever saves the task file, the data files
+      of attached tools listed in apps/installed.json, and Home's layout.json, braindump.json and
+      connections.json in apps/home/data. Nothing else can be written.
     - Photos and videos are saved only for a tool marked "media": true, only with a safe file name and the
       right kind of file, up to 200 MB, and never over a file that is already there. Nothing can delete them.
     - It keeps a backup (for example tasks.backup.json) before every save, and saves in a way that
@@ -59,6 +61,7 @@ function readName() {
 const NAME = readName();
 const HOME_LAYOUT = path.join(APPS, "home", "data", "layout.json");
 const BRAIN_DUMP = path.join(APPS, "home", "data", "braindump.json");   // the shared Brain dump, every tool's notes
+const CONNECTIONS = path.join(APPS, "home", "data", "connections.json");   // which apps Claude can reach, shared by every tool (shared v13)
 // A tool's data file must live in its own data folder: apps/<tool>/data/<name>.json
 const DATA_FILE_RE = /^apps\/[a-z0-9-]+\/data\/[a-z0-9-]+\.json$/;
 const MAX_BODY = 10 * 1024 * 1024;
@@ -202,7 +205,7 @@ function installedTools() {
 // The file behind /api/data/<tool>/<file>, or null if that tool isn't installed or the file isn't one of its own
 function dataFileFor(toolId, fileName) {
   // Home's own file: which boxes show, in what order and how wide
-  if (toolId === "home") return fileName === "layout.json" ? HOME_LAYOUT : fileName === "braindump.json" ? BRAIN_DUMP : null;
+  if (toolId === "home") return fileName === "layout.json" ? HOME_LAYOUT : fileName === "braindump.json" ? BRAIN_DUMP : fileName === "connections.json" ? CONNECTIONS : null;
   for (const tool of installedTools()) {
     if (!tool || tool.id !== toolId || !Array.isArray(tool.dataFiles)) continue;
     // A tool may only save inside its own app folder, never another tool's data or the shared parts

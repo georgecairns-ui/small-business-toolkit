@@ -7,7 +7,7 @@ Goal: you know what the business sells, who it sells to and the problems it solv
 The person shouldn't start from a blank page. Before asking anything, quietly gather what you can:
 
 - Their **website** (from their email signature or `context/business.md`), if you can read web pages: services, prices, who it's for, case studies.
-- Their **sent email** (last 4 weeks): what they quote for, who they quote, the questions prospects ask, who says yes.
+- Their **sent email** (step 2 read the last 30 days): what they quote for, who they quote, the questions prospects ask, who says yes.
 - Their **calendar** and **calls**: who they meet before work starts, how a sale usually goes.
 - Their **CRM or spreadsheet**, if connected: deal sizes, stages, where deals come from.
 - `context/business.md`, if it's already filled in (for example when Pipeline OS was attached to Task List OS): reuse it. Never ask something it already answers.

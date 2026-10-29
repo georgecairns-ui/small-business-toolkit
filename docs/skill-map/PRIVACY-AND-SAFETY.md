@@ -50,7 +50,7 @@ No. Both scans run entirely on your computer and write to files also on your com
 
 ## What about passwords and keys?
 
-Skill and Folder Map OS doesn't need a sign-in to anything: it only works with files already on your computer. It never asks for a password or a key, and none should ever go into this folder or into the chat.
+Skill and Folder Map OS doesn't need a sign-in to anything: it only works with files already on your computer. It never asks for a password or a key, and none should ever go into this folder or into the chat. Other tools in the toolkit connect apps through Claude's Connectors, signed in on each app's own page, with no keys; an app with no Claude connector is read from a CSV or PDF export you drop in the files folder.
 
 ## What is the helper?
 

@@ -32,7 +32,6 @@ Shipped blank exactly as:
 ```json
 {
   "version": 1,
-  "connections": {},
   "tools": {},
   "ideas": [],
   "builds": []
@@ -41,7 +40,7 @@ Shipped blank exactly as:
 
 Claude fills it; the app only ever changes an idea's status.
 
-- `connections`: keyed by app id (the ids in `app/apps-list.js`): `{ "status": "connected" | "not-connected" | "needs-attention" | "not-used", "how": "Claude connector" | "key saved" | "", "note": "", "checked": "YYYY-MM-DD" }`. An app with no entry counts as Not connected.
+- `connections`: **moved in shared version 13.** Which apps are connected now lives in `apps/home/data/connections.json`, the file every tool shares (format in `setup/connections/README.md`, "Recording a connection"), keyed by the same app ids. The Connections page and the Home box read it; `toolkit.json` ships without a `connections` part.
 - `tools`: keyed by tool id (`task-list`, `pipeline`, `skill-map`, `proposals`, `content`, `money`, `ads`): `{ "status": "set-up" | "part-done" | "not-yet" | "skipped", "date": "YYYY-MM-DD", "note": "" }`.
 - `ideas`: `{ "id": "i-xxxxxx", "title": "", "why": "", "prompt": "", "status": "new" | "done" | "dismissed", "added": "YYYY-MM-DD" }`.
 - `builds`: `{ "id": "b-xxxxxx", "title": "", "what": "", "date": "YYYY-MM-DD" }`.
@@ -50,9 +49,9 @@ Claude fills it; the app only ever changes an idea's status.
 
 One entry per guide in `setup/connections/` (not README.md): `{ id, name, group, guide: "setup/connections/<file>.md", usedBy: [tool ids], what: "one plain line" }`. `xero-drafts` and `bank-feeds` are Money View extras: list them under Money. The prompts:
 
-- Connect: `Connect <name> for me. Follow setup/connections/<file>.md and .claude/skills/connect-a-tool, then update apps/toolkit/data/toolkit.json.`
-- Check it: `Check my <name> connection still works and tell me what you can see. Update apps/toolkit/data/toolkit.json.`
-- Fix it: `My <name> connection needs attention. Follow setup/connections/<file>.md to fix it, then update apps/toolkit/data/toolkit.json.`
+- Connect: `Connect <name> for me. Follow setup/connections/<file>.md and .claude/skills/connect-a-tool, then update apps/home/data/connections.json.`
+- Check it: `Check my <name> connection still works and tell me what you can see. Update apps/home/data/connections.json.`
+- Fix it: `My <name> connection needs attention. Follow setup/connections/<file>.md to fix it, then update apps/home/data/connections.json.`
 - Connect something else: `I'd like to connect another app to my toolkit. Ask me which one, then use .claude/skills/connect-a-tool.`
 - Set up a tool: `Set up <Tool name> for me. Follow the "<Tool name>" part of START-HERE.md, and skip anything my notes in context/ already answer.`
 - Build cards: `<the card's job>. <their sentence, if any> Follow .claude/skills/build-on-my-toolkit.`

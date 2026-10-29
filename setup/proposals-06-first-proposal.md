@@ -18,20 +18,4 @@ Goal: a real proposal, for a real client, in their brand, before setup ends. Thi
 
 Ask what they'd change. Make the changes they ask for with `.claude/skills/change-a-proposal`, and if a change is about how they always want proposals (not just this one), update their proposal skill too (`build-my-proposal-skill`) and say so.
 
-## 10.3 Make it automatic (if they said yes in step 1)
-
-Explain the trade-off first, in one breath:
-
-> I'll check for new client folders, emails and calls every hour during your working day, write proposals for new clients, and draft follow-ups for proposals gone quiet. It uses a little of your Claude allowance each time, and it only runs while your computer is on and the Claude app is open. You can pause it any time.
-
-The Claude desktop app can run scheduled tasks on their computer, with access to this folder. Menus change, so describe what to look for and ask what they see:
-
-1. In the Claude desktop app, find **Scheduled tasks** (in the sidebar or the Code area).
-2. Create a new task: **Folder:** their Small Business Toolkit folder. **Prompt:** `Run /proposals-check-in`. If another toolkit tool with its own check-in is in this folder (Task List OS's `/check-in`), use that one instead: it runs the proposals check-in too, so there's only ever one. **When:** every hour, on their working days, during their working hours.
-3. Save it, then run it once now to check it works.
-
-If scheduled tasks aren't available, the simple alternative: they say "check my proposals" (or `/proposals-check-in`) when they've added something. Write proposal in the app works straight away either way.
-
-When the check-in first uses each connection, Claude may ask for permission once. Approve the read tools only. Never pre-approve tools that send, delete, post or pay.
-
-Note the schedule in `context/tools.md` and `setup/progress.md`. Tick step 10.
+Tick step 10 in `setup/progress.md`. Step 11 sets up the check-ins.

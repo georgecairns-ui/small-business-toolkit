@@ -141,7 +141,7 @@
   function setupCard() {
     return '<section class="panel setup-card"><div class="setup-card__art"><img src="' + ART.welcome + '" alt="" width="72" height="72"></div>' +
       '<div class="setup-card__body"><h2>Let\u2019s set up your pipeline</h2>' +
-      '<p class="muted">It\u2019s empty for now. Claude fills it with your real deals in about 25 minutes, and you approve everything.</p>' +
+      '<p class="muted">It\u2019s empty for now. Claude fills it with your real deals in 30 to 40 minutes, and you approve everything.</p>' +
       '<ol class="setup-card__steps">' +
       "<li>Open Claude Code in your <strong>Pipeline OS</strong> folder (in the Claude desktop app, the Code tab).</li>" +
       "<li>Type " + say("/setup") + " and answer Claude\u2019s questions. It asks what you sell and who you sell to, then connects your email, calendar and calls.</li>" +

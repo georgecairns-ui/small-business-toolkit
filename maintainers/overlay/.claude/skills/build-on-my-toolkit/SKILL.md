@@ -26,7 +26,7 @@ The toolkit is theirs to grow. You build what they ask, in the same shape as eve
 - Follow `.claude/skills/match-my-brand`.
 
 **A routine Claude checks on a schedule** (a Monday report, a reminder before VAT is due, a check on a supplier's site)
-- Write it as a skill, then either add it to `.claude/skills/toolkit-check-in` (hourly, or under "First run of the day only") or, for something weekly, set up its own scheduled task in the Claude desktop app with them, the same way as `setup/toolkit-03-make-it-automatic.md`. Never anything that sends, posts, pays or deletes on its own.
+- Write it as a skill, then add it to `.claude/skills/toolkit-check-in`: under "Every run", or under "First run of the day only", with a day or date in it for something weekly or monthly ("on Mondays", "7 days before VAT is due"). The toolkit keeps one scheduled task (`setup/toolkit-03-make-it-automatic.md`), so never make another. If the routine reads an app the check-in can't read without asking, tell them it will stop to ask on a scheduled run. Never anything that sends, posts, pays or deletes on its own.
 
 **Their team** (who does what)
 - Add each person to `context/people.md` and the task list's people, and ask who should get which kind of task, so `.claude/skills/delegate-it` routes work to the right person.

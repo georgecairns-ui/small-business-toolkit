@@ -5,6 +5,6 @@
     { "id": "build", "label": "Build and customise", "icon": "sparkle" }
   ],
   "home": {
-    "scripts": ["app/apps-list.js", "app/model.js", "home-boxes.js"]
+    "scripts": ["../shared/js/connections.js", "app/apps-list.js", "app/model.js", "home-boxes.js"]
   }
 }

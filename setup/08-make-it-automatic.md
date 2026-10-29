@@ -1,28 +1,41 @@
 # Step 8: make it automatic
 
-Goal: the task list keeps itself up to date. Every hour while they work, Claude checks in: copies the calendar, sorts new email, writes up new calls, and adds anything new to Review. The app picks it up within seconds.
+Goal: the task list is up to date whenever they open it. You check in a few times a day on your own: copy the calendar, sort new email, write up new calls, and add anything new to Review.
 
-Only do this if they said yes in step 1, question 8. Explain the trade-off first, in one breath:
+The tools named in this step are often not loaded yet: search your tools for them first.
 
-> I'll check in every hour during your working day. It uses a little of your Claude allowance each time, and it only runs while your computer is on and the Claude app is open. You can pause it any time.
+## 8.1 Agree the times
 
-## 8.1 Set up a scheduled task
+Suggest times from their working hours in `context/routines.md`, for example: "I'll check in at 7am, 12pm and 4pm on weekdays, so it's fresh when you start, after lunch and before you finish. Shall I use those, or would other times suit you better?" Say plainly: "It uses a little of your Claude allowance each time, and it only runs while your computer is on and the Claude app is open."
 
-The Claude desktop app can run scheduled tasks on their computer, with access to this folder. Menus change, so describe what to look for and ask what they see:
+If they say no, tick this step in `setup/progress.md` with the note 'Check-ins: said no', tell them they can say "check in" any time, and go to step 9.
 
-1. In the Claude desktop app, find **Scheduled tasks** (in the sidebar or the Code area).
-2. Create a new task:
-   - **Folder:** their Small Business Toolkit folder.
-   - **Prompt:** `Run /check-in`
-   - **When:** every hour, on their working days, between their start and end times from `settings`.
-3. Save it, then run it once now to check it works.
+## 8.2 Let check-ins read without stopping
 
-If they use Claude Code without the desktop app, or scheduled tasks aren't available to them, offer the simple alternative: they say "check in" (or type `/check-in`) a few times a day, for example after lunch. Don't set up anything that runs outside Claude without explaining it and getting a clear yes.
+A check-in that runs on its own stops if it has to ask permission, and the task list quietly goes out of date. So, with their yes, allow the read-only tools of each connection that's `connected` in `apps/home/data/connections.json`:
 
-## 8.2 Pre-approve what the check-in needs
+1. From your own list of tools, collect the names of that connection's read tools: exactly the ones its guide in `setup/connections/` lists under "Pre-approve for check-ins". For an app without a guide, only names that start with `get_`, `list_`, `search_`, `read_`, `find_`, `fetch_` or `query_`, or end with `_search` or `_get`, and only if they only read. Never any name containing create, update, delete, send, mark, archive, add, remove, set, move, post, reply, label, trash or write, whatever else it matches.
+2. Show them the list in one line per app, for example: "Gmail: search and read emails. Google Calendar: read events." Ask: "Can I let your check-ins do just these without asking each time?"
+3. If they say no, tell them plainly: "Then the scheduled check-in will stop at each permission prompt and the app will go out of date. If you'd rather, say 'check in' whenever you want one." Tick this step in `setup/progress.md` with the note 'Check-ins: said no', skip 8.3 and go to step 9.
+   With a yes, add them to `permissions.allow` in this folder's `.claude/settings.local.json` (create it if it isn't there, as `{ "permissions": { "allow": [] } }`), using the full tool names as they appear in your list (they start `mcp__`). Never add anything that sends, replies, forwards, deletes, archives, labels, pays, posts, books or changes anything.
 
-So a scheduled check-in doesn't stop to ask permission, this folder's `.claude/settings.json` already allows Claude to read anything here and edit the task file and the `context/` notes. When the check-in first uses each connection (Gmail, Google Calendar, Fathom and so on), Claude may ask for permission once. Approve the read tools only. Never pre-approve tools that send, delete, post or pay.
+`.claude/settings.local.json` stays on this computer and is never part of an update.
 
-## 8.3 Record it
+## 8.3 Create the check-in
 
-Set `triage.nextRunAt` after each run so the app shows "Next check 2pm". Note the schedule in `context/tools.md` and `setup/progress.md`. Tick step 8.
+Create it from this session, in this folder: a scheduled task runs in the folder it was made in.
+
+First look with `list_scheduled_tasks` for an existing check-in task for this folder. If there is one, update it to the agreed times rather than making another. If not, create it yourself with the desktop app's scheduled tasks tool (`create_scheduled_task`):
+- **Title:** "<their business> check-in", for example "Harbour Bakery check-in".
+- **Prompt:** `In <full path of this folder>, follow .claude/skills/check-in/SKILL.md. Never send anything except emails the person has already approved in the app; apart from those, never reply, forward, delete, archive, label, pay or post anything.` Fill in this folder's full path.
+- **When:** the times they agreed, on their working days.
+
+Then run it once now (`run_scheduled_task`) and check it finished without stopping to ask anything (`list_task_runs`). If it stopped at a permission, ask the person before adding that tool, and only if it is read-only under 8.2's rule; then run it again. If the stop is at a tool that isn't read-only, tell them and leave it. Only ever one check-in task for this folder.
+
+Then look up that first run's session with the desktop app's session tools (for example `get_session` with the run's session id) and check 2 things:
+- **It ran in this folder.** If it ran somewhere else, delete nothing: update the task's prompt so it opens with this folder's full path, and run it again. If it still runs elsewhere, tell the person plainly that the scheduled check-in can't find this folder, and offer the alternative: they say "check in" whenever they want one.
+- **It didn't run in an Auto or Bypass permission mode.** If it did, tell the person in one line: "This session is set to act without asking, so the check-ins would too." Then ask them to switch this session to the normal permission mode, where Claude asks first. Once it is switched, delete that check-in task and create it again from this session, so there is still only one check-in task. (The "delete nothing" rule above is only for the wrong-folder case.)
+
+## 8.4 Record it
+
+Set `triage.nextRunAt` after each run so the app shows "Next check 12pm". Note the times in `context/tools.md` and `setup/progress.md`. Tick step 8.

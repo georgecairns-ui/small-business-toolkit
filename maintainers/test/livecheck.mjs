@@ -68,7 +68,8 @@ for (const tool of tools) {
   }
   for (const [name, url] of pages) {
     const r = await openPage(url);
-    const bad = r.errors.filter((e) => !/favicon|home\/layout\.json/.test(e));
+    // A fresh copy has no saved Home layout and no connections file yet (Claude writes it in setup, shared v13)
+    const bad = r.errors.filter((e) => !/favicon|home\/(layout|connections)\.json/.test(e));
     if (bad.length || r.info?.wide) failures++;
     console.log(`${bad.length ? "FAIL" : "ok  "} ${name} | ${r.info?.title} ${r.info?.wide ? "| SCROLLS SIDEWAYS" : ""}`);
     if (name === "home") console.log("     menu: " + r.info?.sidebar);
