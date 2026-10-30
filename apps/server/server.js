@@ -128,18 +128,13 @@ function startNext() {
   claudeRun.running = true;
   claudeRun.job = job.key;
   claudeRun.startedAt = new Date().toISOString();
-  const log = fs.openSync(CLAUDE_LOG, "a");
-  fs.writeSync(log, "\n--- " + claudeRun.startedAt + " " + job.label + "\n");
-  const isCmd = /\.cmd$/i.test(bin);
-  const child = spawn(isCmd ? "cmd.exe" : bin, isCmd ? ["/d", "/c", bin, "-p", job.prompt] : ["-p", job.prompt],
-    { cwd: ROOT, stdio: ["ignore", log, log], windowsHide: true });
-  const limit = setTimeout(function () { child.kill(); }, RUN_LIMIT_MS);
+  let log = null, child = null, limit = null;
   let done = false;
   function finished(result) {
     if (done) return;
     done = true;
     clearTimeout(limit);
-    try { fs.closeSync(log); } catch (e) { /* already closed */ }
+    if (log !== null) try { fs.closeSync(log); } catch (e) { /* already closed */ }
     claudeRun.running = false;
     claudeRun.lastJob = job.key;
     claudeRun.job = null;
@@ -147,6 +142,18 @@ function startNext() {
     claudeRun.lastResult = result;
     startNext();
   }
+  // If the log can't be opened or Claude can't be started (a prompt with a NUL character), this job fails and the next
+  // one runs. Left as a throw, running stayed true for ever, and from a finished run it stopped the helper.
+  try {
+    log = fs.openSync(CLAUDE_LOG, "a");
+    fs.writeSync(log, "\n--- " + claudeRun.startedAt + " " + job.label + "\n");
+    const isCmd = /\.cmd$/i.test(bin);
+    child = spawn(isCmd ? "cmd.exe" : bin, isCmd ? ["/d", "/c", bin, "-p", job.prompt] : ["-p", job.prompt],
+      { cwd: ROOT, stdio: ["ignore", log, log], windowsHide: true });
+  } catch (e) {
+    return finished("failed");
+  }
+  limit = setTimeout(function () { child.kill(); }, RUN_LIMIT_MS);
   child.on("error", function () { finished("failed"); });
   child.on("exit", function (code) { finished(code === 0 ? "ok" : "failed"); });
 }

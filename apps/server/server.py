@@ -30,6 +30,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 import threading
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -74,7 +75,8 @@ MEDIA_CHUNK = 64 * 1024
 # Asking Claude to do a small job: sort a voice note, update a deal (see server.js for the plain-English explanation)
 AUTO_CLAUDE = os.environ.get("TLOS_AUTO_CLAUDE", "on") != "off"
 _logs = os.path.join(os.path.expanduser("~"), "Library", "Logs")
-CLAUDE_LOG = os.path.join(_logs if os.path.isdir(_logs) else os.environ.get("TMPDIR", "/tmp"), (re.sub(r"[^a-z0-9]+", "-", NAME.lower()).strip("-") or "toolkit") + "-claude.log")
+# tempfile.gettempdir(), like os.tmpdir() in server.js: Windows has no TMPDIR and usually no C:\tmp
+CLAUDE_LOG = os.path.join(_logs if os.path.isdir(_logs) else tempfile.gettempdir(),(re.sub(r"[^a-z0-9]+", "-", NAME.lower()).strip("-") or "toolkit") + "-claude.log")
 RUN_LIMIT_S = 10 * 60
 UNWATCHED = " Nobody is watching this run, so do not ask questions: make your best reading of anything unclear and say so in your notes."
 SORT_JOB = {"key": "shared:brain-dump", "label": "sorting the brain dump",
@@ -135,14 +137,16 @@ def _claude_worker(binary):
             claude_run["queued"] = len(claude_queue) > 0
             claude_run["job"] = job["key"]
             claude_run["startedAt"] = now_iso()
-        with open(CLAUDE_LOG, "a") as log:
-            log.write("\n--- %s %s\n" % (claude_run["startedAt"], job["label"]))
-            log.flush()
-            try:
+        # Anything that goes wrong (no log folder, a prompt Claude can't be started with) fails this job only,
+        # so the loop carries on and running is set back to False: otherwise every later job just waits for ever
+        try:
+            with open(CLAUDE_LOG, "a", encoding="utf-8") as log:
+                log.write("\n--- %s %s\n" % (claude_run["startedAt"], job["label"]))
+                log.flush()
                 result = subprocess.run([binary, "-p", job["prompt"]], cwd=ROOT, stdout=log, stderr=log, timeout=RUN_LIMIT_S)
                 outcome = "ok" if result.returncode == 0 else "failed"
-            except (OSError, subprocess.TimeoutExpired):
-                outcome = "failed"
+        except Exception:
+            outcome = "failed"
         with claude_lock:
             claude_run["lastRunAt"] = now_iso()
             claude_run["lastResult"] = outcome
@@ -287,7 +291,9 @@ class Handler(BaseHTTPRequestHandler):
 
     def read_file(self, path):
         try:
-            with open(path, "r", encoding="utf-8", newline="") as f:
+            # errors="replace": a byte that isn't UTF-8 (a £ saved by Windows PowerShell 5.1) reads as U+FFFD, as in server.js,
+            # instead of an error that drops the connection and makes the app say the helper isn't running
+            with open(path, "r", encoding="utf-8", errors="replace", newline="") as f:
                 text = f.read()
         except OSError:
             return self.send_json(404, {"error": "missing"})
@@ -522,7 +528,7 @@ class Handler(BaseHTTPRequestHandler):
             with save_lock:
                 if based is not None:
                     try:
-                        with open(path, "r", encoding="utf-8", newline="") as f:
+                        with open(path, "r", encoding="utf-8", errors="replace", newline="") as f:  # read as read_file does, so the versions match
                             current = f.read()
                     except OSError:
                         current = None  # the file is gone: also a change
